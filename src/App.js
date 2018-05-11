@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
+import Quiz from './containers/Quiz';
+import {quiz} from './quiz';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      quiz: quiz
+    }
+  }
+
+
+
   render() {
+    let { quiz } = this.state;
+    
     return (
       <div className="App">
-          React-quiz
+          <Quiz 
+            quiz={quiz}
+          />
       </div>
     );
   }
