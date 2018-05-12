@@ -14,9 +14,9 @@ class App extends Component {
 
   render() {
     let { quiz } = this.state;
-    
+
     return (
-      <div className="App">
+      <div className="react-quiz-container">
           <Quiz 
             quiz={quiz}
           />
