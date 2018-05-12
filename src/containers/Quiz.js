@@ -1,26 +1,38 @@
 import React, { Component } from 'react';
 import Question from '../components/Question';
 import Answer from '../components/Answer';
+import Result from '../components/Result';
 
 class Quiz extends Component {
   constructor(props){
   	super(props);
   	let quiz = this.props.quiz;
+  	console.log(quiz)
   	this.state = {
 	  step: 0,
+	  title: quiz.quizTitle,
       questions: quiz.questions,
       currentQuestion: quiz.questions[0],
       answers: [],
+      correctAns: [],
       totalQuestions: quiz.questions.length,
       showResult: false
   	};
+  	this.parseCorrectAnswer();
   }
 
-   handleClick = (e) =>{
+  parseCorrectAnswer(){
+  	const {correctAns, questions} = this.state;
+   	questions.map(question=>{
+   		correctAns.push(question.correctAnswer);
+   	})
+  }
+
+
+   handleClick = (index) =>{
 	    const { step, currentQuestion, questions, answers, totalQuestions } = this.state;
-
-	    answers.push(e.target.dataset.value);
-
+	    answers.push((index+1));
+	    console.log(answers)
 	    let updatedStep = step;
 
 	    if(step < totalQuestions - 1){
@@ -37,23 +49,13 @@ class Quiz extends Component {
 	 }
 
   render() {
-  	const {title, currentQuestion, answers, totalQuestions, step, showResult} = this.state;
-
-
-	const renderResult =
-		answers.map((answer,index)=>{
-			return (
-				<div key={index+1}>
-					{index+1} : {answer}
-				</div>
-			)
-		})
+  	const {title, currentQuestion, answers, correctAns,totalQuestions, step, showResult} = this.state;
 
     return (
       <div>
-    		{title}
+    		<h2 className="quiz-title">{title}</h2>
     		{ showResult==true? (
-    			<div>{renderResult}</div>
+    			<Result answers={answers} correctAns={correctAns}/>
     		): (
     			<div>
     				<Question currentQuestion={currentQuestion} />
