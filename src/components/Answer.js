@@ -11,17 +11,19 @@ class Answer extends Component {
 
   render() {
     const renderAnswer = 
-    this.props.answers.map((answer, index)=>{
-      return (
-        <li key={index} data-value={answer} onClick={this.props.handleClick}>
-          {answer}
-        </li>
-      )
-    })
+      this.props.answers.map((answer, index)=>{
+        return (
+          <li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>
+            {answer}
+          </li>
+        )
+      })
 
     return (
       <div>
-          {renderAnswer}
+          <ul>
+            {renderAnswer}
+          </ul>
       </div>
     );
   }
