@@ -68,7 +68,13 @@ Then pass the object to Quiz Container
  <Quiz quiz={quiz}/>
 ```
 
+## Development
+- Clone the project
+- run `npm install`
+- run `npm run start`
+
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz/
 
 ## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
