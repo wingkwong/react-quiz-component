@@ -11,10 +11,11 @@ class Answer extends Component {
 
   render() {
     const {userAnswers, answers, questionType, renderInResult, correctAns, qIdx } = this.props;
+    const answerKey = ["A", "B", "C", "D"];
     const renderAnswer = 
       answers.map((answer, index)=>{
         return (
-          questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answer}</li>) ||
+          questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answerKey[(index)]}. {answer}</li>) ||
           questionType=='photo' && (<img key={index} className="img-answer" src={answer} onClick={() => this.props.handleClick(index)}/>)
         )
       })
@@ -28,7 +29,7 @@ class Answer extends Component {
           c = "user-incorrect"
         }
         return (
-          questionType=='text' && (<li key={index} data-value={answer} className={c}>{answer}</li>) ||
+          questionType=='text' && (<li key={index} data-value={answer} className={c}>{answerKey[(index)]}. {answer}</li>) ||
           questionType=='photo' && (<img key={index} className={`${c} img-answer`} src={answer}/>)
         )
       })
