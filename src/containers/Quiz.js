@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Question from '../components/Question';
 import Answer from '../components/Answer';
 import Result from '../components/Result';
+import PropTypes from 'prop-types';
 
 class Quiz extends Component {
   constructor(props){
@@ -23,13 +24,13 @@ class Quiz extends Component {
   parseCorrectAnswer(){
   	const {correctAns, questions} = this.state;
    	questions.map(question=>{
-   		correctAns.push(question.correctAnswer);
+   		return correctAns.push(question.correctAnswer);
    	})
   }
 
 
    handleClick = (index) =>{
-	    const { step, currentQuestion, questions, answers, totalQuestions } = this.state;
+	    const { step, questions, answers, totalQuestions } = this.state;
 	    answers.push((index+1));
 	    let updatedStep = step;
 
@@ -47,11 +48,11 @@ class Quiz extends Component {
 	 }
 
   render() {
-  	const {title, questions, currentQuestion, answers, correctAns,totalQuestions, step, showResult} = this.state;
+  	const {title, questions, currentQuestion, answers, correctAns, showResult} = this.state;
     return (
       <div>
     		<h2 className="quiz-title">{title}</h2>
-    		{ showResult==true? (
+    		{ showResult===true? (
     			<Result questions={questions} answers={answers} correctAns={correctAns}/>
     		): (
     			<div>
@@ -63,5 +64,9 @@ class Quiz extends Component {
     );
   }
 }
+
+Quiz.propTypes = {
+  quiz: PropTypes.object
+};
 
 export default Quiz;

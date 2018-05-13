@@ -10,8 +10,6 @@ class App extends Component {
     }
   }
 
-
-
   render() {
     let { quiz } = this.state;
 

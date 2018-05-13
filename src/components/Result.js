@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Question from './Question';
 import Answer from './Answer';
 
@@ -15,20 +16,19 @@ class Result extends Component {
     const {correctAns, answers} = this.props;
     let tmpScore = score;
     answers.map((answer,index)=>{
-        let score = this
         if(answer == correctAns[index]){
           tmpScore = tmpScore + 1;
         }
+        return this.setState({
+          score: tmpScore
+        })
     })
-    this.setState({
-      score: tmpScore
-    })
+
   }
 
   render() {
     const {score} = this.state;
     const {questions, answers, correctAns} = this.props;
-
     const renderQuestion =
       questions.map((question, index)=>{
             return (<div className="result-question" key={index}>
@@ -50,5 +50,11 @@ class Result extends Component {
     );
   }
 }
+
+Result.propTypes = {
+  correctAns: PropTypes.array,
+  answers: PropTypes.array,
+  questions: PropTypes.array,
+};
 
 export default Result;

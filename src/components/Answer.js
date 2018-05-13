@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Answer extends Component {
   constructor(props){
@@ -8,15 +9,14 @@ class Answer extends Component {
     }
   }
 
-
   render() {
     const {userAnswers, answers, questionType, renderInResult, correctAns, qIdx } = this.props;
     const answerKey = ["A", "B", "C", "D"];
     const renderAnswer = 
       answers.map((answer, index)=>{
         return (
-          questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answerKey[(index)]}. {answer}</li>) ||
-          questionType=='photo' && (<img key={index} className="img-answer" src={answer} onClick={() => this.props.handleClick(index)}/>)
+          ( questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answerKey[(index)]}. {answer}</li>) ) ||
+          ( questionType=='photo' && (<img key={index} className="img-answer" alt="" src={answer} onClick={() => this.props.handleClick(index)}/>) )
         )
       })
     const renderAnswerInResult = 
@@ -29,8 +29,8 @@ class Answer extends Component {
           c = "user-incorrect"
         }
         return (
-          questionType=='text' && (<li key={index} data-value={answer} className={c}>{answerKey[(index)]}. {answer}</li>) ||
-          questionType=='photo' && (<img key={index} className={`${c} img-answer`} src={answer}/>)
+          ( questionType=='text' && (<li key={index} data-value={answer} className={c}>{answerKey[(index)]}. {answer}</li>) ) ||
+          ( questionType=='photo' && (<img key={index} className={`${c} img-answer`} alt="" src={answer}/>) )
         )
       })
 
@@ -43,5 +43,15 @@ class Answer extends Component {
     );
   }
 }
+
+Answer.propTypes = {
+  userAnswers: PropTypes.array,
+  answers: PropTypes.array,
+  questionType: PropTypes.string,
+  renderInResult: PropTypes.bool,
+  correctAns: PropTypes.array,
+  qIdx: PropTypes.number,
+  handleClick: PropTypes.func
+};
 
 export default Answer;

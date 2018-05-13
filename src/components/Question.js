@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Question extends Component {
   constructor(props){
@@ -7,8 +8,6 @@ class Question extends Component {
 
     }
   }
-
-
 
   render() {
     const {currentQuestion} = this.props;
@@ -19,5 +18,10 @@ class Question extends Component {
     );
   }
 }
+
+
+Question.propTypes = {
+  currentQuestion: PropTypes.object,
+};
 
 export default Question;
