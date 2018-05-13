@@ -50,7 +50,6 @@ class Quiz extends Component {
 
   render() {
   	const {title, currentQuestion, answers, correctAns,totalQuestions, step, showResult} = this.state;
-
     return (
       <div>
     		<h2 className="quiz-title">{title}</h2>
@@ -59,7 +58,7 @@ class Quiz extends Component {
     		): (
     			<div>
     				<Question currentQuestion={currentQuestion} />
-    				<Answer answers={currentQuestion.answers} handleClick={this.handleClick}/>
+    				<Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick}/>
     			</div>
     		)}
 
