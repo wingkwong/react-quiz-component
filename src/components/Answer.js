@@ -10,17 +10,17 @@ class Answer extends Component {
 
 
   render() {
+    const {answers, questionType} = this.props;
     const renderAnswer = 
-      this.props.answers.map((answer, index)=>{
+      answers.map((answer, index)=>{
         return (
-          <li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>
-            {answer}
-          </li>
+          questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answer}</li>) ||
+          questionType=='photo' && (<img className="img-answer" src={answer} onClick={() => this.props.handleClick(index)}/>)
         )
       })
 
     return (
-      <div>
+      <div className="answer-container">
           <ul>
             {renderAnswer}
           </ul>
