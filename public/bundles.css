@@ -42,8 +42,8 @@
 	margin-left: 10px;
 	margin-right: 10px;
 	margin-bottom: 30px;
-	width: 360px;
-    height: 240px;
+	width: 240px;
+    height: 160px;
     border: 20px solid #fff;
 }
 
@@ -64,11 +64,11 @@
 }
 
 .react-quiz-container .result-answer .img-answer.correct{
-	border: 20px solid #2e7b32;
+	border: 10px solid #2e7b32;
 }
 
 .react-quiz-container .result-answer .img-answer.user-incorrect{
-	border: 20px solid #d32f2f;
+	border: 10px solid #d32f2f;
 }
 
 .react-quiz-container .result-container ul li,
