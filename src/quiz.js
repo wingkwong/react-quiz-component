@@ -1,28 +1,47 @@
 export const quiz =  {
-  "quizTitle": "Quiz Title",
+  "quizTitle": "React Quiz Demo - https://github.com/wingkwong/react-quiz",
   "questions": [
     {
-      "question": "Q1",
+      "question": "How can you access the state of a component from inside of a member function?",
       "questionType": "text",
       "answers": [
-        "A1",
-        "A2",
-        "A3",
-        "A4"
+        "this.getState()",
+        "this.prototype.stateValue",
+        "this.state",
+        "this.values"
       ],
-      "correctAnswer": "1"
+      "correctAnswer": "3"
     },
     {
-      "question": "Q2",
+      "question": "ReactJS is developed by _____?",
+      "questionType": "text",
+      "answers": [
+        "Google Engineers",
+        "Facebook Engineers"
+      ],
+      "correctAnswer": "2"
+    },
+    {
+      "question": "ReactJS is an MVC based framework?",
       "questionType": "text",
       "answers": [
         "True",
         "False"
       ],
-      "correctAnswer": "1"
+      "correctAnswer": "2"
     },
     {
-      "question": "Q3",
+      "question": "Which of the following concepts is/are key to ReactJS?",
+      "questionType": "text",
+      "answers": [
+        "Component-oriented design",
+        "Event delegation model",
+        "Both of the above",
+      ],
+      "correctAnswer": "3"
+    },
+    {
+      "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
       "questionType": "photo",
       "answers": [
         "https://dummyimage.com/600x400/000/fff&text=A",
