@@ -1,7 +1,3 @@
-.react-quiz-container{
-	
-}
-
 .react-quiz-container .quiz-title{
 	font-size: 30px;
 	font-weight: bold;
@@ -31,6 +27,7 @@
     padding: 30px;
     color: #fff;
     cursor: pointer;
+    text-align: left;
 }
 
 .react-quiz-container ul li:nth-child(odd){
@@ -41,18 +38,15 @@
 	background: #5c6bc0;
 }
 
-.react-quiz-container{
-
+.react-quiz-container .img-answer{
+	cursor: pointer;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 30px;
+	width: 360px;
+    height: 240px;
 }
 
-.react-quiz-container{
-	
-}
-
-.react-quiz-container{
-
-}
-
-.react-quiz-container{
-	
+.react-quiz-container .answer-container{
+	text-align: center;
 }
