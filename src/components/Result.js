@@ -39,7 +39,7 @@ class Result extends Component {
 
     const renderResult =
           <div>
-            Your score: {score}
+           <h1> Your score: {score}/{questions.length}</h1>
           </div>
         
     return (
