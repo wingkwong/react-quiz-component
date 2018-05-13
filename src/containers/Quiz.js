@@ -7,7 +7,6 @@ class Quiz extends Component {
   constructor(props){
   	super(props);
   	let quiz = this.props.quiz;
-  	console.log(quiz)
   	this.state = {
 	  step: 0,
 	  title: quiz.quizTitle,
@@ -32,7 +31,6 @@ class Quiz extends Component {
    handleClick = (index) =>{
 	    const { step, currentQuestion, questions, answers, totalQuestions } = this.state;
 	    answers.push((index+1));
-	    console.log(answers)
 	    let updatedStep = step;
 
 	    if(step < totalQuestions - 1){
@@ -49,21 +47,18 @@ class Quiz extends Component {
 	 }
 
   render() {
-  	const {title, currentQuestion, answers, correctAns,totalQuestions, step, showResult} = this.state;
+  	const {title, questions, currentQuestion, answers, correctAns,totalQuestions, step, showResult} = this.state;
     return (
       <div>
     		<h2 className="quiz-title">{title}</h2>
     		{ showResult==true? (
-    			<Result answers={answers} correctAns={correctAns}/>
+    			<Result questions={questions} answers={answers} correctAns={correctAns}/>
     		): (
     			<div>
     				<Question currentQuestion={currentQuestion} />
-    				<Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick}/>
+    				<Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
     			</div>
     		)}
-
-    		
-    		
       </div>
     );
   }

@@ -1,8 +1,8 @@
 .react-quiz-container .quiz-title{
 	font-size: 30px;
 	font-weight: bold;
-	margin-bottom: 20px;
 	text-align: center;
+	margin-bottom: 20px;
 	padding: 20px;
 	background: #304ffe;
 	color: #fff;
@@ -11,7 +11,6 @@
 .react-quiz-container .question-title{
 	font-size: 30px;
 	font-weight: bold;
-	margin-bottom: 20px;
 	padding: 20px;
 	background: #5c6bc0;
 	color: #fff;
@@ -45,8 +44,34 @@
 	margin-bottom: 30px;
 	width: 360px;
     height: 240px;
+    border: 20px solid #fff;
 }
 
 .react-quiz-container .answer-container{
 	text-align: center;
+}
+
+.react-quiz-container .result-question{
+	margin-bottom: 20px;
+}
+
+.react-quiz-container .result-answer .correct{
+	background: #2e7b32 ;
+}
+
+.react-quiz-container .result-answer .user-incorrect{
+	background: #d32f2f;
+}
+
+.react-quiz-container .result-answer .img-answer.correct{
+	border: 20px solid #2e7b32;
+}
+
+.react-quiz-container .result-answer .img-answer.user-incorrect{
+	border: 20px solid #d32f2f;
+}
+
+.react-quiz-container .result-container ul li,
+.react-quiz-container .result-container .img-answer{
+	cursor: inherit;
 }

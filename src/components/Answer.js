@@ -10,19 +10,33 @@ class Answer extends Component {
 
 
   render() {
-    const {answers, questionType} = this.props;
+    const {userAnswers, answers, questionType, renderInResult, correctAns, qIdx } = this.props;
     const renderAnswer = 
       answers.map((answer, index)=>{
         return (
           questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answer}</li>) ||
-          questionType=='photo' && (<img className="img-answer" src={answer} onClick={() => this.props.handleClick(index)}/>)
+          questionType=='photo' && (<img key={index} className="img-answer" src={answer} onClick={() => this.props.handleClick(index)}/>)
+        )
+      })
+    const renderAnswerInResult = 
+    renderInResult &&
+      answers.map((answer, index)=>{
+        let c = ""
+        if( ((index+1) == correctAns[qIdx]) ){
+          c = "correct"
+        }else if( ((index+1) == userAnswers[qIdx]) && (correctAns[qIdx] != userAnswers[qIdx]) ){
+          c = "user-incorrect"
+        }
+        return (
+          questionType=='text' && (<li key={index} data-value={answer} className={c}>{answer}</li>) ||
+          questionType=='photo' && (<img key={index} className={`${c} img-answer`} src={answer}/>)
         )
       })
 
     return (
       <div className="answer-container">
           <ul>
-            {renderAnswer}
+            {renderInResult == true? (<div className="result-answer">{renderAnswerInResult}</div>) : (<div>{renderAnswer}</div>) }
           </ul>
       </div>
     );
