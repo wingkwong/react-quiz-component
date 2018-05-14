@@ -6,30 +6,30 @@ import PropTypes from 'prop-types';
 
 class Quiz extends Component {
   constructor(props){
-  	super(props);
-  	let quiz = this.props.quiz;
-  	this.state = {
-	  step: 0,
-	  title: quiz.quizTitle,
+    super(props);
+    let quiz = this.props.quiz;
+    this.state = {
+      step: 0,
+      title: quiz.quizTitle,
       questions: quiz.questions,
       currentQuestion: quiz.questions[0],
       answers: [],
       correctAns: [],
       totalQuestions: quiz.questions.length,
       showResult: false
-  	};
-  	this.parseCorrectAnswer();
+    };
+    this.parseCorrectAnswer();
   }
 
   parseCorrectAnswer(){
-  	const {correctAns, questions} = this.state;
-   	questions.map(question=>{
-   		return correctAns.push(question.correctAnswer);
-   	})
+    const {correctAns, questions} = this.state;
+    questions.map(question=>{
+      return correctAns.push(question.correctAnswer);
+    })
   }
 
 
-   handleClick = (index) =>{
+   handleClick = (index) => {
 	    const { step, questions, answers, totalQuestions } = this.state;
 	    answers.push((index+1));
 	    let updatedStep = step;
@@ -48,18 +48,18 @@ class Quiz extends Component {
 	 }
 
   render() {
-  	const {title, questions, currentQuestion, answers, correctAns, showResult} = this.state;
+    const {title, questions, currentQuestion, answers, correctAns, showResult} = this.state;
     return (
       <div>
-    		<h2 className="quiz-title">{title}</h2>
-    		{ showResult===true? (
-    			<Result questions={questions} answers={answers} correctAns={correctAns}/>
-    		): (
-    			<div>
-    				<Question currentQuestion={currentQuestion} />
-    				<Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
-    			</div>
-    		)}
+        <h2 className="quiz-title">{title}</h2>
+        { showResult===true? (
+          <Result questions={questions} answers={answers} correctAns={correctAns}/>
+        ): (
+          <div>
+            <Question currentQuestion={currentQuestion} />
+            <Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
+            </div>
+        )}
       </div>
     );
   }
