@@ -8,6 +8,7 @@ body{
 
 .react-quiz-container{
 	text-align: center;
+	font-family: 'Open Sans Condensed', sans-serif;
 }
 
 .react-quiz-container .quiz-title{
@@ -23,24 +24,28 @@ body{
 .react-quiz-container .question-title{
 	font-size: 30px;
 	font-weight: bold;
-	padding: 20px;
-	margin-top: 0px;
-	background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);	
-	color: #fff;
+	padding: 50px;
+	margin: 50px;
+	border: 2px solid #e8e8e8;
+	border-radius: 15px;
 }
 
-.react-quiz-container ul{
-	list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.react-quiz-container ul li {
+.react-quiz-container .answer-option{
     padding: 30px;
     color: #000000;
     background: #fff;
     cursor: pointer;
+    width: 320px;
+    display: inline-grid;
+    margin: 20px;
     box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    font-size: 25px;
+}
+
+@media(min-width: 768px){
+	.react-quiz-container .answer-option{
+		width: 520px;
+	}
 }
 
 .react-quiz-container .img-answer{
