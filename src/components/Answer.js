@@ -15,7 +15,7 @@ class Answer extends Component {
     const renderAnswer = 
       answers.map((answer, index)=>{
         return (
-          ( questionType=='text' && (<li key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answerKey[(index)]}. {answer}</li>) ) ||
+          ( questionType=='text' && (<div className="answer-option" key={index} data-value={answer} onClick={() => this.props.handleClick(index)}>{answerKey[(index)]}. {answer}</div>) ) ||
           ( questionType=='photo' && (<img key={index} className="img-answer" alt="" src={answer} onClick={() => this.props.handleClick(index)}/>) )
         )
       })
@@ -29,16 +29,16 @@ class Answer extends Component {
           c = "user-incorrect"
         }
         return (
-          ( questionType=='text' && (<li key={index} data-value={answer} className={c}>{answerKey[(index)]}. {answer}</li>) ) ||
+          ( questionType=='text' && (<div key={index} data-value={answer} className={`${c} answer-option`}>{answerKey[(index)]}. {answer}</div>) ) ||
           ( questionType=='photo' && (<img key={index} className={`${c} img-answer`} alt="" src={answer}/>) )
         )
       })
 
     return (
       <div className="answer-container">
-          <ul>
+         
             {renderInResult == true? (<div className="result-answer">{renderAnswerInResult}</div>) : (<div>{renderAnswer}</div>) }
-          </ul>
+     
       </div>
     );
   }
