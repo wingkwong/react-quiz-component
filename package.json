@@ -1,7 +1,7 @@
 {
   "name": "react-quiz-component",
   "description": "React Quiz Component",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "main": "build/static/js/main.17c888a0.js",
   "homepage": "https://wingkwong.github.io/react-quiz/",
   "dependencies": {
