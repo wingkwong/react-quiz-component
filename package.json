@@ -1,7 +1,8 @@
 {
-  "name": "react-quiz",
-  "version": "0.1.0",
-  "private": true,
+  "name": "react-quiz-component",
+  "description": "React Quiz Component",
+  "version": "0.0.2",
+  "main": "build/static/js/main.17c888a0.js",
   "homepage": "https://wingkwong.github.io/react-quiz/",
   "dependencies": {
     "eslint": "^4.19.1",
@@ -24,5 +25,18 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wingkwong/react-quiz"
+  },
+  "keywords": [
+    "react",
+    "quiz"
+  ],
+  "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wingkwong/react-quiz/issues"
   }
 }
