@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Question from '../components/Question';
-import Answer from '../components/Answer';
-import Result from '../components/Result';
+import Question from './Question';
+import Answer from './Answer';
+import Result from './Result';
 import PropTypes from 'prop-types';
 
 class Quiz extends Component {
@@ -50,7 +50,7 @@ class Quiz extends Component {
   render() {
     const {title, questions, currentQuestion, answers, correctAns, showResult} = this.state;
     return (
-      <div>
+      <div className="react-quiz-container">
         <h2 className="quiz-title">{title}</h2>
         { showResult===true? (
           <Result questions={questions} answers={answers} correctAns={correctAns}/>

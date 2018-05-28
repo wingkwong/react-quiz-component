@@ -1,7 +1,7 @@
 # react-quiz
 :orange_book: React Quiz Component
 
-react-quiz is a ReactJS component allowing users to attempt a quiz. 
+react-quiz-component is a ReactJS component allowing users to attempt a quiz. 
 
 ## Init Your Quiz
 The quiz source is a JSON object. You can use [react-quiz-form](https://github.com/wingkwong/react-quiz-form/) to generate it.
@@ -72,10 +72,9 @@ Then pass the object to Quiz Container
 - Clone the project
 - run `npm install`
 - run `npm run start`
-- run `npm run lint`
 
 ## Demo
-The demo is available at https://wingkwong.github.io/react-quiz/
+The demo is available at https://wingkwong.github.io/react-quiz-component/
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
