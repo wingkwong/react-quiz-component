@@ -71,7 +71,7 @@ Then pass the object to Quiz Container
 ## Development
 - Clone the project
 - run `npm install`
-- run `npm run start`
+- run `npm run dev`
 
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz-component/
