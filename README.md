@@ -1,4 +1,4 @@
-# react-quiz
+# react-quiz-component
 :orange_book: React Quiz Component
 
 react-quiz-component is a ReactJS component allowing users to attempt a quiz. 
