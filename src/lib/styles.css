@@ -1,0 +1,25 @@
+.react-quiz-container {
+	text-align: center;
+}
+
+.react-quiz-container .result-question {
+	margin: 20px;
+}
+
+.react-quiz-container .result-answer .btn-success {
+  border-color: #86a361;
+  background-color: #d0dbc2;
+  color: #41403e
+}
+
+.react-quiz-container .result-answer .btn-danger {
+  color: #a7342d;
+  border-color: #a7342d;
+  background-color: #f0cbc9
+}
+
+
+.react-quiz-container .result-container button,
+.react-quiz-container .result-container .img-answer {
+	cursor: inherit;
+}
