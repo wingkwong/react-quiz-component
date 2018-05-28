@@ -3,6 +3,8 @@ import Question from './Question';
 import Answer from './Answer';
 import Result from './Result';
 import PropTypes from 'prop-types';
+import 'react-paper-css';
+import "./styles.css";
 
 class Quiz extends Component {
   constructor(props){
@@ -16,8 +18,10 @@ class Quiz extends Component {
       answers: [],
       correctAns: [],
       totalQuestions: quiz.questions.length,
+      endQuiz: false,
       showResult: false
     };
+    this.handleClick = this.handleClick.bind(this);
     this.parseCorrectAnswer();
   }
 
@@ -30,6 +34,7 @@ class Quiz extends Component {
 
 
    handleClick = (index) => {
+   console.log(index);
 	    const { step, questions, answers, totalQuestions } = this.state;
 	    answers.push((index+1));
 	    let updatedStep = step;
@@ -42,23 +47,31 @@ class Quiz extends Component {
 	      })
 	    }else{
 	      this.setState({
-	        showResult: true
+	        endQuiz: true
 	      })
 	    } 
 	 }
 
   render() {
-    const {title, questions, currentQuestion, answers, correctAns, showResult} = this.state;
+    const {title, questions, currentQuestion, answers, correctAns, endQuiz} = this.state;
     return (
       <div className="react-quiz-container">
-        <h2 className="quiz-title">{title}</h2>
-        { showResult===true? (
+        <h2>{title}</h2>
+        { endQuiz===true? (
           <Result questions={questions} answers={answers} correctAns={correctAns}/>
         ): (
           <div>
-            <Question currentQuestion={currentQuestion} />
-            <Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
+           <div className="row">
+            <div className="col-12 col">
+             <Question currentQuestion={currentQuestion} />
+             </div>
+           </div>
+           <div className="row">
+           <div className="col-12 col">
+             <Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
+             </div>
             </div>
+          </div>
         )}
       </div>
     );

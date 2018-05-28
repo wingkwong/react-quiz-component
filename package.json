@@ -39,5 +39,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/wingkwong/react-quiz-component.git"
+  },
+  "dependencies": {
+    "react-paper-css": "0.0.4"
   }
 }

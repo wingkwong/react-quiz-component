@@ -12,9 +12,11 @@ class Question extends Component {
   render() {
     const {currentQuestion} = this.props;
     return (
-      <div className="question-title">
-        {currentQuestion.question}
-      </div>
+      <div className="card">
+        <div className="card-body">
+          <h3 className="card-title">{currentQuestion.question}</h3>
+          </div>
+        </div>
     );
   }
 }
