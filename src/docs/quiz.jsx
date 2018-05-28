@@ -1,5 +1,5 @@
 export const quiz =  {
-  "quizTitle": "React Quiz Component Demo - https://github.com/wingkwong/react-quiz-component",
+  "quizTitle": "React Quiz Component Demo",
   "questions": [
     {
       "question": "How can you access the state of a component from inside of a member function?",
