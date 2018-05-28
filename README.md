@@ -1,4 +1,6 @@
 # react-quiz
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwingkwong%2Freact-quiz-component.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwingkwong%2Freact-quiz-component?ref=badge_shield)
+
 :orange_book: React Quiz Component
 
 react-quiz is a ReactJS component allowing users to attempt a quiz. 
@@ -79,3 +81,5 @@ The demo is available at https://wingkwong.github.io/react-quiz/
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwingkwong%2Freact-quiz-component.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwingkwong%2Freact-quiz-component?ref=badge_large)
