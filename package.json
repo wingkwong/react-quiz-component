@@ -8,8 +8,7 @@
     "lib": "babel src/lib -d lib --copy-files",
     "lib:watch": "babel src/lib -w -d lib --copy-files",
     "docs": "webpack-dev-server --mode development",
-    "docs:prod": "webpack --mode production",
-    "deploy": "gh-pages -d docs"
+    "docs:prod": "webpack --mode production"
   },
   "keywords": [],
   "license": "MIT",
