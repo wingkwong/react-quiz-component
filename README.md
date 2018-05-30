@@ -1,13 +1,24 @@
 # react-quiz-component
-:orange_book: React Quiz Component
+:orange_book: React Quiz Component 
+[![NPM version](https://img.shields.io/npm/v/react-quiz-component.svg)](https://www.npmjs.com/package/react-quiz-component) [![License](https://img.shields.io/npm/l/react-quiz-component.svg)](https://github.com/wingkwong/react-quiz-component/blob/master/LICENSE) [![Total NPM Download](https://img.shields.io/npm/dt/react-quiz-component.svg)](https://www.npmjs.com/package/react-quiz-component)
 
 react-quiz-component is a ReactJS component allowing users to attempt a quiz. 
 
-## Init Your Quiz
+## Installing
+```
+npm i react-quiz-component
+```
+
+## Importing react-quiz-component
+```
+import Quiz from 'react-quiz-component';
+```
+
+## Defining Your Quiz Source
 The quiz source is a JSON object. You can use [react-quiz-form](https://github.com/wingkwong/react-quiz-form/) to generate it.
 ```javascript
 export const quiz =  {
-  "quizTitle": "React Quiz Demo - https://github.com/wingkwong/react-quiz",
+  "quizTitle": "React Quiz Component Demo",
   "questions": [
     {
       "question": "How can you access the state of a component from inside of a member function?",
@@ -63,8 +74,10 @@ export const quiz =  {
 } 
 ```
 
-Then pass the object to Quiz Container
+## Passing to Quiz container
 ```javascript
+ import { quiz } from './quiz';
+ ...
  <Quiz quiz={quiz}/>
 ```
 
@@ -72,6 +85,10 @@ Then pass the object to Quiz Container
 - Clone the project
 - run `npm install`
 - run `npm run dev`
+
+## Dependencies
+- [react-paper-css@0.0.4](https://github.com/papercss/papercss-react)
+
 
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz-component/
