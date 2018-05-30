@@ -18,6 +18,9 @@
   background-color: #f0cbc9
 }
 
+.react-quiz-container .answer-container button {		
+	margin: 20px;
+}
 
 .react-quiz-container .result-container button,
 .react-quiz-container .result-container .img-answer {
