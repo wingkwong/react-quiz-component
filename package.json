@@ -1,8 +1,8 @@
 {
   "name": "react-quiz-component",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Quiz Component",
-  "main": "lib/index.js",
+  "main": "lib/Quiz.js",
   "scripts": {
     "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
     "lib": "babel src/lib -d lib --copy-files",
@@ -10,7 +10,13 @@
     "docs": "webpack-dev-server --mode development",
     "docs:prod": "webpack --mode production"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-quiz-component",
+    "react-quiz",
+    "quiz"
+  ],
   "license": "MIT",
   "peerDependencies": {
     "react": "^15.3.0 || ^16.2.0",
