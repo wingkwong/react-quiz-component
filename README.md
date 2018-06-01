@@ -86,10 +86,6 @@ export const quiz =  {
 - run `npm install`
 - run `npm run dev`
 
-## Dependencies
-- [react-paper-css@0.0.4](https://github.com/papercss/papercss-react)
-
-
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz-component/
 
