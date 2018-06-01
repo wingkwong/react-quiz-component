@@ -3,7 +3,6 @@ import Question from './Question';
 import Answer from './Answer';
 import Result from './Result';
 import PropTypes from 'prop-types';
-import 'react-paper-css';
 import "./styles.css";
 
 class Quiz extends Component {
