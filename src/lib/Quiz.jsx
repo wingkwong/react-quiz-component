@@ -1,77 +1,39 @@
 import React, { Component } from 'react';
-import Question from './Question';
-import Answer from './Answer';
-import Result from './Result';
 import PropTypes from 'prop-types';
+import Question from './Question';
 import "./styles.css";
 
 class Quiz extends Component {
   constructor(props){
     super(props);
-    let quiz = this.props.quiz;
     this.state = {
-      step: 0,
-      title: quiz.quizTitle,
-      questions: quiz.questions,
-      currentQuestion: quiz.questions[0],
-      answers: [],
-      correctAns: [],
-      totalQuestions: quiz.questions.length,
-      endQuiz: false,
-      showResult: false
-    };
-    this.handleClick = this.handleClick.bind(this);
-    this.parseCorrectAnswer();
+      start: false,
+    }
+    this.start = this.start.bind(this);
   }
 
-  parseCorrectAnswer(){
-    const {correctAns, questions} = this.state;
-    questions.map(question=>{
-      return correctAns.push(question.correctAnswer);
-    })
+  start = () => {
+    this.setState({start: true})
   }
-
-
-   handleClick = (index) => {
-   console.log(index);
-	    const { step, questions, answers, totalQuestions } = this.state;
-	    answers.push((index+1));
-	    let updatedStep = step;
-
-	    if(step < totalQuestions - 1){
-	       updatedStep = step + 1;
-	        this.setState({
-	        step: updatedStep,
-	        currentQuestion: questions[updatedStep],
-	      })
-	    }else{
-	      this.setState({
-	        endQuiz: true
-	      })
-	    } 
-	 }
 
   render() {
-    const {title, questions, currentQuestion, answers, correctAns, endQuiz} = this.state;
+    let quiz = this.props.quiz;
+    let questions = quiz.questions;
     return (
       <div className="react-quiz-container">
-        <h2>{title}</h2>
-        { endQuiz===true? (
-          <Result questions={questions} answers={answers} correctAns={correctAns}/>
-        ): (
+        {!this.state.start &&
           <div>
-           <div className="row">
-            <div className="col-12 col">
-             <Question currentQuestion={currentQuestion} />
-             </div>
-           </div>
-           <div className="row">
-           <div className="col-12 col">
-             <Answer questionType={currentQuestion.questionType} answers={currentQuestion.answers} handleClick={this.handleClick} renderInResult={false}/>
-             </div>
+            <h2>{quiz.quizTitle}</h2>
+            <div>{quiz.questions.length} Questions</div>
+            <div className="startQuizWrapper">
+              <button onClick={() => this.start()} className="startQuizBtn btn">Start Quiz</button>
             </div>
           </div>
-        )}
+        }
+
+        {
+          this.state.start && <Question questions={questions}/>
+        }
       </div>
     );
   }
