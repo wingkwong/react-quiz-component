@@ -52,4 +52,4 @@ export const quiz =  {
       "correctAnswer": "1"
     }
   ]
-} 
+}
