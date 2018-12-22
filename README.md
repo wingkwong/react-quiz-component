@@ -96,6 +96,13 @@ export const quiz =  {
  <Quiz quiz={quiz}/>
 ```
 
+## Props
+
+|Name|Type|Default|Required|Description|
+|:--|:--:|:-----:|:----------|
+|quiz|`object`|`null`|Y|Quiz Json Object|
+|shuffle|`boolean`|`false`|N|Shuffle the questions|
+
 ## Development
 - Clone the project
 - run `npm install`
