@@ -99,7 +99,7 @@ export const quiz =  {
 ## Props
 
 |Name|Type|Default|Required|Description|
-|:--|:--:|:-----:|:----------|
+|:--|:--:|:-----:|:--|:----------|
 |quiz|`object`|`null`|Y|Quiz Json Object|
 |shuffle|`boolean`|`false`|N|Shuffle the questions|
 
