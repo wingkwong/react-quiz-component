@@ -16,9 +16,20 @@ class Quiz extends Component {
     this.setState({start: true})
   }
 
+  shuffleQuestions = (questions) => {
+    for (let i = questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+    return questions;
+  }
+
   render() {
-    let quiz = this.props.quiz;
+    const { quiz, shuffle } = this.props;
     let questions = quiz.questions;
+    if(shuffle) {
+      questions = this.shuffleQuestions(questions);
+    }
     return (
       <div className="react-quiz-container">
         {!this.state.start &&
@@ -40,7 +51,8 @@ class Quiz extends Component {
 }
 
 Quiz.propTypes = {
-  quiz: PropTypes.object
+  quiz: PropTypes.object,
+  shuffle: PropTypes.bool
 };
 
 export default Quiz;
