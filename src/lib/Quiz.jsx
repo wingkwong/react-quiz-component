@@ -26,28 +26,33 @@ class Quiz extends Component {
 
   render() {
     const { quiz, shuffle } = this.props;
+    if(!quiz) {
+      console.error("Quiz object is required.");
+      return (null);
+    } 
+    
     let questions = quiz.questions;
-    if(shuffle) {
-      questions = this.shuffleQuestions(questions);
-    }
-    return (
-      <div className="react-quiz-container">
-        {!this.state.start &&
-          <div>
-            <h2>{quiz.quizTitle}</h2>
-            <div>{quiz.questions.length} Questions</div>
-            <div className="startQuizWrapper">
-              <button onClick={() => this.start()} className="startQuizBtn btn">Start Quiz</button>
+      if(shuffle) {
+        questions = this.shuffleQuestions(questions);
+      }
+      return (
+        <div className="react-quiz-container">
+          {!this.state.start &&
+            <div>
+              <h2>{quiz.quizTitle}</h2>
+              <div>{quiz.questions.length} Questions</div>
+              <div className="startQuizWrapper">
+                <button onClick={() => this.start()} className="startQuizBtn btn">Start Quiz</button>
+              </div>
             </div>
-          </div>
-        }
+          }
 
-        {
-          this.state.start && <Question questions={questions}/>
-        }
-      </div>
-    );
-  }
+          {
+            this.state.start && <Question questions={questions}/>
+          }
+        </div>
+      );
+    }
 }
 
 Quiz.propTypes = {
