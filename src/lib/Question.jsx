@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Answer from './Answer';
 
 class Question extends Component {
   constructor(props){
@@ -100,6 +99,30 @@ class Question extends Component {
     }
   }
 
+  renderMessageforCorrectAnswer = (question) => {
+    const defaultMessage = 'You are correct. Please click Next to continue.';
+    return question.messageForCorrectAnswer || defaultMessage;
+  }
+
+  renderMessageforIncorrectAnswer = (question) => {
+    const defaultMessage = 'Incorrect answer. Please try again.';
+    return question.messageForIncorrectAnswer || defaultMessage;
+  }
+
+  renderExplanation = (question) => {
+    const explanation = question.explanation;
+    if(!explanation) {
+      return (null);
+    }
+
+    return (
+      <div>
+        <br/>
+        {explanation}
+      </div>
+    )
+  }
+
   render() {
     const { questions } = this.props;
     let question = questions[this.state.currentQuestionIndex];
@@ -109,10 +132,13 @@ class Question extends Component {
           <div className="questionWrapperBody">
             <div className="questionModal">
               {this.state.incorrectAnswer &&
-                <div className="alert incorrect">Incorrect answer. Please try again.</div>
+                <div className="alert incorrect">{this.renderMessageforIncorrectAnswer(question)}</div>
               }
               {this.state.correctAnswer &&
-                <div className="alert correct">You are correct. Please click Next to continue.</div>
+                <div className="alert correct">
+                  {this.renderMessageforCorrectAnswer(question)} 
+                  {this.renderExplanation(question)}
+                </div>
               }
             </div>
             <div>Question {this.state.currentQuestionIndex + 1}:</div>
