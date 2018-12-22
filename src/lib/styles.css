@@ -63,9 +63,6 @@
   width: 100%;
 }
 
-.react-quiz-container .nextQuestionBtn {
-}
-
 .react-quiz-container .startQuizWrapper .startQuizBtn {
   font-size: 15px;
   border-radius: 2px;
@@ -73,4 +70,20 @@
   color: #fff;
   background-color: #21b6ae;
   border: 1px solid transparent;
+}
+
+.react-quiz-container .result-answer-wrapper {
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.react-quiz-container .result-answer-wrapper h3{
+    background-color: #21b6ae;
+    color: white;
+    margin: 0px;
+    padding: 10px;
+}
+
+.react-quiz-container .result-answer{
+  padding: 20px;
 }
