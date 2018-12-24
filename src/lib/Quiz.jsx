@@ -41,6 +41,11 @@ class Quiz extends Component {
             <div>
               <h2>{quiz.quizTitle}</h2>
               <div>{quiz.questions.length} Questions</div>
+              { quiz.quizSynopsis && 
+                  <div className="quiz-synopsis">
+                      {quiz.quizSynopsis}
+                  </div> 
+              }
               <div className="startQuizWrapper">
                 <button onClick={() => this.start()} className="startQuizBtn btn">Start Quiz</button>
               </div>
