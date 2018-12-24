@@ -6,7 +6,7 @@ import {quiz} from './quiz';
 function App() {
   return (
     <div>
-      <Quiz quiz={quiz}/>
+      <Quiz quiz={quiz} shuffle={true}/>
     </div>
   );
 }

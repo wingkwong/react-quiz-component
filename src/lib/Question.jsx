@@ -177,16 +177,18 @@ class Question extends Component {
                     this.state.correct.map( (questionIdx, index) => {
                     let question = questions[questionIdx];
                       return (
-                        <div key={index}>
+                        <div class="result-answer-wrapper" key={index}>
                           <h3>
                             Q{questionIdx+1}: {questions[questionIdx].question}
                           </h3>
-                          {
-                            <button disabled={true} className="answerBtn btn">
-                              { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
-                              { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
-                            </button>
-                          }
+                          <div className="result-answer">
+                            {
+                              <button disabled={true} className="answerBtn btn">
+                                { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
+                                { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
+                              </button>
+                            }
+                          </div>
                         </div>
                       )
                     })
@@ -202,16 +204,18 @@ class Question extends Component {
                       this.state.incorrect.map( (questionIdx, index) => {
                       let question = questions[questionIdx];
                         return (
-                          <div key={index}>
+                          <div class="result-answer-wrapper" key={index}>
                             <h3>
                               Q{questionIdx+1}: {questions[questionIdx].question}
                             </h3>
-                            {
-                              <button disabled={true} className="answerBtn btn">
-                                { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
-                                { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
-                              </button>
-                            }
+                            <div className="result-answer">
+                              {
+                                <button disabled={true} className="answerBtn btn">
+                                  { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
+                                  { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
+                                </button>
+                              }
+                            </div>
                           </div>
                         )
                       })
