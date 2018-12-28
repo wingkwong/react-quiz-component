@@ -109,10 +109,18 @@ class Question extends Component {
     return question.messageForIncorrectAnswer || defaultMessage;
   }
 
-  renderExplanation = (question) => {
+  renderExplanation = (question, isResultPage) => {
     const explanation = question.explanation;
     if(!explanation) {
       return (null);
+    }
+    
+    if(isResultPage) {
+      return (
+        <div className="explaination">
+          {explanation}
+        </div>
+      )
     }
 
     return (
@@ -122,7 +130,6 @@ class Question extends Component {
       </div>
     )
   }
-
   render() {
     const { questions } = this.props;
     let question = questions[this.state.currentQuestionIndex];
@@ -137,7 +144,7 @@ class Question extends Component {
               {this.state.correctAnswer &&
                 <div className="alert correct">
                   {this.renderMessageforCorrectAnswer(question)} 
-                  {this.renderExplanation(question)}
+                  {this.renderExplanation(question, false)}
                 </div>
               }
             </div>
@@ -189,6 +196,7 @@ class Question extends Component {
                               </button>
                             }
                           </div>
+                          {this.renderExplanation(question, true)}
                         </div>
                       )
                     })
@@ -216,6 +224,7 @@ class Question extends Component {
                                 </button>
                               }
                             </div>
+                            {this.renderExplanation(question, true)}
                           </div>
                         )
                       })
