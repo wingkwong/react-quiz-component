@@ -97,6 +97,13 @@ export const quiz =  {
  <Quiz quiz={quiz}/>
 ```
 
+## Shuffling question set
+```javascript
+ import { quiz } from './quiz';
+ ...
+ <Quiz quiz={quiz} shuffle={true}/>
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|

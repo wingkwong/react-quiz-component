@@ -14,6 +14,7 @@ class Question extends Component {
       buttonClasses: {},
       correct: [],
       incorrect: [],
+      filteredValue: 'all'
     };
   }
 
@@ -130,6 +131,59 @@ class Question extends Component {
       </div>
     )
   }
+
+  handleChange = (event) => {
+    this.setState({filteredValue: event.target.value});
+  }
+
+  renderQuizResultFilter = () => {
+    return (
+      <div className="quiz-result-filter">
+          <select value={this.state.filteredValue} onChange={this.handleChange}>
+            <option value="all">All</option>
+            <option value="correct">Correct</option>
+            <option value="incorrect">Incorrect</option>
+          </select>
+      </div>
+    );
+  }
+
+  renderQuizResultQuestions = () => {
+    const { filteredValue } = this.state;
+    let questions = this.props.questions;
+
+    if(filteredValue != 'all') {
+      questions = questions.filter( (question, index) => {
+        return this.state[filteredValue].indexOf(index) != -1
+      })
+    }
+
+    return questions.map((question, questionIdx) => {
+      return (
+        <div class="result-answer-wrapper" key={questionIdx+1}>
+        <h3>
+          Q{questionIdx+1}: {question.question}
+        </h3>
+        <div className="result-answer">
+            {
+              question.answers.map( (answer, index) => {
+                return(
+                  <div>
+                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct': '')}>
+                      { question.questionType == 'text' && <span>{ answer }</span> }
+                      { question.questionType == 'photo' && <img src={ answer } /> }
+                    </button>
+                  </div>
+                )
+              })
+            }
+        </div>
+        {this.renderExplanation(question, true)}
+      </div>
+      )
+    })
+  }
+
   render() {
     const { questions } = this.props;
     let question = questions[this.state.currentQuestionIndex];
@@ -176,68 +230,15 @@ class Question extends Component {
         }
         {this.state.endQuiz &&
             <div className="card-body">
-              <h2>You have completed the quiz. You got {this.state.correct.length} out of {questions.length} questions. <br/></h2>
-              {
-                this.state.correct.length > 0 &&
-                <div>
-                  {
-                    this.state.correct.map( (questionIdx, index) => {
-                    let question = questions[questionIdx];
-                      return (
-                        <div class="result-answer-wrapper" key={index}>
-                          <h3>
-                            Q{questionIdx+1}: {questions[questionIdx].question}
-                          </h3>
-                          <div className="result-answer">
-                            {
-                              <button disabled={true} className="answerBtn btn">
-                                { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
-                                { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
-                              </button>
-                            }
-                          </div>
-                          {this.renderExplanation(question, true)}
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-              }
-
-              {
-                this.state.incorrect.length > 0 &&
-                  <div>
-                    <h2>You may need to revise on the following question(s):</h2>
-                    {
-                      this.state.incorrect.map( (questionIdx, index) => {
-                      let question = questions[questionIdx];
-                        return (
-                          <div class="result-answer-wrapper" key={index}>
-                            <h3>
-                              Q{questionIdx+1}: {questions[questionIdx].question}
-                            </h3>
-                            <div className="result-answer">
-                              {
-                                <button disabled={true} className="answerBtn btn">
-                                  { question.questionType == 'text' && <span>{ question.answers[question.correctAnswer - 1] }</span> }
-                                  { question.questionType == 'photo' && <img src={ question.answers[question.correctAnswer -1] } /> }
-                                </button>
-                              }
-                            </div>
-                            {this.renderExplanation(question, true)}
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
-              }
+            <h2>You have completed the quiz. You got {this.state.correct.length} out of {questions.length} questions. <br/></h2>
+              { this.renderQuizResultFilter() }
+              { this.renderQuizResultQuestions() }
             </div>
         }
         </div>
     );
   }
 }
-
 
 Question.propTypes = {
   questions: PropTypes.array,
