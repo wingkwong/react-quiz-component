@@ -14,7 +14,10 @@ class Question extends Component {
       buttonClasses: {},
       correct: [],
       incorrect: [],
-      filteredValue: 'all'
+      filteredValue: 'all',
+      showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
+      onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
+      customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
     };
   }
 
@@ -186,7 +189,14 @@ class Question extends Component {
 
   render() {
     const { questions } = this.props;
+    const questionSummary = {
+      numberOfQuestions: this.props.questions.length,
+      numberOfCorrectAnswers: this.state.correct.length,
+      numberOfIncorrectAnswers: this.state.incorrect.length,
+      questions: this.props.questions
+    };
     let question = questions[this.state.currentQuestionIndex];
+    
     return (
       <div className="questionWrapper">
         {!this.state.endQuiz &&
@@ -228,12 +238,24 @@ class Question extends Component {
             }
           </div>
         }
-        {this.state.endQuiz &&
+        {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
             <div className="card-body">
             <h2>You have completed the quiz. You got {this.state.correct.length} out of {questions.length} questions. <br/></h2>
               { this.renderQuizResultFilter() }
               { this.renderQuizResultQuestions() }
             </div>
+        }
+
+        {
+          this.state.endQuiz && this.state.onComplete != undefined &&
+             this.state.onComplete(questionSummary)
+
+            
+        }
+
+        {
+          this.state.endQuiz && !this.state.showDefaultResult  && this.state.customResultPage != undefined &&
+             this.state.customResultPage(questionSummary)
         }
         </div>
     );
@@ -242,6 +264,9 @@ class Question extends Component {
 
 Question.propTypes = {
   questions: PropTypes.array,
+  showDefaultResult: PropTypes.bool,
+  onComplete: PropTypes.func,
+  customResultPage: PropTypes.func
 };
 
 export default Question;
