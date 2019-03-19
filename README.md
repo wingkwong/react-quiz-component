@@ -113,12 +113,66 @@ export const quiz =  {
  <Quiz quiz={quiz} shuffle={true}/>
 ```
 
+## Disabling Default Result Page
+```javascript
+ import { quiz } from './quiz';
+ ...
+ <Quiz quiz={quiz} showDefaultResult={false}/>
+```
+
+## Enabling Custom Result Page
+* In order to enable custom result page, showDefaultResult has to be false.
+```javascript
+ import { quiz } from './quiz';
+ ...
+  const renderCustomResultPage = (obj) => {
+    console.log(obj);
+    return (
+      <div>
+        This is a custom result page. You can use obj to render your custom result page
+      </div>
+    )
+  }
+ ...
+  <Quiz quiz={quiz} shuffle={true} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
+```
+
+## Enabling Custom Result Page
+```javascript
+ import { quiz } from './quiz';
+ ...
+  const onCompleteAction = (obj) => {
+    console.log(obj);
+    // YOUR LOGIC GOES HERE
+  }
+ ...
+  <Quiz quiz={quiz} shuffle={true} showDefaultResult={false} onComplete={onCompleteAction}/>
+```
+
+## Example of Quiz Summary returned to customResultPage and onComplete
+````
+Object
+  numberOfCorrectAnswers: 4
+  numberOfIncorrectAnswers: 1
+  numberOfQuestions: 5
+  questions: Array(5)
+    0: {question: "Which of the following concepts is/are key to ReactJS?", questionType: "text", answers: Array(3), correctAnswer: "3", messageForCorrectAnswer: "Correct answer. Good job.", …}
+    1: {question: "ReactJS is developed by _____?", questionType: "text", answers: Array(2), correctAnswer: "2", messageForCorrectAnswer: "Correct answer. Good job.", …}
+    2: {question: "How can you access the state of a component from inside of a member function?", questionType: "text", answers: Array(4), correctAnswer: "3", messageForCorrectAnswer: "Correct answer. Good job.", …}
+    3: {question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit,", questionType: "photo", answers: Array(4), correctAnswer: "1", messageForCorrectAnswer: "Correct answer. Good job.", …}
+    4: {question: "ReactJS is an MVC based framework?", questionType: "text", answers: Array(2), correctAnswer: "2", messageForCorrectAnswer: "Correct answer. Good job.", …}
+
+````
+
 ## Props
 
 |Name|Type|Default|Required|Description|
 |:--|:--:|:-----:|:--|:----------|
 |quiz|`object`|`null`|Y|Quiz Json Object|
 |shuffle|`boolean`|`false`|N|Shuffle the questions|
+|showDefaultResult|`boolean`|`true`|N|Show the default result page|
+|customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
+|onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
 
 ## Development
 - Clone the project

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.2.5
+- Added showDefaultResult, customResultPage, onComplete
+
 ## 0.2.4
 - Added CHANGELOG.md
 - Added Features to README.md

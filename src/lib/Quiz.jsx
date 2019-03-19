@@ -25,7 +25,7 @@ class Quiz extends Component {
   }
 
   render() {
-    const { quiz, shuffle } = this.props;
+    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage } = this.props;
     if(!quiz) {
       console.error("Quiz object is required.");
       return (null);
@@ -53,7 +53,7 @@ class Quiz extends Component {
           }
 
           {
-            this.state.start && <Question questions={questions}/>
+            this.state.start && <Question questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage}/>
           }
         </div>
       );
@@ -62,7 +62,10 @@ class Quiz extends Component {
 
 Quiz.propTypes = {
   quiz: PropTypes.object,
-  shuffle: PropTypes.bool
+  shuffle: PropTypes.bool,
+  showDefaultResult: PropTypes.bool,
+  onComplete: PropTypes.func,
+  customResultPage: PropTypes.func
 };
 
 export default Quiz;
