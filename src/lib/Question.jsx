@@ -18,7 +18,7 @@ class Question extends Component {
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
       customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
-      showInstantFeedback: this.props.showInstantFeedback != undefined ? this.props.showInstantFeedback : true
+      showInstantFeedback: this.props.showInstantFeedback != undefined ? this.props.showInstantFeedback : false
     };
   }
 
