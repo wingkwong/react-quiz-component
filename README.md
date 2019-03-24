@@ -7,11 +7,14 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 ## Features
 - JSON-based input
 - Quiz landing page showing title, synopsis and number of questions
-- Multiple answers with a single answer
+- Multiple answers with one correct answer
 - Support text and photo answers
 - Continue till answered correctly
 - Show explainations when answered correctly or not
-- Quiz result at the end with the dropdown filtering all questions or only those you answered correctly or incorrectly
+- Quiz result page at the end with the dropdown filtering all questions or only those you answered correctly or incorrectly
+- Support custom result page
+- Return quiz summary at the page
+- Allow Instant feedback
 
 ## Installing
 ```
@@ -134,10 +137,10 @@ export const quiz =  {
     )
   }
  ...
-  <Quiz quiz={quiz} shuffle={true} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
+  <Quiz quiz={quiz} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
 ```
 
-## Enabling Custom Result Page
+## Enabling onComplete Action
 ```javascript
  import { quiz } from './quiz';
  ...
@@ -146,7 +149,7 @@ export const quiz =  {
     // YOUR LOGIC GOES HERE
   }
  ...
-  <Quiz quiz={quiz} shuffle={true} showDefaultResult={false} onComplete={onCompleteAction}/>
+  <Quiz quiz={quiz} showDefaultResult={false} onComplete={onCompleteAction}/>
 ```
 
 ## Example of Quiz Summary returned to customResultPage and onComplete
@@ -164,6 +167,13 @@ Object
 
 ````
 
+## Showing Instant Feedback
+```javascript
+ import { quiz } from './quiz';
+ ...
+  <Quiz quiz={quiz} showInstantFeedback={true}/>
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|
@@ -173,6 +183,7 @@ Object
 |showDefaultResult|`boolean`|`true`|N|Show the default result page|
 |customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
 |onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
+|showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
 
 ## Development
 - Clone the project
