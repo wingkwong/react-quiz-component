@@ -25,7 +25,7 @@ class Quiz extends Component {
   }
 
   render() {
-    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage } = this.props;
+    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback } = this.props;
     if(!quiz) {
       console.error("Quiz object is required.");
       return (null);
@@ -35,6 +35,12 @@ class Quiz extends Component {
       if(shuffle) {
         questions = this.shuffleQuestions(questions);
       }
+
+      questions = questions.map((question, index) => ({
+        ...question, 
+        questionIndex : index + 1
+      }));
+
       return (
         <div className="react-quiz-container">
           {!this.state.start &&
@@ -53,7 +59,7 @@ class Quiz extends Component {
           }
 
           {
-            this.state.start && <Question questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage}/>
+            this.state.start && <Question questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage} showInstantFeedback={showInstantFeedback}/>
           }
         </div>
       );
@@ -65,7 +71,8 @@ Quiz.propTypes = {
   shuffle: PropTypes.bool,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
-  customResultPage: PropTypes.func
+  customResultPage: PropTypes.func,
+  showInstantFeedback: PropTypes.bool
 };
 
 export default Quiz;
