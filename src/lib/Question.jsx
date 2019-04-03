@@ -234,7 +234,7 @@ class Question extends Component {
               })
             }
             {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
+              <div className="nextQuestionBtnDiv"><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
             }
           </div>
         }
