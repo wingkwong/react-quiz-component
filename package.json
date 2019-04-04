@@ -5,10 +5,11 @@
   "main": "lib/Quiz.js",
   "scripts": {
     "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
-    "lib": "babel src/lib -d lib --copy-files",
+    "lib": "babel src/lib -d src/lib --copy-files",
     "lib:watch": "babel src/lib -w -d lib --copy-files",
     "docs": "webpack-dev-server --mode development",
-    "docs:prod": "webpack --mode production"
+    "docs:prod": "webpack --mode production",
+    "build": "webpack build"
   },
   "keywords": [
     "react",
@@ -36,8 +37,8 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "style-loader": "^0.21.0",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15",
+    "webpack": "4.19.1",
+    "webpack-cli": "2.1.4",
     "webpack-dev-server": "^3.1.14"
   },
   "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
@@ -45,5 +46,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/wingkwong/react-quiz-component.git"
+  },
+  "dependencies": {
+    "babel-core": "7.0.0-bridge.0"
   }
 }
