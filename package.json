@@ -48,6 +48,7 @@
     "url": "https://github.com/wingkwong/react-quiz-component.git"
   },
   "dependencies": {
-    "babel-core": "7.0.0-bridge.0"
+    "babel-core": "7.0.0-bridge.0",
+    "marked": "0.6.1"
   }
 }

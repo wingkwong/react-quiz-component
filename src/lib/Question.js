@@ -9,6 +9,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _marked = _interopRequireDefault(require("marked"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
@@ -150,7 +152,7 @@ function (_Component) {
       if (isResultPage) {
         return _react["default"].createElement("div", {
           className: "explaination"
-        }, explanation);
+        }, _react["default"].createElement("strong", null, "Explaination: "), explanation);
       }
 
       return _react["default"].createElement("div", null, _react["default"].createElement("br", null), explanation);
@@ -191,7 +193,9 @@ function (_Component) {
         return _react["default"].createElement("div", {
           "class": "result-answer-wrapper",
           key: questionIdx + 1
-        }, _react["default"].createElement("h3", null, "Q", questionIdx + 1, ": ", question.question), _react["default"].createElement("div", {
+        }, _react["default"].createElement("h3", null, _react["default"].createElement("span", null, "Q", questionIdx + 1, ": "), _react["default"].createElement("span", {
+          dangerouslySetInnerHTML: _this.rawMarkup(question.question)
+        })), _react["default"].createElement("div", {
           className: "result-answer"
         }, question.answers.map(function (answer, index) {
           return _react["default"].createElement("div", null, _react["default"].createElement("button", {
@@ -223,6 +227,16 @@ function (_Component) {
   }
 
   _createClass(Question, [{
+    key: "rawMarkup",
+    value: function rawMarkup(data) {
+      var rawMarkup = (0, _marked["default"])(data, {
+        sanitize: true
+      });
+      return {
+        __html: rawMarkup
+      };
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -235,6 +249,7 @@ function (_Component) {
         questions: this.props.questions
       };
       var question = questions[this.state.currentQuestionIndex];
+      var totalQuestions = questions.length;
       return _react["default"].createElement("div", {
         className: "questionWrapper"
       }, !this.state.endQuiz && _react["default"].createElement("div", {
@@ -245,7 +260,11 @@ function (_Component) {
         className: "alert incorrect"
       }, this.renderMessageforIncorrectAnswer(question)), this.state.correctAnswer && _react["default"].createElement("div", {
         className: "alert correct"
-      }, this.renderMessageforCorrectAnswer(question), this.renderExplanation(question, false))), _react["default"].createElement("div", null, "Question ", this.state.currentQuestionIndex + 1, ":"), _react["default"].createElement("h3", null, question.question), question.answers.map(function (answer, index) {
+      }, this.renderMessageforCorrectAnswer(question), this.renderExplanation(question, false))), _react["default"].createElement("div", {
+        className: "quizMeta"
+      }, _react["default"].createElement("h5", null, "Question ", this.state.currentQuestionIndex + 1, "/", totalQuestions, ":"), _react["default"].createElement("h5", null, "Correct:", this.state.correct.length, " Wrong: ", this.state.incorrect.length)), _react["default"].createElement("h3", {
+        dangerouslySetInnerHTML: this.rawMarkup(question.question)
+      }), question.answers.map(function (answer, index) {
         if (_this2.state.buttons[index] != undefined) {
           return _react["default"].createElement("button", {
             key: index,

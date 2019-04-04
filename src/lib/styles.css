@@ -142,3 +142,15 @@
 .nextQuestionBtn .btn {
   padding: .74rem 3rem;
 }
+
+.quizMeta {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.result-answer-wrapper h3 p {
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
