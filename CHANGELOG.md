@@ -1,8 +1,9 @@
 # CHANGELOG
 
 ## 0.2.6
-- Added showInstantFeedback
-- fixed the incorrect index in the result page
+- Added showInstantFeedback & continueTillCorrect
+- Revised font color to the incorrect answer container
+- Fixed the incorrect index in the result page
 
 ## 0.2.5
 - Added showDefaultResult, customResultPage, onComplete
