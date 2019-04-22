@@ -62,6 +62,7 @@
 
 .react-quiz-container .incorrect {
   background: red;
+  color: white;
 }
 
 .react-quiz-container .questionWrapper img {

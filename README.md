@@ -15,6 +15,7 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Support custom result page
 - Return quiz summary at the page
 - Allow Instant feedback
+- Allow retry until the answer is selected correctly
 
 ## Installing
 ```
@@ -174,6 +175,13 @@ Object
   <Quiz quiz={quiz} showInstantFeedback={true}/>
 ```
 
+## Answering the same question till it is correct
+```javascript
+ import { quiz } from './quiz';
+ ...
+  <Quiz quiz={quiz} continueTillCorrect={true}/>
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|
@@ -184,6 +192,7 @@ Object
 |customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
 |onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
 |showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
+|continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
 
 ## Development
 - Clone the project
