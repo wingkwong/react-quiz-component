@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import marked from 'marked';
 
 class Question extends Component {
   constructor(props){
@@ -127,10 +128,11 @@ class Question extends Component {
     if(!explanation) {
       return (null);
     }
-    
+
     if(isResultPage) {
       return (
         <div className="explaination">
+          <strong>Explaination: </strong> 
           {explanation}
         </div>
       )
@@ -174,7 +176,8 @@ class Question extends Component {
       return (
         <div class="result-answer-wrapper" key={index+1}>
         <h3>
-          Q{question.questionIndex}: {question.question}
+          <span>Q{questionIdx+1}: </span>
+          <span dangerouslySetInnerHTML={this.rawMarkup(question.question)} />
         </h3>
         <div className="result-answer">
             {
@@ -196,6 +199,11 @@ class Question extends Component {
     })
   }
 
+  rawMarkup(data) {
+    let rawMarkup = marked(data, {sanitize: true});
+    return { __html: rawMarkup };
+  }
+
   render() {
     const { questions } = this.props;
     const questionSummary = {
@@ -205,7 +213,8 @@ class Question extends Component {
       questions: this.props.questions
     };
     let question = questions[this.state.currentQuestionIndex];
-    
+    const totalQuestions = questions.length;
+
     return (
       <div className="questionWrapper">
         {!this.state.endQuiz &&
@@ -216,13 +225,16 @@ class Question extends Component {
               }
               {this.state.correctAnswer &&
                 <div className="alert correct">
-                  {this.renderMessageforCorrectAnswer(question)} 
+                  {this.renderMessageforCorrectAnswer(question)}
                   {this.renderExplanation(question, false)}
                 </div>
               }
             </div>
-            <div>Question {this.state.currentQuestionIndex + 1}:</div>
-            <h3>{question.question}</h3>
+            <div className="quizMeta">
+              <h5>Question {this.state.currentQuestionIndex + 1}/{totalQuestions}:</h5>
+              <h5>Correct:{this.state.correct.length} Wrong: {this.state.incorrect.length}</h5>
+            </div>
+            <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)} />
             {
               question.answers.map( (answer, index) => {
                 if(this.state.buttons[index] != undefined) {
@@ -243,7 +255,7 @@ class Question extends Component {
               })
             }
             {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
+              <div className="nextQuestionBtnDiv"><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
             }
           </div>
         }
