@@ -18,22 +18,18 @@ class Question extends Component {
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
       customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
+      showInstantFeedback: this.props.showInstantFeedback != undefined ? this.props.showInstantFeedback : false,
+      continueTillCorrect: this.props.continueTillCorrect != undefined ? this.props.continueTillCorrect : false
     };
   }
 
   checkAnswer = (index, correctAnswer) => {
-    const { correct, incorrect, currentQuestionIndex } = this.state;
+    const { correct, incorrect, currentQuestionIndex, showInstantFeedback, continueTillCorrect } = this.state;
+
     if(index == correctAnswer) {
       if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
-        correct.push(currentQuestionIndex)
+        correct.push(currentQuestionIndex);
       }
-
-      this.setState({
-        correctAnswer: true,
-        incorrectAnswer: false,
-        showNextQuestionButton: true,
-        correct: correct
-      })
 
       let disabledAll = {
         0: {disabled: true},
@@ -49,34 +45,69 @@ class Question extends Component {
           {
             ...disabledAll,
             [index-1]: {
-              className: (index == correctAnswer)? "correct" : ""
+              className: (index == correctAnswer)? "correct" : "incorrect"
             },
           }
         );
         return { buttons };
+      })
+
+      this.setState({
+        correctAnswer: true,
+        incorrectAnswer: false,
+        correct: correct,
+        showNextQuestionButton: true,
       })
     } else {
       if( correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0 ) {
         incorrect.push(currentQuestionIndex)
       }
 
+      if(continueTillCorrect) {
+        this.setState((prevState) => {
+          const buttons = Object.assign(
+            {},
+            prevState.buttons,
+            {
+              [index-1]: {
+                disabled: !prevState.buttons[index-1]
+              }
+            }
+          );
+          return { buttons };
+        });
+      } else {
+        let disabledAll = {
+          0: {disabled: true},
+          1: {disabled: true},
+          2: {disabled: true},
+          3: {disabled: true}
+        }
+
+        this.setState((prevState) => {
+          const buttons = Object.assign(
+            {},
+            prevState.buttons,
+            {
+              ...disabledAll,
+              [index-1]: {
+                className: (index == correctAnswer)? "correct" : "incorrect"
+              },
+            }
+          );
+          return { buttons };
+        })
+
+        this.setState({
+          showNextQuestionButton: true,
+        })
+      }
+
       this.setState({
         incorrectAnswer: true,
         correctAnswer: false,
-        incorrect: incorrect
+        incorrect: incorrect,
       })
-      this.setState((prevState) => {
-        const buttons = Object.assign(
-          {},
-          prevState.buttons,
-          {
-            [index-1]: {
-              disabled: !prevState.buttons[index-1]
-            }
-          }
-        );
-        return { buttons };
-      });
     }
   }
 
@@ -161,11 +192,11 @@ class Question extends Component {
       })
     }
 
-    return questions.map((question, questionIdx) => {
+    return questions.map((question, index) => {
       return (
-        <div class="result-answer-wrapper" key={questionIdx+1}>
+        <div class="result-answer-wrapper" key={index+1}>
         <h3>
-          Q{questionIdx+1}: {question.question}
+          Q{question.questionIndex}: {question.question}
         </h3>
         <div className="result-answer">
             {
@@ -202,10 +233,10 @@ class Question extends Component {
         {!this.state.endQuiz &&
           <div className="questionWrapperBody">
             <div className="questionModal">
-              {this.state.incorrectAnswer &&
+              {this.state.incorrectAnswer && this.state.showInstantFeedback && 
                 <div className="alert incorrect">{this.renderMessageforIncorrectAnswer(question)}</div>
               }
-              {this.state.correctAnswer &&
+              {this.state.correctAnswer && this.state.showInstantFeedback && 
                 <div className="alert correct">
                   {this.renderMessageforCorrectAnswer(question)} 
                   {this.renderExplanation(question, false)}
@@ -249,8 +280,6 @@ class Question extends Component {
         {
           this.state.endQuiz && this.state.onComplete != undefined &&
              this.state.onComplete(questionSummary)
-
-            
         }
 
         {
@@ -266,7 +295,9 @@ Question.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
-  customResultPage: PropTypes.func
+  customResultPage: PropTypes.func,
+  showInstantFeedback: PropTypes.bool,
+  continueTillCorrect: PropTypes.bool
 };
 
 export default Question;
