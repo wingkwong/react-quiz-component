@@ -19,65 +19,74 @@ class Question extends Component {
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
       customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
+      showInstantFeedback: this.props.showInstantFeedback != undefined ? this.props.showInstantFeedback : false
     };
   }
 
   checkAnswer = (index, correctAnswer) => {
-    const { correct, incorrect, currentQuestionIndex } = this.state;
+    const { correct, incorrect, currentQuestionIndex, showInstantFeedback } = this.state;
     if(index == correctAnswer) {
       if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
         correct.push(currentQuestionIndex)
       }
 
-      this.setState({
-        correctAnswer: true,
-        incorrectAnswer: false,
-        showNextQuestionButton: true,
-        correct: correct
-      })
-
-      let disabledAll = {
-        0: {disabled: true},
-        1: {disabled: true},
-        2: {disabled: true},
-        3: {disabled: true}
+      if(!showInstantFeedback) {
+        return this.nextQuestion(currentQuestionIndex);
+      } else {
+        this.setState({
+          correctAnswer: true,
+          incorrectAnswer: false,
+          showNextQuestionButton: true,
+          correct: correct
+        })
+  
+        let disabledAll = {
+          0: {disabled: true},
+          1: {disabled: true},
+          2: {disabled: true},
+          3: {disabled: true}
+        }
+  
+        this.setState((prevState) => {
+          const buttons = Object.assign(
+            {},
+            prevState.buttons,
+            {
+              ...disabledAll,
+              [index-1]: {
+                className: (index == correctAnswer)? "correct" : ""
+              },
+            }
+          );
+          return { buttons };
+        })
       }
-
-      this.setState((prevState) => {
-        const buttons = Object.assign(
-          {},
-          prevState.buttons,
-          {
-            ...disabledAll,
-            [index-1]: {
-              className: (index == correctAnswer)? "correct" : ""
-            },
-          }
-        );
-        return { buttons };
-      })
     } else {
       if( correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0 ) {
         incorrect.push(currentQuestionIndex)
       }
 
-      this.setState({
-        incorrectAnswer: true,
-        correctAnswer: false,
-        incorrect: incorrect
-      })
-      this.setState((prevState) => {
-        const buttons = Object.assign(
-          {},
-          prevState.buttons,
-          {
-            [index-1]: {
-              disabled: !prevState.buttons[index-1]
+      if(!showInstantFeedback) {
+        return this.nextQuestion(currentQuestionIndex);
+      } else {  
+        this.setState({
+          incorrectAnswer: true,
+          correctAnswer: false,
+          incorrect: incorrect
+        })
+        this.setState((prevState) => {
+          const buttons = Object.assign(
+            {},
+            prevState.buttons,
+            {
+              [index-1]: {
+                disabled: !prevState.buttons[index-1]
+              }
             }
-          }
-        );
-        return { buttons };
-      });
+          );
+          return { buttons };
+        });
+      }
     }
   }
 
@@ -163,9 +172,9 @@ class Question extends Component {
       })
     }
 
-    return questions.map((question, questionIdx) => {
+    return questions.map((question, index) => {
       return (
-        <div class="result-answer-wrapper" key={questionIdx+1}>
+        <div class="result-answer-wrapper" key={index+1}>
         <h3>
           <span>Q{questionIdx+1}: </span>
           <span dangerouslySetInnerHTML={this.rawMarkup(question.question)} />
@@ -276,7 +285,8 @@ Question.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
-  customResultPage: PropTypes.func
+  customResultPage: PropTypes.func,
+  showInstantFeedback: PropTypes.bool
 };
 
 export default Question;
