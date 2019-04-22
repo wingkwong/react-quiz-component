@@ -39,14 +39,14 @@ class Question extends Component {
           showNextQuestionButton: true,
           correct: correct
         })
-  
+
         let disabledAll = {
           0: {disabled: true},
           1: {disabled: true},
           2: {disabled: true},
           3: {disabled: true}
         }
-  
+
         this.setState((prevState) => {
           const buttons = Object.assign(
             {},
@@ -68,7 +68,7 @@ class Question extends Component {
 
       if(!showInstantFeedback) {
         return this.nextQuestion(currentQuestionIndex);
-      } else {  
+      } else {
         this.setState({
           incorrectAnswer: true,
           correctAnswer: false,
@@ -132,7 +132,7 @@ class Question extends Component {
     if(isResultPage) {
       return (
         <div className="explaination">
-          <strong>Explaination: </strong> 
+          <strong>Explaination: </strong>
           {explanation}
         </div>
       )
@@ -174,16 +174,16 @@ class Question extends Component {
 
     return questions.map((question, index) => {
       return (
-        <div class="result-answer-wrapper" key={index+1}>
+        <div className="result-answer-wrapper" key={index+1}>
         <h3>
-          <span>Q{questionIdx+1}: </span>
+          <span>Q{index+1}: </span>
           <span dangerouslySetInnerHTML={this.rawMarkup(question.question)} />
         </h3>
         <div className="result-answer">
             {
               question.answers.map( (answer, index) => {
                 return(
-                  <div>
+                  <div key={index}>
                      <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct': '')}>
                       { question.questionType == 'text' && <span>{ answer }</span> }
                       { question.questionType == 'photo' && <img src={ answer } /> }
