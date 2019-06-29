@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Question from './Question';
+import { defaultLocale } from './Locale';
 import "./styles.css";
 
 class Quiz extends Component {
@@ -30,6 +31,11 @@ class Quiz extends Component {
       console.error("Quiz object is required.");
       return (null);
     } 
+
+    const appLocale = {
+      ...defaultLocale,
+      ...quiz.appLocale
+    };
     
     let questions = quiz.questions;
       if(shuffle) {
@@ -46,20 +52,20 @@ class Quiz extends Component {
           {!this.state.start &&
             <div>
               <h2>{quiz.quizTitle}</h2>
-              <div>{quiz.questions.length} Questions</div>
+              <div> {appLocale.landingHeaderText.replace("<questionLength>" , quiz.questions.length )}</div>
               { quiz.quizSynopsis && 
                   <div className="quiz-synopsis">
                       {quiz.quizSynopsis}
                   </div> 
               }
               <div className="startQuizWrapper">
-                <button onClick={() => this.start()} className="startQuizBtn btn">Start Quiz</button>
+                <button onClick={() => this.start()} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
               </div>
             </div>
           }
 
           {
-            this.state.start && <Question questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage} showInstantFeedback={showInstantFeedback} continueTillCorrect={continueTillCorrect}/>
+            this.state.start && <Question questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage} showInstantFeedback={showInstantFeedback} continueTillCorrect={continueTillCorrect} appLocale={appLocale}/>
           }
         </div>
       );

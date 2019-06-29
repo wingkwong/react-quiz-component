@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.7
+- Added Locale for customimzation (Refer to #21)
+- Added logic to show incorrect answer users chose in result page (Refer to #22)
+
 ## 0.2.6
 - Added showInstantFeedback & continueTillCorrect
 - Revised font color to the incorrect answer container

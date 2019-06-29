@@ -14,6 +14,7 @@ class Question extends Component {
       buttonClasses: {},
       correct: [],
       incorrect: [],
+      userInput: [],
       filteredValue: 'all',
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
@@ -24,7 +25,11 @@ class Question extends Component {
   }
 
   checkAnswer = (index, correctAnswer) => {
-    const { correct, incorrect, currentQuestionIndex, showInstantFeedback, continueTillCorrect } = this.state;
+    const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
+
+    if(!continueTillCorrect) {
+      userInput.push(index)
+    }
 
     if(index == correctAnswer) {
       if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
@@ -171,19 +176,20 @@ class Question extends Component {
   }
 
   renderQuizResultFilter = () => {
+    const { appLocale } = this.props;
     return (
       <div className="quiz-result-filter">
           <select value={this.state.filteredValue} onChange={this.handleChange}>
-            <option value="all">All</option>
-            <option value="correct">Correct</option>
-            <option value="incorrect">Incorrect</option>
+            <option value="all">{appLocale.resultFilterAll}</option>
+            <option value="correct">{appLocale.resultFilterCorrect}</option>
+            <option value="incorrect">{appLocale.resultFilterIncorrect}</option>
           </select>
       </div>
     );
   }
 
   renderQuizResultQuestions = () => {
-    const { filteredValue } = this.state;
+    const { filteredValue, userInput } = this.state;
     let questions = this.props.questions;
 
     if(filteredValue != 'all') {
@@ -193,8 +199,9 @@ class Question extends Component {
     }
 
     return questions.map((question, index) => {
+      const userInputIndex = userInput[index];
       return (
-        <div class="result-answer-wrapper" key={index+1}>
+        <div className="result-answer-wrapper" key={index+1}>
         <h3>
           Q{question.questionIndex}: {question.question}
         </h3>
@@ -202,8 +209,8 @@ class Question extends Component {
             {
               question.answers.map( (answer, index) => {
                 return(
-                  <div>
-                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct': '')}>
+                  <div key={index}>
+                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct ': '') + (userInputIndex != question.correctAnswer && index+1 == userInputIndex ? ' incorrect ' : '')}>
                       { question.questionType == 'text' && <span>{ answer }</span> }
                       { question.questionType == 'photo' && <img src={ answer } /> }
                     </button>
@@ -219,12 +226,13 @@ class Question extends Component {
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions, appLocale } = this.props;
     const questionSummary = {
       numberOfQuestions: this.props.questions.length,
       numberOfCorrectAnswers: this.state.correct.length,
       numberOfIncorrectAnswers: this.state.incorrect.length,
-      questions: this.props.questions
+      questions: this.props.questions,
+      userInput: this.state.userInput
     };
     let question = questions[this.state.currentQuestionIndex];
     
@@ -243,7 +251,7 @@ class Question extends Component {
                 </div>
               }
             </div>
-            <div>Question {this.state.currentQuestionIndex + 1}:</div>
+            <div>{appLocale.question} {this.state.currentQuestionIndex + 1}:</div>
             <h3>{question.question}</h3>
             {
               question.answers.map( (answer, index) => {
@@ -265,13 +273,13 @@ class Question extends Component {
               })
             }
             {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
+              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
             }
           </div>
         }
         {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
             <div className="card-body">
-            <h2>You have completed the quiz. You got {this.state.correct.length} out of {questions.length} questions. <br/></h2>
+            <h2>{appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } <br/></h2>
               { this.renderQuizResultFilter() }
               { this.renderQuizResultQuestions() }
             </div>
@@ -297,7 +305,8 @@ Question.propTypes = {
   onComplete: PropTypes.func,
   customResultPage: PropTypes.func,
   showInstantFeedback: PropTypes.bool,
-  continueTillCorrect: PropTypes.bool
+  continueTillCorrect: PropTypes.bool,
+  appLocale: PropTypes.object
 };
 
 export default Question;
