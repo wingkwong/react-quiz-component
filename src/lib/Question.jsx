@@ -14,6 +14,7 @@ class Question extends Component {
       buttonClasses: {},
       correct: [],
       incorrect: [],
+      userInput: [],
       filteredValue: 'all',
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
@@ -24,7 +25,11 @@ class Question extends Component {
   }
 
   checkAnswer = (index, correctAnswer) => {
-    const { correct, incorrect, currentQuestionIndex, showInstantFeedback, continueTillCorrect } = this.state;
+    const { correct, incorrect, currentQuestionIndex, showInstantFeedback, continueTillCorrect, userInput } = this.state;
+
+    if(!continueTillCorrect) {
+      userInput.push(index)
+    }
 
     if(index == correctAnswer) {
       if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
@@ -183,7 +188,7 @@ class Question extends Component {
   }
 
   renderQuizResultQuestions = () => {
-    const { filteredValue } = this.state;
+    const { filteredValue, userInput } = this.state;
     let questions = this.props.questions;
 
     if(filteredValue != 'all') {
@@ -191,8 +196,9 @@ class Question extends Component {
         return this.state[filteredValue].indexOf(index) != -1
       })
     }
-
+    
     return questions.map((question, index) => {
+      const userInputIndex = userInput[index];
       return (
         <div class="result-answer-wrapper" key={index+1}>
         <h3>
@@ -203,7 +209,7 @@ class Question extends Component {
               question.answers.map( (answer, index) => {
                 return(
                   <div>
-                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct': '')}>
+                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct ': '') + (userInputIndex != question.correctAnswer && index+1 == userInputIndex ? ' incorrect ' : '')}>
                       { question.questionType == 'text' && <span>{ answer }</span> }
                       { question.questionType == 'photo' && <img src={ answer } /> }
                     </button>
@@ -224,7 +230,8 @@ class Question extends Component {
       numberOfQuestions: this.props.questions.length,
       numberOfCorrectAnswers: this.state.correct.length,
       numberOfIncorrectAnswers: this.state.incorrect.length,
-      questions: this.props.questions
+      questions: this.props.questions,
+      userInput: this.state.userInput
     };
     let question = questions[this.state.currentQuestionIndex];
     
