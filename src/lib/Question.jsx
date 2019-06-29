@@ -25,7 +25,7 @@ class Question extends Component {
   }
 
   checkAnswer = (index, correctAnswer) => {
-    const { correct, incorrect, currentQuestionIndex, showInstantFeedback, continueTillCorrect, userInput } = this.state;
+    const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
 
     if(!continueTillCorrect) {
       userInput.push(index)
@@ -176,12 +176,13 @@ class Question extends Component {
   }
 
   renderQuizResultFilter = () => {
+    const { appLocale } = this.props;
     return (
       <div className="quiz-result-filter">
           <select value={this.state.filteredValue} onChange={this.handleChange}>
-            <option value="all">All</option>
-            <option value="correct">Correct</option>
-            <option value="incorrect">Incorrect</option>
+            <option value="all">{appLocale.resultFilterAll}</option>
+            <option value="correct">{appLocale.resultFilterCorrect}</option>
+            <option value="incorrect">{appLocale.resultFilterIncorrect}</option>
           </select>
       </div>
     );
@@ -196,11 +197,11 @@ class Question extends Component {
         return this.state[filteredValue].indexOf(index) != -1
       })
     }
-    
+
     return questions.map((question, index) => {
       const userInputIndex = userInput[index];
       return (
-        <div class="result-answer-wrapper" key={index+1}>
+        <div className="result-answer-wrapper" key={index+1}>
         <h3>
           Q{question.questionIndex}: {question.question}
         </h3>
@@ -208,7 +209,7 @@ class Question extends Component {
             {
               question.answers.map( (answer, index) => {
                 return(
-                  <div>
+                  <div key={index}>
                      <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct ': '') + (userInputIndex != question.correctAnswer && index+1 == userInputIndex ? ' incorrect ' : '')}>
                       { question.questionType == 'text' && <span>{ answer }</span> }
                       { question.questionType == 'photo' && <img src={ answer } /> }
@@ -225,7 +226,7 @@ class Question extends Component {
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions, appLocale } = this.props;
     const questionSummary = {
       numberOfQuestions: this.props.questions.length,
       numberOfCorrectAnswers: this.state.correct.length,
@@ -250,7 +251,7 @@ class Question extends Component {
                 </div>
               }
             </div>
-            <div>Question {this.state.currentQuestionIndex + 1}:</div>
+            <div>{appLocale.question} {this.state.currentQuestionIndex + 1}:</div>
             <h3>{question.question}</h3>
             {
               question.answers.map( (answer, index) => {
@@ -272,13 +273,13 @@ class Question extends Component {
               })
             }
             {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">Next</button></div>
+              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
             }
           </div>
         }
         {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
             <div className="card-body">
-            <h2>You have completed the quiz. You got {this.state.correct.length} out of {questions.length} questions. <br/></h2>
+            <h2>{appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } <br/></h2>
               { this.renderQuizResultFilter() }
               { this.renderQuizResultQuestions() }
             </div>
@@ -304,7 +305,8 @@ Question.propTypes = {
   onComplete: PropTypes.func,
   customResultPage: PropTypes.func,
   showInstantFeedback: PropTypes.bool,
-  continueTillCorrect: PropTypes.bool
+  continueTillCorrect: PropTypes.bool,
+  appLocale: PropTypes.object
 };
 
 export default Question;
