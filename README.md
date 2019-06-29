@@ -103,6 +103,21 @@ export const quiz =  {
 } 
 ```
 
+### Locale Customization 
+If you want to use your customized text, you can add appLocale into your quiz source. Below is the default one. <questionLength> and <correctIndexLength> will be replaced dynamically.
+```javascript
+ "appLocale": {
+    "landingHeaderText": "<questionLength> Questions",
+    "question": "Question",
+    "startQuizBtn": "Start Quiz",
+    "resultFilterAll": "All",
+    "resultFilterCorrect": "Correct",
+    "resultFilterIncorrect": "Incorrect",
+    "nextQuestionBtn": "Next",
+    "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
+  } 
+```
+
 ## Passing to Quiz container
 ```javascript
  import { quiz } from './quiz';
