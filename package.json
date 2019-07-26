@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -45,5 +45,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/wingkwong/react-quiz-component.git"
+  },
+  "dependencies": {
+    "marked": "^0.7.0"
   }
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import marked from 'marked';
 
-class Question extends Component {
+class Core extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -27,7 +28,7 @@ class Question extends Component {
   checkAnswer = (index, correctAnswer) => {
     const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
 
-    if(!continueTillCorrect) {
+    if(userInput[currentQuestionIndex] == undefined) {
       userInput.push(index)
     }
 
@@ -202,9 +203,8 @@ class Question extends Component {
       const userInputIndex = userInput[index];
       return (
         <div className="result-answer-wrapper" key={index+1}>
-        <h3>
-          Q{question.questionIndex}: {question.question}
-        </h3>
+
+        <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
         <div className="result-answer">
             {
               question.answers.map( (answer, index) => {
@@ -225,39 +225,78 @@ class Question extends Component {
     })
   }
 
+  rawMarkup = (data) => {
+    let rawMarkup = marked(data, {sanitize: true});
+    return { __html: rawMarkup };
+  }
+
   render() {
     const { questions, appLocale } = this.props;
+    const { 
+      correct, 
+      incorrect, 
+      userInput, 
+      currentQuestionIndex, 
+      correctAnswer, 
+      incorrectAnswer, 
+      endQuiz, 
+      showInstantFeedback, 
+      buttons, 
+      onComplete, 
+      showNextQuestionButton, 
+      showDefaultResult, 
+      customResultPage
+    } = this.state;
+
+    let question = questions[currentQuestionIndex];
+    let totalPoints = 0;
+    let correctPoints = 0;
+
+    for(var i=0; i<questions.length; i++) {
+      let point = questions[i].point || 0;
+      if(typeof point === 'string' || point instanceof String) {
+        point = parseInt(point)
+      }
+
+      totalPoints = totalPoints + point;
+
+      if(correct.includes(i)) {
+        correctPoints = correctPoints + point;
+      }
+    }
+
     const questionSummary = {
-      numberOfQuestions: this.props.questions.length,
-      numberOfCorrectAnswers: this.state.correct.length,
-      numberOfIncorrectAnswers: this.state.incorrect.length,
-      questions: this.props.questions,
-      userInput: this.state.userInput
+      numberOfQuestions: questions.length,
+      numberOfCorrectAnswers: correct.length,
+      numberOfIncorrectAnswers: incorrect.length,
+      questions: questions,
+      userInput: userInput,
+      totalPoints: totalPoints,
+      correctPoints: correctPoints
     };
-    let question = questions[this.state.currentQuestionIndex];
     
     return (
       <div className="questionWrapper">
-        {!this.state.endQuiz &&
+        {!endQuiz &&
           <div className="questionWrapperBody">
             <div className="questionModal">
-              {this.state.incorrectAnswer && this.state.showInstantFeedback && 
-                <div className="alert incorrect">{this.renderMessageforIncorrectAnswer(question)}</div>
+              {incorrectAnswer && showInstantFeedback && 
+                <div className="alert incorrect">{ this.renderMessageforIncorrectAnswer(question) }</div>
               }
-              {this.state.correctAnswer && this.state.showInstantFeedback && 
+              { correctAnswer && showInstantFeedback && 
                 <div className="alert correct">
-                  {this.renderMessageforCorrectAnswer(question)} 
-                  {this.renderExplanation(question, false)}
+                  { this.renderMessageforCorrectAnswer(question) } 
+                  { this.renderExplanation(question, false) }
                 </div>
               }
             </div>
-            <div>{appLocale.question} {this.state.currentQuestionIndex + 1}:</div>
-            <h3>{question.question}</h3>
+            <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
+            <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
             {
               question.answers.map( (answer, index) => {
-                if(this.state.buttons[index] != undefined) {
+                if(buttons[index] != undefined) {
                   return (
-                    <button key={index} disabled={ this.state.buttons[index].disabled || false } className={`${this.state.buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, question.correctAnswer)}>
+                    <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, question.correctAnswer)}>
                       { question.questionType == 'text' && <span>{answer}</span> }
                       { question.questionType == 'photo' && <img src={answer} /> }
                     </button>
@@ -272,34 +311,40 @@ class Question extends Component {
                 }
               })
             }
-            {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
+            { showNextQuestionButton &&
+              <div><button onClick={() => this.nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
             }
           </div>
         }
-        {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
+        { endQuiz && showDefaultResult && customResultPage == null &&
             <div className="card-body">
-            <h2>{appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } <br/></h2>
+            <h2>
+              {appLocale.resultPageHeaderText.replace("<correctIndexLength>", correct.length).replace("<questionLength>", questions.length) } 
+            </h2>
+            <h2>
+              { appLocale.resultPagePoint.replace("<correctPoints>", correctPoints).replace("<totalPoints>", totalPoints) }
+            </h2>
+            <br/> 
               { this.renderQuizResultFilter() }
               { this.renderQuizResultQuestions() }
             </div>
         }
 
         {
-          this.state.endQuiz && this.state.onComplete != undefined &&
-             this.state.onComplete(questionSummary)
+          endQuiz && onComplete != undefined &&
+             onComplete(questionSummary)
         }
 
         {
-          this.state.endQuiz && !this.state.showDefaultResult  && this.state.customResultPage != undefined &&
-             this.state.customResultPage(questionSummary)
+          endQuiz && !showDefaultResult  && customResultPage != undefined &&
+             customResultPage(questionSummary)
         }
         </div>
     );
   }
 }
 
-Question.propTypes = {
+Core.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
@@ -309,4 +354,4 @@ Question.propTypes = {
   appLocale: PropTypes.object
 };
 
-export default Question;
+export default Core;

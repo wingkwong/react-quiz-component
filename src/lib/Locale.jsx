@@ -6,5 +6,6 @@ export const defaultLocale =  {
     "resultFilterCorrect": "Correct",
     "resultFilterIncorrect": "Incorrect",
     "nextQuestionBtn": "Next",
-    "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
+    "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.",
+    "resultPagePoint": "You scored <correctPoints> out of <totalPoints>."
   } 
