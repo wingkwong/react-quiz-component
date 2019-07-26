@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.2.8
+- Added Scoring System (Ref to #25)
 - Revised Question tag to allow markdown (Ref to #24)
 
 ## 0.2.7

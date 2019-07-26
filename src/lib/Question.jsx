@@ -232,6 +232,7 @@ class Question extends Component {
 
   render() {
     const { questions, appLocale } = this.props;
+    const { correct } = this.state;
     const questionSummary = {
       numberOfQuestions: this.props.questions.length,
       numberOfCorrectAnswers: this.state.correct.length,
@@ -240,6 +241,21 @@ class Question extends Component {
       userInput: this.state.userInput
     };
     let question = questions[this.state.currentQuestionIndex];
+
+    let totalPoints = 0;
+    let correctPoints = 0;
+
+    for(var i=0; i<questions.length; i++) {
+      let point = questions[i].point || 0;
+      if(typeof point === 'string' || point instanceof String) {
+        point = parseInt(point)
+      }
+
+      totalPoints = totalPoints + point;
+      if(correct.includes(i)) {
+        correctPoints = correctPoints + point;
+      }
+    }
     
     return (
       <div className="questionWrapper">
@@ -284,7 +300,13 @@ class Question extends Component {
         }
         {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
             <div className="card-body">
-            <h2>{appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } <br/></h2>
+            <h2>
+              {appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } 
+            </h2>
+            <h2>
+              { appLocale.resultPagePoint.replace("<correctPoints>", correctPoints).replace("<totalPoints>", totalPoints) }
+            </h2>
+            <br/> 
               { this.renderQuizResultFilter() }
               { this.renderQuizResultQuestions() }
             </div>
