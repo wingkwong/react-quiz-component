@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 
-class Question extends Component {
+class Core extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ class Question extends Component {
   checkAnswer = (index, correctAnswer) => {
     const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
 
-    if(!continueTillCorrect) {
+    if(userInput[currentQuestionIndex] == undefined) {
       userInput.push(index)
     }
 
@@ -247,13 +247,6 @@ class Question extends Component {
       showDefaultResult, 
       customResultPage
     } = this.state;
-    const questionSummary = {
-      numberOfQuestions: questions.length,
-      numberOfCorrectAnswers: correct.length,
-      numberOfIncorrectAnswers: incorrect.length,
-      questions: questions,
-      userInput: userInput
-    };
 
     let question = questions[currentQuestionIndex];
     let totalPoints = 0;
@@ -271,6 +264,16 @@ class Question extends Component {
         correctPoints = correctPoints + point;
       }
     }
+
+    const questionSummary = {
+      numberOfQuestions: questions.length,
+      numberOfCorrectAnswers: correct.length,
+      numberOfIncorrectAnswers: incorrect.length,
+      questions: questions,
+      userInput: userInput,
+      totalPoints: totalPoints,
+      correctPoints: correctPoints
+    };
     
     return (
       <div className="questionWrapper">
@@ -341,7 +344,7 @@ class Question extends Component {
   }
 }
 
-Question.propTypes = {
+Core.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
@@ -351,4 +354,4 @@ Question.propTypes = {
   appLocale: PropTypes.object
 };
 
-export default Question;
+export default Core;

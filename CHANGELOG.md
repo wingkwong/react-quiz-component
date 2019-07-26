@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.2.8
+- Renamed Question.jsx to Core.jsx
 - Added Scoring System (Ref to #25)
 - Revised Question tag to allow markdown (Ref to #24)
 
