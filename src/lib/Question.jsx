@@ -232,16 +232,30 @@ class Question extends Component {
 
   render() {
     const { questions, appLocale } = this.props;
-    const { correct } = this.state;
+    const { 
+      correct, 
+      incorrect, 
+      userInput, 
+      currentQuestionIndex, 
+      correctAnswer, 
+      incorrectAnswer, 
+      endQuiz, 
+      showInstantFeedback, 
+      buttons, 
+      onComplete, 
+      showNextQuestionButton, 
+      showDefaultResult, 
+      customResultPage
+    } = this.state;
     const questionSummary = {
-      numberOfQuestions: this.props.questions.length,
-      numberOfCorrectAnswers: this.state.correct.length,
-      numberOfIncorrectAnswers: this.state.incorrect.length,
-      questions: this.props.questions,
-      userInput: this.state.userInput
+      numberOfQuestions: questions.length,
+      numberOfCorrectAnswers: correct.length,
+      numberOfIncorrectAnswers: incorrect.length,
+      questions: questions,
+      userInput: userInput
     };
-    let question = questions[this.state.currentQuestionIndex];
 
+    let question = questions[currentQuestionIndex];
     let totalPoints = 0;
     let correctPoints = 0;
 
@@ -252,6 +266,7 @@ class Question extends Component {
       }
 
       totalPoints = totalPoints + point;
+
       if(correct.includes(i)) {
         correctPoints = correctPoints + point;
       }
@@ -259,26 +274,26 @@ class Question extends Component {
     
     return (
       <div className="questionWrapper">
-        {!this.state.endQuiz &&
+        {!endQuiz &&
           <div className="questionWrapperBody">
             <div className="questionModal">
-              {this.state.incorrectAnswer && this.state.showInstantFeedback && 
-                <div className="alert incorrect">{this.renderMessageforIncorrectAnswer(question)}</div>
+              {incorrectAnswer && showInstantFeedback && 
+                <div className="alert incorrect">{ this.renderMessageforIncorrectAnswer(question) }</div>
               }
-              {this.state.correctAnswer && this.state.showInstantFeedback && 
+              { correctAnswer && showInstantFeedback && 
                 <div className="alert correct">
-                  {this.renderMessageforCorrectAnswer(question)} 
-                  {this.renderExplanation(question, false)}
+                  { this.renderMessageforCorrectAnswer(question) } 
+                  { this.renderExplanation(question, false) }
                 </div>
               }
             </div>
-            <div>{appLocale.question} {this.state.currentQuestionIndex + 1}:</div>
+            <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
             <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
             {
               question.answers.map( (answer, index) => {
-                if(this.state.buttons[index] != undefined) {
+                if(buttons[index] != undefined) {
                   return (
-                    <button key={index} disabled={ this.state.buttons[index].disabled || false } className={`${this.state.buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, question.correctAnswer)}>
+                    <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, question.correctAnswer)}>
                       { question.questionType == 'text' && <span>{answer}</span> }
                       { question.questionType == 'photo' && <img src={answer} /> }
                     </button>
@@ -293,15 +308,15 @@ class Question extends Component {
                 }
               })
             }
-            {this.state.showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(this.state.currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
+            { showNextQuestionButton &&
+              <div><button onClick={() => this.nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
             }
           </div>
         }
-        {this.state.endQuiz && this.state.showDefaultResult && this.state.customResultPage == null &&
+        { endQuiz && showDefaultResult && customResultPage == null &&
             <div className="card-body">
             <h2>
-              {appLocale.resultPageHeaderText.replace("<correctIndexLength>", this.state.correct.length).replace("<questionLength>", questions.length) } 
+              {appLocale.resultPageHeaderText.replace("<correctIndexLength>", correct.length).replace("<questionLength>", questions.length) } 
             </h2>
             <h2>
               { appLocale.resultPagePoint.replace("<correctPoints>", correctPoints).replace("<totalPoints>", totalPoints) }
@@ -313,13 +328,13 @@ class Question extends Component {
         }
 
         {
-          this.state.endQuiz && this.state.onComplete != undefined &&
-             this.state.onComplete(questionSummary)
+          endQuiz && onComplete != undefined &&
+             onComplete(questionSummary)
         }
 
         {
-          this.state.endQuiz && !this.state.showDefaultResult  && this.state.customResultPage != undefined &&
-             this.state.customResultPage(questionSummary)
+          endQuiz && !showDefaultResult  && customResultPage != undefined &&
+             customResultPage(questionSummary)
         }
         </div>
     );
