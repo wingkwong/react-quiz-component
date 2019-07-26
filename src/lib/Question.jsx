@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import marked from 'marked';
 
 class Question extends Component {
   constructor(props){
@@ -202,9 +203,8 @@ class Question extends Component {
       const userInputIndex = userInput[index];
       return (
         <div className="result-answer-wrapper" key={index+1}>
-        <h3>
-          Q{question.questionIndex}: {question.question}
-        </h3>
+
+        <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
         <div className="result-answer">
             {
               question.answers.map( (answer, index) => {
@@ -223,6 +223,11 @@ class Question extends Component {
       </div>
       )
     })
+  }
+
+  rawMarkup = (data) => {
+    let rawMarkup = marked(data, {sanitize: true});
+    return { __html: rawMarkup };
   }
 
   render() {
@@ -252,7 +257,7 @@ class Question extends Component {
               }
             </div>
             <div>{appLocale.question} {this.state.currentQuestionIndex + 1}:</div>
-            <h3>{question.question}</h3>
+            <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
             {
               question.answers.map( (answer, index) => {
                 if(this.state.buttons[index] != undefined) {

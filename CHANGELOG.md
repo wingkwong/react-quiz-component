@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.2.8
+- Revised Question tag to allow markdown (Ref to #24)
+
 ## 0.2.7
 - Added Locale for customimzation (Refer to #21)
 - Added logic to show incorrect answer users chose in result page (Refer to #22)

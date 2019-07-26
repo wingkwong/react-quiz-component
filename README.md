@@ -16,6 +16,7 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Return quiz summary at the page
 - Allow Instant feedback
 - Allow retry until the answer is selected correctly
+- Allow markdown in Question
 
 ## Installing
 ```
