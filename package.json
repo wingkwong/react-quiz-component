@@ -1,15 +1,15 @@
 {
   "name": "react-quiz-component",
-  "version": "0.2.8",
+  "version": "0.1.0",
   "description": "React Quiz Component",
-  "main": "lib/Quiz.js",
+  "main": "dist/Quiz.js",
   "scripts": {
-    "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
-    "lib": "babel src/lib -d lib --copy-files",
-    "lib:watch": "babel src/lib -w -d lib --copy-files",
-    "docs": "webpack-dev-server --mode development",
-    "docs:prod": "webpack --mode production"
+    "dev": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "react",
     "reactjs",
@@ -33,15 +33,17 @@
     "concurrently": "^3.5.1",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.21.0",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15",
     "webpack-dev-server": "^3.1.14"
   },
-  "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
-  "homepage": "https://github.com/wingkwong/react-quiz-component",
+  "homepage": "https://github.com/neetos/react-quiz-component",
   "repository": {
     "type": "git",
     "url": "https://github.com/wingkwong/react-quiz-component.git"

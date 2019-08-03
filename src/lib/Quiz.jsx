@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Core from './Core';
 import { defaultLocale } from './Locale';
-import "./styles.css";
+import './styles.scss';
 
 class Quiz extends Component {
   constructor(props){
@@ -30,20 +30,20 @@ class Quiz extends Component {
     if(!quiz) {
       console.error("Quiz object is required.");
       return (null);
-    } 
+    }
 
     const appLocale = {
       ...defaultLocale,
       ...quiz.appLocale
     };
-    
+
     let questions = quiz.questions;
       if(shuffle) {
         questions = this.shuffleQuestions(questions);
       }
 
       questions = questions.map((question, index) => ({
-        ...question, 
+        ...question,
         questionIndex : index + 1
       }));
 
@@ -53,10 +53,10 @@ class Quiz extends Component {
             <div>
               <h2>{quiz.quizTitle}</h2>
               <div> {appLocale.landingHeaderText.replace("<questionLength>" , quiz.questions.length )}</div>
-              { quiz.quizSynopsis && 
+              { quiz.quizSynopsis &&
                   <div className="quiz-synopsis">
                       {quiz.quizSynopsis}
-                  </div> 
+                  </div>
               }
               <div className="startQuizWrapper">
                 <button onClick={() => this.start()} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
