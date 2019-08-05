@@ -25,12 +25,77 @@ class Quiz extends Component {
     return questions;
   }
 
-  render() {
-    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect } = this.props;
+  validateQuiz = (quiz) => {
     if(!quiz) {
       console.error("Quiz object is required.");
-      return (null);
+      return false;
     } 
+
+    const { questions } = quiz;
+    if(!questions ) {
+      console.error("Field 'questions' is required.");
+      return false;
+    }
+
+    for(var i=0; i<questions.length; i++) {
+      const { question, questionType, answerSelectionType, answers, correctAnswer } = questions[i];
+      if(!question) {
+        console.error("Field 'question' is required.");
+        return false;
+      }
+  
+      if(!questionType) {
+        console.error("Field 'questionType' is required.");
+        return false;
+      } else {
+        if(questionType != 'text' && questionType != 'photo') {
+          console.error("The value of 'questionType' is either 'text' or 'photo'.");
+          return false;
+        }
+      }
+  
+      if(!answers) {
+        console.error("Field 'answers' is required.");
+        return false;
+      } else {
+        if(!Array.isArray(answers)) {
+          console.error("Field 'answers' has to be an Array");
+          return false;
+        } 
+      }
+  
+      if(!correctAnswer) {
+        console.error("Field 'correctAnswer' is required.");
+        return false;
+      }
+  
+      if(!answerSelectionType) {
+        // Default single to avoid code breaking due to automatic version upgrade
+        console.warn("Field answerSelectionType should be defined since v0.3.0. Use single by default.")
+        answerSelectionType = answerSelectionType || 'single'; 
+      }
+  
+      if(answerSelectionType == 'single' && !(typeof answerSelectionType === 'string' || answerSelectionType   instanceof String) ) {
+        console.error("answerSelectionType is single but expecting String in the field correctAnswer");
+        return false;
+      }
+  
+      if(answerSelectionType == 'multiple' && !Array.isArray(correctAnswer)) {
+        console.error("answerSelectionType is multiple but expecting Array in the field correctAnswer");
+        return false;
+      }
+    }
+
+    return  true;
+  }
+
+  render() {
+    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect } = this.props;
+
+
+    if(!this.validateQuiz(quiz)) {
+      return (null)
+    }
 
     const appLocale = {
       ...defaultLocale,
