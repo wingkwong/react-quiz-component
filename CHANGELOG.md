@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.3.0
+- Added Feature: Multiple answers with multiple correct answers (Refer to #26)
+- Added Feature: Quiz Input Validator 
+- Added Selection Tags
+- Introduced fields ``answerSelectionType``
+- Updated ``correctAnswer`` to either ``String``(Single Selection) or ``Array`` (Multiple Selection)
+
 ## 0.2.8
 - Renamed Question.jsx to Core.jsx
 - Added Scoring System (Ref to #25)

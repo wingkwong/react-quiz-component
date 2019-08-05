@@ -17,6 +17,7 @@ class Core extends Component {
       incorrect: [],
       userInput: [],
       filteredValue: 'all',
+      userAttempt: 1,
       showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
       onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
       customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
@@ -25,71 +26,27 @@ class Core extends Component {
     };
   }
 
-  checkAnswer = (index, correctAnswer) => {
+  checkAnswer = (index, correctAnswer, answerSelectionType) => {
     const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
+    let { userAttempt } = this.state;
 
-    if(userInput[currentQuestionIndex] == undefined) {
-      userInput.push(index)
-    }
-
-    if(index == correctAnswer) {
-      if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
-        correct.push(currentQuestionIndex);
+    if(answerSelectionType == 'single') {
+      if(userInput[currentQuestionIndex] == undefined) {
+        userInput.push(index)
       }
+  
+      if(index == correctAnswer) {
+        if( incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
+          correct.push(currentQuestionIndex);
+        }
 
-      let disabledAll = {
-        0: {disabled: true},
-        1: {disabled: true},
-        2: {disabled: true},
-        3: {disabled: true}
-      }
-
-      this.setState((prevState) => {
-        const buttons = Object.assign(
-          {},
-          prevState.buttons,
-          {
-            ...disabledAll,
-            [index-1]: {
-              className: (index == correctAnswer)? "correct" : "incorrect"
-            },
-          }
-        );
-        return { buttons };
-      })
-
-      this.setState({
-        correctAnswer: true,
-        incorrectAnswer: false,
-        correct: correct,
-        showNextQuestionButton: true,
-      })
-    } else {
-      if( correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0 ) {
-        incorrect.push(currentQuestionIndex)
-      }
-
-      if(continueTillCorrect) {
-        this.setState((prevState) => {
-          const buttons = Object.assign(
-            {},
-            prevState.buttons,
-            {
-              [index-1]: {
-                disabled: !prevState.buttons[index-1]
-              }
-            }
-          );
-          return { buttons };
-        });
-      } else {
         let disabledAll = {
           0: {disabled: true},
           1: {disabled: true},
           2: {disabled: true},
           3: {disabled: true}
         }
-
+  
         this.setState((prevState) => {
           const buttons = Object.assign(
             {},
@@ -103,18 +60,147 @@ class Core extends Component {
           );
           return { buttons };
         })
-
+  
         this.setState({
+          correctAnswer: true,
+          incorrectAnswer: false,
+          correct: correct,
           showNextQuestionButton: true,
         })
+      } else {
+        if( correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0 ) {
+          incorrect.push(currentQuestionIndex)
+        }
+  
+        if(continueTillCorrect) {
+          this.setState((prevState) => {
+            const buttons = Object.assign(
+              {},
+              prevState.buttons,
+              {
+                [index-1]: {
+                  disabled: !prevState.buttons[index-1]
+                }
+              }
+            );
+            return { buttons };
+          });
+        } else {
+          let disabledAll = {
+            0: {disabled: true},
+            1: {disabled: true},
+            2: {disabled: true},
+            3: {disabled: true}
+          }
+  
+          this.setState((prevState) => {
+            const buttons = Object.assign(
+              {},
+              prevState.buttons,
+              {
+                ...disabledAll,
+                [index-1]: {
+                  className: (index == correctAnswer)? "correct" : "incorrect"
+                },
+              }
+            );
+            return { buttons };
+          })
+  
+          this.setState({
+            showNextQuestionButton: true,
+          })
+        }
+  
+        this.setState({
+          incorrectAnswer: true,
+          correctAnswer: false,
+          incorrect: incorrect,
+        })
+      }
+    } else {
+      
+      let maxNumberOfMultipleSelection = correctAnswer.length;
+
+      if(userInput[currentQuestionIndex] == undefined) {
+        userInput[currentQuestionIndex] = []
+      }
+      
+      if(userInput[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
+        userInput[currentQuestionIndex].push(index)
+
+        if(correctAnswer.includes(index)) {
+          if(userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection)  {
+          
+            this.setState((prevState) => {
+              const buttons = Object.assign(
+                {},
+                prevState.buttons,
+                {
+                  [index-1]: {
+                    disabled: !prevState.buttons[index-1],
+                    className: (correctAnswer.includes(index))? "correct" : "incorrect"
+                  },
+                }
+              );
+              return { buttons };
+            })
+  
+          
+          }
+        } else {
+          if(userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection)  { 
+            this.setState((prevState) => {
+              const buttons = Object.assign(
+                {},
+                prevState.buttons,
+                {
+                  [index-1]: {
+                    className: (correctAnswer.includes(index))? "correct" : "incorrect"
+                  },
+                }
+              );
+              return { buttons };
+            })
+          }
+        }
       }
 
+
+      if(maxNumberOfMultipleSelection == userAttempt) {
+        
+        let cnt = 0;
+        for(var i=0; i<correctAnswer.length; i++) {
+          if(userInput[currentQuestionIndex].includes(correctAnswer[i])) {
+            cnt ++;
+          }
+        }
+
+        if(cnt == maxNumberOfMultipleSelection) {
+          correct.push(currentQuestionIndex);
+          this.setState({
+            correctAnswer: true,
+            incorrectAnswer: false,
+            correct: correct,
+            showNextQuestionButton: true,
+          })
+        } else {
+          incorrect.push(currentQuestionIndex)
+          this.setState({
+            incorrectAnswer: true,
+            correctAnswer: false,
+            incorrect: incorrect,
+            showNextQuestionButton: true,
+          })
+        }
+      } 
+      
       this.setState({
-        incorrectAnswer: true,
-        correctAnswer: false,
-        incorrect: incorrect,
+        userInput,
+        userAttempt: userAttempt + 1
       })
     }
+     
   }
 
   nextQuestion = (currentQuestionIndex) => {
@@ -189,34 +275,66 @@ class Core extends Component {
     );
   }
 
+  renderAnswerInResult = (question, userInputIndex) => {
+    const { answers, correctAnswer, questionType } = question;
+    let { answerSelectionType } = question;
+    let answerBtnCorrectClassName;
+    let answerBtnIncorrectClassName;
+
+    // Default single to avoid code breaking due to automatic version upgrade
+    answerSelectionType = answerSelectionType || 'single';
+
+    return answers.map( (answer, index) => {
+      if(answerSelectionType == 'single') {
+        answerBtnCorrectClassName = ( index+1 == correctAnswer ? ' correct ': '' )
+        answerBtnIncorrectClassName = (userInputIndex != correctAnswer && index + 1 == userInputIndex ? ' incorrect ' : '')
+      } else {
+        answerBtnCorrectClassName = ( correctAnswer.includes(index + 1)  ? ' correct ': '' )
+        answerBtnIncorrectClassName = ( !correctAnswer.includes(index + 1) && userInputIndex.includes(index + 1) ? ' incorrect ' : '')
+      }
+
+      return(
+        <div key={index}>
+           <button disabled={true} className={"answerBtn btn " + answerBtnCorrectClassName + answerBtnIncorrectClassName}>
+            { questionType == 'text' && <span>{ answer }</span> }
+            { questionType == 'photo' && <img src={ answer } /> }
+          </button>
+        </div>
+      )
+    });
+  }
+
   renderQuizResultQuestions = () => {
-    const { filteredValue, userInput } = this.state;
-    let questions = this.props.questions;
+    const { filteredValue } = this.state;
+    let { userInput } = this.state;
+    let { questions } = this.props;
 
     if(filteredValue != 'all') {
       questions = questions.filter( (question, index) => {
+        return this.state[filteredValue].indexOf(index) != -1
+      })
+
+      userInput = userInput.filter( (input, index) => {
         return this.state[filteredValue].indexOf(index) != -1
       })
     }
 
     return questions.map((question, index) => {
       const userInputIndex = userInput[index];
+
+      // Default single to avoid code breaking due to automatic version upgrade
+      let answerSelectionType = question.answerSelectionType || 'single';
+      
       return (
         <div className="result-answer-wrapper" key={index+1}>
 
         <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
+        {
+          this.renderTags(answerSelectionType, question.correctAnswer.length)
+        }
         <div className="result-answer">
             {
-              question.answers.map( (answer, index) => {
-                return(
-                  <div key={index}>
-                     <button disabled={true} className={"answerBtn btn" + (index+1 == question.correctAnswer ? ' correct ': '') + (userInputIndex != question.correctAnswer && index+1 == userInputIndex ? ' incorrect ' : '')}>
-                      { question.questionType == 'text' && <span>{ answer }</span> }
-                      { question.questionType == 'photo' && <img src={ answer } /> }
-                    </button>
-                  </div>
-                )
-              })
+              this.renderAnswerInResult(question, userInputIndex)
             }
         </div>
         {this.renderExplanation(question, true)}
@@ -228,6 +346,54 @@ class Core extends Component {
   rawMarkup = (data) => {
     let rawMarkup = marked(data, {sanitize: true});
     return { __html: rawMarkup };
+  }
+
+  renderAnswers = (question, buttons) => {
+    const { answers, correctAnswer, questionType } = question;
+    let { answerSelectionType } = question;
+    
+    // Default single to avoid code breaking due to automatic version upgrade
+    answerSelectionType = answerSelectionType || 'single';
+
+    return answers.map( (answer, index) => {
+      if(buttons[index] != undefined) {
+        return (
+          <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)}>
+            { questionType == 'text' && <span>{answer}</span> }
+            { questionType == 'photo' && <img src={answer} /> }
+          </button>
+        )
+      } else {
+        return (
+          <button key={index} onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)} className="answerBtn btn">
+          { questionType == 'text' && answer }
+          { questionType == 'photo' && <img src={answer}/> }
+          </button>
+        )
+      }
+    })
+  }
+
+  renderTags(answerSelectionType, numberOfSelection) {
+    const { 
+      appLocale: {
+        singleSelectionTagText,
+        multipleSelectionTagText,
+        pickNumberOfSelection
+      } 
+    } = this.props;
+
+    return (
+      <div className="tag-container">
+        {
+          answerSelectionType == 'single' && <span class="single selection-tag"> { singleSelectionTagText }</span>
+        }
+        {
+          answerSelectionType == 'multiple' && <span class="multiple selection-tag"> { multipleSelectionTagText }</span>
+        }
+        <span class="number-of-selection">{ pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection) }</span>
+      </div>
+      )
   }
 
   render() {
@@ -274,6 +440,11 @@ class Core extends Component {
       totalPoints: totalPoints,
       correctPoints: correctPoints
     };
+
+    let { answerSelectionType } = question;
+
+    // Default single to avoid code breaking due to automatic version upgrade
+    answerSelectionType = answerSelectionType || 'single';
     
     return (
       <div className="questionWrapper">
@@ -293,23 +464,10 @@ class Core extends Component {
             <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
             <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
             {
-              question.answers.map( (answer, index) => {
-                if(buttons[index] != undefined) {
-                  return (
-                    <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, question.correctAnswer)}>
-                      { question.questionType == 'text' && <span>{answer}</span> }
-                      { question.questionType == 'photo' && <img src={answer} /> }
-                    </button>
-                  )
-                } else {
-                  return (
-                    <button key={index} onClick={() => this.checkAnswer(index+1, question.correctAnswer)} className="answerBtn btn">
-                    { question.questionType == 'text' && answer }
-                    { question.questionType == 'photo' && <img src={answer}/> }
-                    </button>
-                  )
-                }
-              })
+              this.renderTags(answerSelectionType, question.correctAnswer.length)
+            }
+            {
+              this.renderAnswers(question, buttons)
             }
             { showNextQuestionButton &&
               <div><button onClick={() => this.nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
