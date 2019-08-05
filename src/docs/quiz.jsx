@@ -5,6 +5,7 @@ export const quiz =  {
     {
       "question": "How can you access the state of a component from inside of a member function?",
       "questionType": "text",
+      "answerSelectionType": "single",
       "answers": [
         "this.getState()",
         "this.prototype.stateValue",
@@ -20,6 +21,7 @@ export const quiz =  {
     {
       "question": "ReactJS is developed by _____?",
       "questionType": "text",
+      "answerSelectionType": "single",
       "answers": [
         "Google Engineers",
         "Facebook Engineers"
@@ -33,6 +35,7 @@ export const quiz =  {
     {
       "question": "ReactJS is an MVC based framework?",
       "questionType": "text",
+      "answerSelectionType": "single",
       "answers": [
         "True",
         "False"
@@ -46,6 +49,7 @@ export const quiz =  {
     {
       "question": "Which of the following concepts is/are key to ReactJS?",
       "questionType": "text",
+      "answerSelectionType": "single",
       "answers": [
         "Component-oriented design",
         "Event delegation model",
@@ -60,6 +64,7 @@ export const quiz =  {
     {
       "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
       "questionType": "photo",
+      "answerSelectionType": "single",
       "answers": [
         "https://dummyimage.com/600x400/000/fff&text=A",
         "https://dummyimage.com/600x400/000/fff&text=B",
