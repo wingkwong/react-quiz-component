@@ -7,7 +7,9 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 ## Features
 - JSON-based input
 - Quiz landing page showing title, synopsis and number of questions
-- Multiple answers with one correct answer
+- Quiz Input Validator 
+- Multiple answers with single correct answer
+- Multiple answers with multiple correct answers
 - Support text and photo answers
 - Continue till answered correctly
 - Show explainations when answered correctly or not
