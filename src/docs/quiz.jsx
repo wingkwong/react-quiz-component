@@ -71,6 +71,22 @@ export const quiz =  {
       "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       "point": "20"
-    }
+    },
+    {
+      "question": "What are the advantages of React JS?",
+      "questionType": "text",
+      "answerSelectionType": "multiple",
+      "answers": [
+        "React can be used on client and as well as server side too",
+        "Using React increases readability and makes maintainability easier. Component, Data patterns improves readability and thus makes it easier for manitaining larger apps",
+        "React components have lifecycle events that fall into State/Property Updates",
+        "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer"
+      ],
+      "correctAnswer": [1, 2, 4],
+      "messageForCorrectAnswer": "Correct answer. Good job.",
+      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "point": "20"
+    },
   ]
 } 
