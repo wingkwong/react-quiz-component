@@ -32,6 +32,8 @@
   border: 1px solid #e8e8e8;;
   font-size: 15px;
   display: block;
+  white-space: normal;
+  text-align: unset;
 }
 
 .react-quiz-container .questionWrapper .btn.correct {
