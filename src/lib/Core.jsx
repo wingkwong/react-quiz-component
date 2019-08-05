@@ -307,7 +307,7 @@ class Core extends Component {
   renderQuizResultQuestions = () => {
     const { filteredValue } = this.state;
     let { userInput } = this.state;
-    let { questions} = this.props;
+    let { questions } = this.props;
 
     if(filteredValue != 'all') {
       questions = questions.filter( (question, index) => {
@@ -321,10 +321,17 @@ class Core extends Component {
 
     return questions.map((question, index) => {
       const userInputIndex = userInput[index];
+
+      // Default single to avoid code breaking due to automatic version upgrade
+      let answerSelectionType = question.answerSelectionType || 'single';
+      
       return (
         <div className="result-answer-wrapper" key={index+1}>
 
         <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
+        {
+          this.renderTags(answerSelectionType, question.correctAnswer.length)
+        }
         <div className="result-answer">
             {
               this.renderAnswerInResult(question, userInputIndex)
@@ -365,6 +372,28 @@ class Core extends Component {
         )
       }
     })
+  }
+
+  renderTags(answerSelectionType, numberOfSelection) {
+    const { 
+      appLocale: {
+        singleSelectionTagText,
+        multipleSelectionTagText,
+        pickNumberOfSelection
+      } 
+    } = this.props;
+
+    return (
+      <div className="tag-container">
+        {
+          answerSelectionType == 'single' && <span class="single selection-tag"> { singleSelectionTagText }</span>
+        }
+        {
+          answerSelectionType == 'multiple' && <span class="multiple selection-tag"> { multipleSelectionTagText }</span>
+        }
+        <span class="number-of-selection">{ pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection) }</span>
+      </div>
+      )
   }
 
   render() {
@@ -411,6 +440,11 @@ class Core extends Component {
       totalPoints: totalPoints,
       correctPoints: correctPoints
     };
+
+    let { answerSelectionType } = question;
+
+    // Default single to avoid code breaking due to automatic version upgrade
+    answerSelectionType = answerSelectionType || 'single';
     
     return (
       <div className="questionWrapper">
@@ -429,6 +463,9 @@ class Core extends Component {
             </div>
             <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
             <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
+            {
+              this.renderTags(answerSelectionType, question.correctAnswer.length)
+            }
             {
               this.renderAnswers(question, buttons)
             }

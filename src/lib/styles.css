@@ -98,9 +98,12 @@
   border: 1px solid #e8e8e8;
 }
 
+.react-quiz-container .result-answer-wrapper .tag-container {
+  margin: 20px;
+}
 
 .react-quiz-container .result-answer {
-  padding: 20px;
+  padding: 0px 20px;
 }
 
 .react-quiz-container .quiz-synopsis {
@@ -126,4 +129,28 @@
    width: 100%;
    height: 30px;
    border: 1px solid #ffffff;
+}
+
+.react-quiz-container .tag-container {
+  margin-bottom: 20px;
+}
+
+.react-quiz-container .selection-tag,
+.react-quiz-container .number-of-selection{
+  padding: 7px;
+  border-radius: 5px;
+  color: #ffffff;
+}
+
+.react-quiz-container .number-of-selection {
+  background: #673AB7;
+  margin-left: 5px;
+}
+
+.react-quiz-container .selection-tag.single {
+  background: #3F51B5;
+}
+
+.react-quiz-container .selection-tag.multiple {
+  background: #FF9800;
 }
