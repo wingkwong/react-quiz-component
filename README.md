@@ -242,8 +242,8 @@ Object
 |showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
 |continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
 
-## Development
-- Clone the project
+## Contribution 
+- Clone the project and choose `feature/contributors` branch
 - run `npm install`
 - run `npm run dev`
 
