@@ -28,7 +28,7 @@ class Core extends Component {
 
   checkAnswer = (index, correctAnswer, answerSelectionType) => {
     const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
-    let { userAttempt } = this.state;
+    let { userAttempt, showNextQuestionButton } = this.state;
 
     if(answerSelectionType == 'single') {
       if(userInput[currentQuestionIndex] == undefined) {
@@ -166,9 +166,7 @@ class Core extends Component {
         }
       }
 
-
       if(maxNumberOfMultipleSelection == userAttempt) {
-        
         let cnt = 0;
         for(var i=0; i<correctAnswer.length; i++) {
           if(userInput[currentQuestionIndex].includes(correctAnswer[i])) {
@@ -181,8 +179,8 @@ class Core extends Component {
           this.setState({
             correctAnswer: true,
             incorrectAnswer: false,
-            correct: correct,
-            showNextQuestionButton: true,
+            correct: true,
+            userAttempt: 1
           })
         } else {
           incorrect.push(currentQuestionIndex)
@@ -191,16 +189,18 @@ class Core extends Component {
             correctAnswer: false,
             incorrect: incorrect,
             showNextQuestionButton: true,
+            userAttempt: 1
           })
         }
-      } 
-      
-      this.setState({
-        userInput,
-        userAttempt: userAttempt + 1
-      })
+      } else {
+        if(!showNextQuestionButton) {
+          this.setState({
+            userInput,
+            userAttempt: userAttempt + 1
+          })
+        }
+      }
     }
-     
   }
 
   nextQuestion = (currentQuestionIndex) => {
@@ -386,12 +386,12 @@ class Core extends Component {
     return (
       <div className="tag-container">
         {
-          answerSelectionType == 'single' && <span class="single selection-tag"> { singleSelectionTagText }</span>
+          answerSelectionType == 'single' && <span className="single selection-tag"> { singleSelectionTagText }</span>
         }
         {
-          answerSelectionType == 'multiple' && <span class="multiple selection-tag"> { multipleSelectionTagText }</span>
+          answerSelectionType == 'multiple' && <span className="multiple selection-tag"> { multipleSelectionTagText }</span>
         }
-        <span class="number-of-selection">{ pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection) }</span>
+        <span className="number-of-selection">{ pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection) }</span>
       </div>
       )
   }

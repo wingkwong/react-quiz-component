@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.3.1
+- Fixed Button issue introduced by v0.3.0 (Ref to #30)
+
 ## 0.3.0
 - Added Feature: Multiple answers with multiple correct answers (Refer to #26)
 - Added Feature: Quiz Input Validator 
