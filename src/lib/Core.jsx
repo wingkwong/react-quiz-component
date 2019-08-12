@@ -179,7 +179,8 @@ class Core extends Component {
           this.setState({
             correctAnswer: true,
             incorrectAnswer: false,
-            correct: true,
+            correct: correct,
+            showNextQuestionButton: true,
             userAttempt: 1
           })
         } else {
