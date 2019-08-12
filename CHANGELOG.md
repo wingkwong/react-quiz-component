@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.3.2 
+- Fixed incorrect type and button issues (Ref to #32)
+
 ## 0.3.1
 - Fixed Button issue introduced by v0.3.0 (Ref to #30)
 
