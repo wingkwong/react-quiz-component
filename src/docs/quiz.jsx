@@ -4,6 +4,7 @@ export const quiz =  {
   "questions": [
     {
       "question": "How can you access the state of a component from inside of a member function?",
+      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
       "questionType": "text",
       "answerSelectionType": "single",
       "answers": [

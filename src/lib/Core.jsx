@@ -330,6 +330,7 @@ class Core extends Component {
         <div className="result-answer-wrapper" key={index+1}>
 
         <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
+        {question.questionPic && <img src={question.questionPic}/>}
         {
           this.renderTags(answerSelectionType, question.correctAnswer.length)
         }
@@ -464,6 +465,7 @@ class Core extends Component {
             </div>
             <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
             <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
+            {question.questionPic && <img src={question.questionPic}/>}
             {
               this.renderTags(answerSelectionType, question.correctAnswer.length)
             }

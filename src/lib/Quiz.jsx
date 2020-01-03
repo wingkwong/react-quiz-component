@@ -38,7 +38,7 @@ class Quiz extends Component {
     }
 
     for(var i=0; i<questions.length; i++) {
-      const { question, questionType, answerSelectionType, answers, correctAnswer } = questions[i];
+      const { question, questionType, questionPic, answerSelectionType, answers, correctAnswer } = questions[i];
       if(!question) {
         console.error("Field 'question' is required.");
         return false;
