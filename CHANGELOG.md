@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.3.3
+- Added Picture in Question
+
 ## 0.3.2 
 - Fixed incorrect type and button issues (Ref to #32)
 

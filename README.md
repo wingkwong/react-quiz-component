@@ -19,6 +19,7 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Allow Instant feedback
 - Allow retry until the answer is selected correctly
 - Allow markdown in Question
+- Allow Picture in Question
 - Scoring System
 
 ## Installing
@@ -41,6 +42,7 @@ export const quiz =  {
     {
       "question": "How can you access the state of a component from inside of a member function?",
       "questionType": "text",
+      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
       "answerSelectionType": "single",
       "answers": [
         "this.getState()",
