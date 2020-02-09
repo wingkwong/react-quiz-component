@@ -300,6 +300,7 @@ class Core extends Component {
             { questionType == 'text' && <span>{ answer.content ? answer.content : answer }</span> }
             { questionType == 'photo' && <img src={ answer.content ? answer.content : answer } /> }
           </button>
+		  <span className="otherParticipants">{answer.otherParticipants}</span>
         </div>
       )
     });
@@ -356,13 +357,9 @@ class Core extends Component {
     
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
-	console.log("RENDERANSWERS");
-	console.log(answers);
 	var newArray = answers.map((answer, index) => {
-		console.log(answer);
 		return answer;
 	});
-	console.log(newArray);
     return answers.map( (answer, index) => {
       if(buttons[index] != undefined) {
         return (
@@ -389,7 +386,6 @@ class Core extends Component {
   }
 
   renderTags(answerSelectionType, numberOfSelection) {
-	  console.log("RENDERTAGS");
     const { 
       appLocale: {
         singleSelectionTagText,
@@ -412,7 +408,6 @@ class Core extends Component {
   }
 
   render() {
-	  console.log("RENDER");
     const { questions, appLocale } = this.props;
     const { 
       correct, 
