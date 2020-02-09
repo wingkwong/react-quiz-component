@@ -297,8 +297,8 @@ class Core extends Component {
       return(
         <div key={index}>
            <button disabled={true} className={"answerBtn btn " + answerBtnCorrectClassName + answerBtnIncorrectClassName}>
-            { questionType == 'text' && <span>{ answer }</span> }
-            { questionType == 'photo' && <img src={ answer } /> }
+            { questionType == 'text' && <span>{ answer.content ? answer.content : answer }</span> }
+            { questionType == 'photo' && <img src={ answer.content ? answer.content : answer } /> }
           </button>
         </div>
       )
@@ -350,33 +350,46 @@ class Core extends Component {
     return { __html: rawMarkup };
   }
 
-  renderAnswers = (question, buttons) => {
+  renderAnswers = (question, buttons, showNextQuestionButton) => {
     const { answers, correctAnswer, questionType } = question;
     let { answerSelectionType } = question;
     
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
-
+	console.log("RENDERANSWERS");
+	console.log(answers);
+	var newArray = answers.map((answer, index) => {
+		console.log(answer);
+		return answer;
+	});
+	console.log(newArray);
     return answers.map( (answer, index) => {
       if(buttons[index] != undefined) {
         return (
-          <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)}>
-            { questionType == 'text' && <span>{answer}</span> }
-            { questionType == 'photo' && <img src={answer} /> }
-          </button>
+		<span className="answerBtn_with_Participants">
+			<button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)}>
+				{ questionType == 'text' && <span>{answer.content ? answer.content : answer}</span> }
+				{ questionType == 'photo' && <img src={answer.content ? answer.content : answer} /> }
+			</button>
+			{ showNextQuestionButton && <span className="otherParticipants">{answer.otherParticipants}</span> }
+		</span>
         )
       } else {
         return (
-          <button key={index} onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)} className="answerBtn btn">
-          { questionType == 'text' && answer }
-          { questionType == 'photo' && <img src={answer}/> }
-          </button>
+          <span className="answerBtn_with_Participants">
+			  <button key={index} onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)} className="answerBtn btn">
+			  { questionType == 'text' && answer.content ? answer.content : answer }
+			  { questionType == 'photo' && <img src={answer.content ? answer.content : answer}/> }
+			  </button>
+			  { showNextQuestionButton && <span className="otherParticipants">{answer.otherParticipants}</span> }
+		  </span>
         )
       }
     })
   }
 
   renderTags(answerSelectionType, numberOfSelection) {
+	  console.log("RENDERTAGS");
     const { 
       appLocale: {
         singleSelectionTagText,
@@ -399,6 +412,7 @@ class Core extends Component {
   }
 
   render() {
+	  console.log("RENDER");
     const { questions, appLocale } = this.props;
     const { 
       correct, 
@@ -470,7 +484,7 @@ class Core extends Component {
               this.renderTags(answerSelectionType, question.correctAnswer.length)
             }
             {
-              this.renderAnswers(question, buttons)
+              this.renderAnswers(question, buttons, showNextQuestionButton)
             }
             { showNextQuestionButton &&
               <div><button onClick={() => this.nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>

@@ -4,7 +4,6 @@ export const quiz =  {
   "questions": [
     {
       "question": "How can you access the state of a component from inside of a member function?",
-      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
       "questionType": "text",
       "answerSelectionType": "single",
       "answers": [
@@ -89,6 +88,23 @@ export const quiz =  {
         "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer"
       ],
       "correctAnswer": [1, 2, 4],
+      "messageForCorrectAnswer": "Correct answer. Good job.",
+      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "point": "20"
+    },
+	{
+      "question": "How would you classify the following picture?",
+      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
+      "questionType": "text",
+      "answerSelectionType": "multiple",
+      "answers": [
+	  {content: "It's an 'X' letter", otherParticipants: "Tom, Julia"},
+	  {content: "The first letter of the word: 'hobby'", otherParticipants: "Анатолий"},
+      {content: "Seems like a father figure", otherParticipants: "李秀英"},
+	  {content: "A new kind of ray", otherParticipants: "Wilhelm Conrad Röntgen"}
+      ],
+      "correctAnswer": [1, 2, 3, 4],
       "messageForCorrectAnswer": "Correct answer. Good job.",
       "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",

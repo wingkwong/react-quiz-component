@@ -1,6 +1,6 @@
 .react-quiz-container {
   margin: 20px;
-  width: 500px;
+  width: 550px;
 }
 
 .react-quiz-container .startQuizWrapper {
@@ -31,7 +31,7 @@
   border-radius: 4px;
   border: 1px solid #e8e8e8;;
   font-size: 15px;
-  display: block;
+  display: inline;
   white-space: normal;
   text-align: unset;
 }
@@ -63,7 +63,7 @@
 }
 
 .react-quiz-container .answerBtn {
-  width: 100%;
+  width: 50%;
 }
 
 .react-quiz-container .startQuizWrapper .startQuizBtn {
@@ -154,4 +154,16 @@
 
 .react-quiz-container .selection-tag.multiple {
   background: #FF9800;
+}
+
+.react-quiz-container .answerBtn_with_Participants {
+  display: block;
+  width: 200%;
+}
+
+.react-quiz-container .otherParticipants {
+  display: inline;
+  margin-left: 10px;
+  white-space: nowrap;
+  font-size: 13px;
 }

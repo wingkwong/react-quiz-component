@@ -10,16 +10,16 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Quiz Input Validator 
 - Multiple answers with single correct answer
 - Multiple answers with multiple correct answers
-- Support text and photo answers
+- Support text and photo questions and answers
 - Continue till answered correctly
 - Show explainations when answered correctly or not
+- Show other participants answers'
 - Quiz result page at the end with the dropdown filtering all questions or only those you answered correctly or incorrectly
 - Support custom result page
 - Return quiz summary at the page
 - Allow Instant feedback
 - Allow retry until the answer is selected correctly
 - Allow markdown in Question
-- Allow Picture in Question
 - Scoring System
 
 ## Installing
@@ -42,7 +42,6 @@ export const quiz =  {
     {
       "question": "How can you access the state of a component from inside of a member function?",
       "questionType": "text",
-      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
       "answerSelectionType": "single",
       "answers": [
         "this.getState()",
@@ -131,6 +130,23 @@ export const quiz =  {
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       "point": "20"
     },
+	{
+      "question": "How would you classify the following picture?",
+      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
+      "questionType": "text",
+      "answerSelectionType": "multiple",
+      "answers": [
+	  {content: "It's an 'X' letter", otherParticipants: "Tom, Julia"},
+	  {content: "This is the first letter of the word: 'hobby'", otherParticipants: "Анатолий"},
+      {content:  "Seems like a father figure", otherParticipants: " 李秀英"},
+	  {content:  "A new kind of ray", otherParticipants: "Wilhelm Conrad Röntgen"}
+      ],
+      "correctAnswer": [1, 2, 3, 4],
+      "messageForCorrectAnswer": "Correct answer. Good job.",
+      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "point": "20"
+    },	
   ]
 } 
 ```

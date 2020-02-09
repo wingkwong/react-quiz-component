@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.3.4
+- Added other participants' answers when showing results
+
 ## 0.3.3
 - Added Picture in Question
 
