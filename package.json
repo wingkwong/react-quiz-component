@@ -47,6 +47,7 @@
     "url": "https://github.com/wingkwong/react-quiz-component.git"
   },
   "dependencies": {
+    "dompurify": "^2.0.8",
     "marked": "^0.7.0"
   }
 }
