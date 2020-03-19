@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
+import dompurify from 'dompurify';
 
 class Core extends Component {
   constructor(props){
@@ -346,7 +347,8 @@ class Core extends Component {
   }
 
   rawMarkup = (data) => {
-    let rawMarkup = marked(data, {sanitize: true});
+    const sanitizer = dompurify.sanitize;
+    let rawMarkup = marked(sanitizer(data));
     return { __html: rawMarkup };
   }
 
