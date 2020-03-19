@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.4
+- Fixed issue #35
+- Upgraded several dependencies
+
 ## 0.3.3
 - Added Picture in Question
 
