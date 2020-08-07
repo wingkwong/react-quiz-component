@@ -1,31 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Core from './Core';
 import { defaultLocale } from './Locale';
 import "./styles.css";
 
-class Quiz extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      start: false,
+const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect }) => {
+  const [start, setStart] = useState(false)
+  const [questions, setQuestions] = useState(quiz.questions)
+
+  useEffect(() => {
+    if(shuffle) {
+      setQuestions(shuffleQuestions(quiz.questions));
+    } else {
+      setQuestions(quiz.questions);
     }
-    this.start = this.start.bind(this);
-  }
 
-  start = () => {
-    this.setState({start: true})
-  }
+    setQuestions(questions.map((question, index) => ({
+      ...question, 
+      questionIndex : index + 1
+    })))
+    
+  }, [start])
 
-  shuffleQuestions = (questions) => {
+  const shuffleQuestions = useCallback((questions) => {
     for (let i = questions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [questions[i], questions[j]] = [questions[j], questions[i]];
     }
     return questions;
-  }
+  }, [])
 
-  validateQuiz = (quiz) => {
+  const validateQuiz = (quiz) => {
     if(!quiz) {
       console.error("Quiz object is required.");
       return false;
@@ -89,11 +94,8 @@ class Quiz extends Component {
     return  true;
   }
 
-  render() {
-    const { quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect } = this.props;
 
-
-    if(!this.validateQuiz(quiz)) {
+    if(!validateQuiz(quiz)) {
       return (null)
     }
 
@@ -102,39 +104,35 @@ class Quiz extends Component {
       ...quiz.appLocale
     };
     
-    let questions = quiz.questions;
-      if(shuffle) {
-        questions = this.shuffleQuestions(questions);
-      }
-
-      questions = questions.map((question, index) => ({
-        ...question, 
-        questionIndex : index + 1
-      }));
-
-      return (
-        <div className="react-quiz-container">
-          {!this.state.start &&
-            <div>
-              <h2>{quiz.quizTitle}</h2>
-              <div> {appLocale.landingHeaderText.replace("<questionLength>" , quiz.questions.length )}</div>
-              { quiz.quizSynopsis && 
-                  <div className="quiz-synopsis">
-                      {quiz.quizSynopsis}
-                  </div> 
-              }
-              <div className="startQuizWrapper">
-                <button onClick={() => this.start()} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
-              </div>
+    return (
+      <div className="react-quiz-container">
+        {!start &&
+          <div>
+            <h2>{quiz.quizTitle}</h2>
+            <div>{appLocale.landingHeaderText.replace("<questionLength>" , quiz.questions.length)}</div>
+            {quiz.quizSynopsis && 
+              <div className="quiz-synopsis">
+                  {quiz.quizSynopsis}
+              </div> 
+            }
+            <div className="startQuizWrapper">
+              <button onClick={() => setStart(true)} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
             </div>
-          }
+          </div>
+        }
 
-          {
-            this.state.start && <Core questions={questions} showDefaultResult={showDefaultResult} onComplete={onComplete} customResultPage={customResultPage} showInstantFeedback={showInstantFeedback} continueTillCorrect={continueTillCorrect} appLocale={appLocale}/>
-          }
-        </div>
-      );
-    }
+        {start && <Core 
+                    questions={questions} 
+                    showDefaultResult={showDefaultResult} 
+                    onComplete={onComplete} 
+                    customResultPage={customResultPage} 
+                    showInstantFeedback={showInstantFeedback} 
+                    continueTillCorrect={continueTillCorrect} 
+                    appLocale={appLocale}
+                  />
+        }
+      </div>
+    );
 }
 
 Quiz.propTypes = {
