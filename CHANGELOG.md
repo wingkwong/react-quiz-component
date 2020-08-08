@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.5
+- Fixed issue #48 - Maximum update depth exceeded with onComplete props
+- Upgraded react version
+
 ## 0.3.4
 - Fixed issue #35
 - Upgraded several dependencies
