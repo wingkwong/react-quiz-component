@@ -450,7 +450,7 @@ const Core = ({ questions, appLocale, showDefaultResult, onComplete, customResul
           }
         </div>
       }
-      {endQuiz && showDefaultResultState && customResultPage === null && 
+      {endQuiz && showDefaultResultState && customResultPage === undefined && 
         renderResult()
       }
     </div>
