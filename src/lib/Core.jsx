@@ -1,36 +1,89 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 import dompurify from 'dompurify';
 
-class Core extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      incorrectAnswer: false,
-      correctAnswer: false,
-      showNextQuestionButton: false,
-      endQuiz: false,
-      currentQuestionIndex: 0,
-      buttons: {},
-      buttonClasses: {},
-      correct: [],
-      incorrect: [],
-      userInput: [],
-      filteredValue: 'all',
-      userAttempt: 1,
-      showDefaultResult: this.props.showDefaultResult != undefined ? this.props.showDefaultResult : true,
-      onComplete: this.props.onComplete != undefined ? this.props.onComplete : null,
-      customResultPage: this.props.customResultPage != undefined ? this.props.customResultPage : null,
-      showInstantFeedback: this.props.showInstantFeedback != undefined ? this.props.showInstantFeedback : false,
-      continueTillCorrect: this.props.continueTillCorrect != undefined ? this.props.continueTillCorrect : false
-    };
-  }
+const Core = ({ questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect }) => {
+  const [incorrectAnswer, setIncorrectAnswer] = useState(false)
+  const [correctAnswer, setCorrectAnswer] = useState(false)
+  const [showNextQuestionButton, setShowNextQuestionButton] = useState(false)
+  const [endQuiz, setEndQuiz] = useState(false)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [buttons, setButtons] = useState({})
+  const [buttonClasses, setButtonClasses] = useState({})
+  const [correct, setCorrect] = useState([])
+  const [incorrect, setIncorrect] = useState([])
+  const [userInput, setUserInput] = useState([])
+  const [filteredValue, setFilteredValue] = useState('all')
+  const [userAttempt, setUserAttempt] = useState(1)
+  const [showDefaultResultState, setShowDefaultResult] = useState(true)
+  const [answerSelectionTypeState, setAnswerSelectionType] = useState(undefined)
 
-  checkAnswer = (index, correctAnswer, answerSelectionType) => {
-    const { correct, incorrect, currentQuestionIndex, continueTillCorrect, userInput } = this.state;
-    let { userAttempt, showNextQuestionButton } = this.state;
+  const [totalPoints, setTotalPoints] = useState(0)
+  const [correctPoints, setCorrectPoints] = useState(0)
+  const [question, setQuestion] = useState(questions[currentQuestionIndex])
+  const [questionSummary, setQuestionSummary] = useState(undefined)
+  
+  useEffect(() => {
+    setShowDefaultResult(showDefaultResult !== undefined ? showDefaultResult : true);
+  }, [showDefaultResult])
+  
+  useEffect(() => {
+    setQuestion(questions[currentQuestionIndex]);
+  }, [currentQuestionIndex])
 
+  useEffect(() => {
+    let { answerSelectionType } = question;
+    // Default single to avoid code breaking due to automatic version upgrade
+    setAnswerSelectionType(answerSelectionType || 'single');
+  }, [question, currentQuestionIndex])
+
+  useEffect(() => {
+    if (endQuiz) { 
+      let totalPointsTemp = 0;
+      let correctPointsTemp = 0;
+      for (var i = 0; i < questions.length; i++) {
+        let point = questions[i].point || 0;
+        if(typeof point === 'string' || point instanceof String) {
+          point = parseInt(point)
+        }
+        
+        totalPointsTemp = totalPointsTemp + point
+        
+        if(correct.includes(i)) {
+          correctPointsTemp = correctPointsTemp + point
+        }
+      }
+      setTotalPoints(totalPointsTemp);
+      setCorrectPoints(correctPointsTemp);
+    }
+  }, [endQuiz])
+  
+  useEffect(() => {
+    setQuestionSummary({
+      numberOfQuestions: questions.length,
+      numberOfCorrectAnswers: correct.length,
+      numberOfIncorrectAnswers: incorrect.length,
+      questions: questions,
+      userInput: userInput,
+      totalPoints: totalPoints,
+      correctPoints: correctPoints
+    })
+  }, [totalPoints, correctPoints])
+
+  useEffect(() => {
+    if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
+      onComplete(questionSummary)
+    }
+  }, [endQuiz, questionSummary])
+
+  useEffect(() => {
+    if(endQuiz && !showDefaultResultState && customResultPage !== undefined && questionSummary !== undefined) {
+      customResultPage(questionSummary)
+    }
+  }, [endQuiz, questionSummary])
+
+  const checkAnswer = (index, correctAnswer, answerSelectionType) => {
     if(answerSelectionType == 'single') {
       if(userInput[currentQuestionIndex] == undefined) {
         userInput.push(index)
@@ -48,44 +101,36 @@ class Core extends Component {
           3: {disabled: true}
         }
   
-        this.setState((prevState) => {
-          const buttons = Object.assign(
-            {},
-            prevState.buttons,
-            {
-              ...disabledAll,
-              [index-1]: {
-                className: (index == correctAnswer)? "correct" : "incorrect"
-              },
-            }
-          );
-          return { buttons };
-        })
-  
-        this.setState({
-          correctAnswer: true,
-          incorrectAnswer: false,
-          correct: correct,
-          showNextQuestionButton: true,
-        })
+        setButtons((prevState) => ({ ...prevState,
+            ...disabledAll,
+            [index-1]: {
+              className: (index == correctAnswer) ? "correct" : "incorrect"
+            },
+          })
+        )
+
+        setCorrectAnswer(true)
+        setIncorrectAnswer(false)
+        setCorrect(correct)
+        setShowNextQuestionButton(true)
+
       } else {
         if( correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0 ) {
           incorrect.push(currentQuestionIndex)
         }
   
         if(continueTillCorrect) {
-          this.setState((prevState) => {
-            const buttons = Object.assign(
+          setButtons((prevState) => (
+            Object.assign(
               {},
-              prevState.buttons,
+              prevState,
               {
                 [index-1]: {
-                  disabled: !prevState.buttons[index-1]
+                  disabled: !prevState[index-1]
                 }
               }
-            );
-            return { buttons };
-          });
+            )
+          ))
         } else {
           let disabledAll = {
             0: {disabled: true},
@@ -94,30 +139,25 @@ class Core extends Component {
             3: {disabled: true}
           }
   
-          this.setState((prevState) => {
-            const buttons = Object.assign(
+          setButtons((prevState) => (
+            Object.assign(
               {},
-              prevState.buttons,
+              prevState,
               {
                 ...disabledAll,
                 [index-1]: {
-                  className: (index == correctAnswer)? "correct" : "incorrect"
+                  className: (index == correctAnswer) ? "correct" : "incorrect"
                 },
               }
-            );
-            return { buttons };
-          })
-  
-          this.setState({
-            showNextQuestionButton: true,
-          })
+            )
+          ))
+
+          setShowNextQuestionButton(true)
         }
   
-        this.setState({
-          incorrectAnswer: true,
-          correctAnswer: false,
-          incorrect: incorrect,
-        })
+        setIncorrectAnswer(true)
+        setCorrectAnswer(false)
+        setIncorrect(incorrect)
       }
     } else {
       
@@ -133,112 +173,85 @@ class Core extends Component {
         if(correctAnswer.includes(index)) {
           if(userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection)  {
           
-            this.setState((prevState) => {
-              const buttons = Object.assign(
-                {},
-                prevState.buttons,
-                {
-                  [index-1]: {
-                    disabled: !prevState.buttons[index-1],
-                    className: (correctAnswer.includes(index))? "correct" : "incorrect"
-                  },
-                }
-              );
-              return { buttons };
-            })
-  
-          
+            setButtons((prevState) => ({ ...prevState,
+                [index-1]: {
+                  disabled: !prevState[index-1],
+                  className: (correctAnswer.includes(index)) ? "correct" : "incorrect"
+                },
+              })
+            )
           }
         } else {
           if(userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection)  { 
-            this.setState((prevState) => {
-              const buttons = Object.assign(
-                {},
-                prevState.buttons,
-                {
-                  [index-1]: {
-                    className: (correctAnswer.includes(index))? "correct" : "incorrect"
-                  },
-                }
-              );
-              return { buttons };
-            })
+            setButtons((prevState) => ({ ...prevState, 
+                [index-1]: {
+                  className: (correctAnswer.includes(index)) ? "correct" : "incorrect"
+                },
+              })
+            )
           }
         }
       }
 
       if(maxNumberOfMultipleSelection == userAttempt) {
         let cnt = 0;
-        for(var i=0; i<correctAnswer.length; i++) {
+        for(var i = 0; i < correctAnswer.length; i++) {
           if(userInput[currentQuestionIndex].includes(correctAnswer[i])) {
-            cnt ++;
+            cnt++;
           }
         }
 
-        if(cnt == maxNumberOfMultipleSelection) {
+        if(cnt === maxNumberOfMultipleSelection) {
           correct.push(currentQuestionIndex);
-          this.setState({
-            correctAnswer: true,
-            incorrectAnswer: false,
-            correct: correct,
-            showNextQuestionButton: true,
-            userAttempt: 1
-          })
+          
+          setCorrectAnswer(true)
+          setIncorrectAnswer(false)
+          setCorrect(correct)
+          setShowNextQuestionButton(true)
+          setUserAttempt(1)
         } else {
           incorrect.push(currentQuestionIndex)
-          this.setState({
-            incorrectAnswer: true,
-            correctAnswer: false,
-            incorrect: incorrect,
-            showNextQuestionButton: true,
-            userAttempt: 1
-          })
+          
+          setIncorrectAnswer(true)
+          setCorrectAnswer(false)
+          setIncorrect(incorrect)
+          setShowNextQuestionButton(true)
+          setUserAttempt(1)
         }
       } else {
         if(!showNextQuestionButton) {
-          this.setState({
-            userInput,
-            userAttempt: userAttempt + 1
-          })
+          setUserInput(userInput)
+          setUserAttempt(userAttempt + 1)
         }
       }
     }
   }
 
-  nextQuestion = (currentQuestionIndex) => {
-    const { questions } = this.props;
+  const nextQuestion = (currentQuestionIndex) => {
 
-    var initState = {
-      incorrectAnswer: false,
-      correctAnswer: false,
-      showNextQuestionButton: false,
-      buttons: {},
-    }
+    setIncorrectAnswer(false)
+    setCorrectAnswer(false)
+    setShowNextQuestionButton(false)
+    setButtons({})
 
     if(currentQuestionIndex + 1 == questions.length) {
-      this.setState({
-        ...initState,
-        endQuiz: true
-      })
+      setEndQuiz(true)
     } else {
-      this.setState({
-        ...initState,
-        currentQuestionIndex: currentQuestionIndex + 1,
-      })
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  renderMessageforCorrectAnswer = (question) => {
+  const renderMessageforCorrectAnswer = (question) => {
     const defaultMessage = 'You are correct. Please click Next to continue.';
     return question.messageForCorrectAnswer || defaultMessage;
   }
 
-  renderMessageforIncorrectAnswer = (question) => {
+  const renderMessageforIncorrectAnswer = (question) => {
     const defaultMessage = 'Incorrect answer. Please try again.';
     return question.messageForIncorrectAnswer || defaultMessage;
   }
 
-  renderExplanation = (question, isResultPage) => {
+  const renderExplanation = (question, isResultPage) => {
     const explanation = question.explanation;
     if(!explanation) {
       return (null);
@@ -246,7 +259,7 @@ class Core extends Component {
     
     if(isResultPage) {
       return (
-        <div className="explaination">
+        <div className="explanation">
           {explanation}
         </div>
       )
@@ -260,39 +273,36 @@ class Core extends Component {
     )
   }
 
-  handleChange = (event) => {
-    this.setState({filteredValue: event.target.value});
+  const handleChange = (event) => {
+    setFilteredValue(event.target.value)
   }
 
-  renderQuizResultFilter = () => {
-    const { appLocale } = this.props;
-    return (
-      <div className="quiz-result-filter">
-          <select value={this.state.filteredValue} onChange={this.handleChange}>
-            <option value="all">{appLocale.resultFilterAll}</option>
-            <option value="correct">{appLocale.resultFilterCorrect}</option>
-            <option value="incorrect">{appLocale.resultFilterIncorrect}</option>
-          </select>
-      </div>
-    );
-  }
+  const renderQuizResultFilter = () => (
+    <div className="quiz-result-filter">
+      <select value={filteredValue} onChange={handleChange}>
+        <option value="all">{appLocale.resultFilterAll}</option>
+        <option value="correct">{appLocale.resultFilterCorrect}</option>
+        <option value="incorrect">{appLocale.resultFilterIncorrect}</option>
+      </select>
+    </div>
+  );
 
-  renderAnswerInResult = (question, userInputIndex) => {
+  const renderAnswerInResult = (question, userInputIndex) => {
     const { answers, correctAnswer, questionType } = question;
     let { answerSelectionType } = question;
     let answerBtnCorrectClassName;
     let answerBtnIncorrectClassName;
-
+    
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
-
-    return answers.map( (answer, index) => {
+    
+    return answers.map((answer, index) => {
       if(answerSelectionType == 'single') {
-        answerBtnCorrectClassName = ( index+1 == correctAnswer ? ' correct ': '' )
-        answerBtnIncorrectClassName = (userInputIndex != correctAnswer && index + 1 == userInputIndex ? ' incorrect ' : '')
+        answerBtnCorrectClassName = ( index+1 == correctAnswer ? 'correct': '' )
+        answerBtnIncorrectClassName = (userInputIndex != correctAnswer && index + 1 == userInputIndex ? 'incorrect' : '')
       } else {
-        answerBtnCorrectClassName = ( correctAnswer.includes(index + 1)  ? ' correct ': '' )
-        answerBtnIncorrectClassName = ( !correctAnswer.includes(index + 1) && userInputIndex.includes(index + 1) ? ' incorrect ' : '')
+        answerBtnCorrectClassName = ( correctAnswer.includes(index + 1)  ? 'correct': '' )
+        answerBtnIncorrectClassName = ( !correctAnswer.includes(index + 1) && userInputIndex.includes(index + 1) ? 'incorrect' : '')
       }
 
       return(
@@ -306,53 +316,47 @@ class Core extends Component {
     });
   }
 
-  renderQuizResultQuestions = () => {
-    const { filteredValue } = this.state;
-    let { userInput } = this.state;
-    let { questions } = this.props;
+  const renderQuizResultQuestions = useCallback(() => {
+    let filteredQuestions;
+    let filteredUserInput;
 
-    if(filteredValue != 'all') {
-      questions = questions.filter( (question, index) => {
-        return this.state[filteredValue].indexOf(index) != -1
-      })
-
-      userInput = userInput.filter( (input, index) => {
-        return this.state[filteredValue].indexOf(index) != -1
-      })
+    if(filteredValue !== 'all') {
+      if (filteredValue === 'correct') {
+        filteredQuestions = questions.filter((question, index) => correct.indexOf(index) != -1)
+        filteredUserInput = userInput.filter((input, index) => correct.indexOf(index) != -1)
+      } else {
+        filteredQuestions = questions.filter((question, index) => incorrect.indexOf(index) != -1)
+        filteredUserInput = userInput.filter((input, index) => incorrect.indexOf(index) != -1)
+      }
     }
 
-    return questions.map((question, index) => {
-      const userInputIndex = userInput[index];
+    return (filteredQuestions ? filteredQuestions : questions).map((question, index) => {
+      const userInputIndex = filteredUserInput ? filteredUserInput[index] : userInput[index];
 
       // Default single to avoid code breaking due to automatic version upgrade
       let answerSelectionType = question.answerSelectionType || 'single';
       
       return (
         <div className="result-answer-wrapper" key={index+1}>
-
-        <h3 dangerouslySetInnerHTML={this.rawMarkup(`Q${question.questionIndex}: ${question.question}`)}/> 
-        {question.questionPic && <img src={question.questionPic}/>}
-        {
-          this.renderTags(answerSelectionType, question.correctAnswer.length)
-        }
-        <div className="result-answer">
-            {
-              this.renderAnswerInResult(question, userInputIndex)
-            }
+          <h3 dangerouslySetInnerHTML={ rawMarkup(`Q${question.questionIndex}: ${question.question}`) }/> 
+          {question.questionPic && <img src={question.questionPic}/>}
+          {renderTags(answerSelectionType, question.correctAnswer.length)}
+          <div className="result-answer">
+            {renderAnswerInResult(question, userInputIndex)}
+          </div>
+          {renderExplanation(question, true)}
         </div>
-        {this.renderExplanation(question, true)}
-      </div>
       )
     })
-  }
+  }, [endQuiz, filteredValue])
 
-  rawMarkup = (data) => {
+  const rawMarkup = (data) => {
     const sanitizer = dompurify.sanitize;
     let rawMarkup = marked(sanitizer(data));
     return { __html: rawMarkup };
   }
 
-  renderAnswers = (question, buttons) => {
+  const renderAnswers = (question, buttons) => {
     const { answers, correctAnswer, questionType } = question;
     let { answerSelectionType } = question;
     
@@ -362,149 +366,95 @@ class Core extends Component {
     return answers.map( (answer, index) => {
       if(buttons[index] != undefined) {
         return (
-          <button key={index} disabled={ buttons[index].disabled || false } className={`${buttons[index].className} answerBtn btn`}  onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)}>
-            { questionType == 'text' && <span>{answer}</span> }
-            { questionType == 'photo' && <img src={answer} /> }
+          <button 
+            key={index} 
+            disabled={buttons[index].disabled || false} 
+            className={`${buttons[index].className} answerBtn btn`} 
+            onClick={() => checkAnswer(index+1, correctAnswer, answerSelectionType)}
+          >
+            {questionType == 'text' && <span>{answer}</span>}
+            {questionType == 'photo' && <img src={answer} />}
           </button>
         )
       } else {
         return (
-          <button key={index} onClick={() => this.checkAnswer(index+1, correctAnswer, answerSelectionType)} className="answerBtn btn">
-          { questionType == 'text' && answer }
-          { questionType == 'photo' && <img src={answer}/> }
+          <button 
+            key={index} 
+            onClick={() => checkAnswer(index+1, correctAnswer, answerSelectionType)} 
+            className="answerBtn btn"
+          >
+          {questionType == 'text' && answer}
+          {questionType == 'photo' && <img src={answer}/>}
           </button>
         )
       }
     })
   }
 
-  renderTags(answerSelectionType, numberOfSelection) {
+  const renderTags = (answerSelectionType, numberOfSelection) => {
     const { 
-      appLocale: {
-        singleSelectionTagText,
-        multipleSelectionTagText,
-        pickNumberOfSelection
-      } 
-    } = this.props;
+      singleSelectionTagText,
+      multipleSelectionTagText,
+      pickNumberOfSelection
+    } = appLocale;
 
     return (
       <div className="tag-container">
-        {
-          answerSelectionType == 'single' && <span className="single selection-tag"> { singleSelectionTagText }</span>
-        }
-        {
-          answerSelectionType == 'multiple' && <span className="multiple selection-tag"> { multipleSelectionTagText }</span>
-        }
-        <span className="number-of-selection">{ pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection) }</span>
+        {answerSelectionType === 'single' && <span className="single selection-tag">{singleSelectionTagText}</span>}
+        {answerSelectionType === 'multiple' && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        <span className="number-of-selection">{pickNumberOfSelection.replace("<numberOfSelection>", numberOfSelection)}</span>
       </div>
-      )
+    )
   }
-
-  render() {
-    const { questions, appLocale } = this.props;
-    const { 
-      correct, 
-      incorrect, 
-      userInput, 
-      currentQuestionIndex, 
-      correctAnswer, 
-      incorrectAnswer, 
-      endQuiz, 
-      showInstantFeedback, 
-      buttons, 
-      onComplete, 
-      showNextQuestionButton, 
-      showDefaultResult, 
-      customResultPage
-    } = this.state;
-
-    let question = questions[currentQuestionIndex];
-    let totalPoints = 0;
-    let correctPoints = 0;
-
-    for(var i=0; i<questions.length; i++) {
-      let point = questions[i].point || 0;
-      if(typeof point === 'string' || point instanceof String) {
-        point = parseInt(point)
-      }
-
-      totalPoints = totalPoints + point;
-
-      if(correct.includes(i)) {
-        correctPoints = correctPoints + point;
-      }
-    }
-
-    const questionSummary = {
-      numberOfQuestions: questions.length,
-      numberOfCorrectAnswers: correct.length,
-      numberOfIncorrectAnswers: incorrect.length,
-      questions: questions,
-      userInput: userInput,
-      totalPoints: totalPoints,
-      correctPoints: correctPoints
-    };
-
-    let { answerSelectionType } = question;
-
-    // Default single to avoid code breaking due to automatic version upgrade
-    answerSelectionType = answerSelectionType || 'single';
     
-    return (
-      <div className="questionWrapper">
-        {!endQuiz &&
-          <div className="questionWrapperBody">
-            <div className="questionModal">
-              {incorrectAnswer && showInstantFeedback && 
-                <div className="alert incorrect">{ this.renderMessageforIncorrectAnswer(question) }</div>
-              }
-              { correctAnswer && showInstantFeedback && 
-                <div className="alert correct">
-                  { this.renderMessageforCorrectAnswer(question) } 
-                  { this.renderExplanation(question, false) }
-                </div>
-              }
-            </div>
-            <div>{ appLocale.question } { currentQuestionIndex + 1 }:</div>
-            <h3 dangerouslySetInnerHTML={this.rawMarkup(question.question)}/> 
-            {question.questionPic && <img src={question.questionPic}/>}
-            {
-              this.renderTags(answerSelectionType, question.correctAnswer.length)
+  const renderResult = () => (
+    <div className="card-body">
+      <h2>
+        {appLocale.resultPageHeaderText.replace("<correctIndexLength>", correct.length).replace("<questionLength>", questions.length)}
+      </h2>
+      <h2>
+        {appLocale.resultPagePoint.replace("<correctPoints>", correctPoints).replace("<totalPoints>", totalPoints)}
+      </h2>
+      <br />
+      {renderQuizResultFilter()}
+      {renderQuizResultQuestions()}
+    </div>
+  )
+
+  return (
+    <div className="questionWrapper">
+      {!endQuiz &&
+        <div className="questionWrapperBody">
+          <div className="questionModal">
+            {incorrectAnswer && showInstantFeedback && 
+              <div className="alert incorrect">{renderMessageforIncorrectAnswer(question)}</div>
             }
-            {
-              this.renderAnswers(question, buttons)
-            }
-            { showNextQuestionButton &&
-              <div><button onClick={() => this.nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">{appLocale.nextQuestionBtn}</button></div>
+            {correctAnswer && showInstantFeedback && 
+              <div className="alert correct">
+                { renderMessageforCorrectAnswer(question) } 
+                { renderExplanation(question, false) }
+              </div>
             }
           </div>
-        }
-        { endQuiz && showDefaultResult && customResultPage == null &&
-            <div className="card-body">
-            <h2>
-              {appLocale.resultPageHeaderText.replace("<correctIndexLength>", correct.length).replace("<questionLength>", questions.length) } 
-            </h2>
-            <h2>
-              { appLocale.resultPagePoint.replace("<correctPoints>", correctPoints).replace("<totalPoints>", totalPoints) }
-            </h2>
-            <br/> 
-              { this.renderQuizResultFilter() }
-              { this.renderQuizResultQuestions() }
+          <div>{appLocale.question} {currentQuestionIndex + 1}:</div>
+          <h3 dangerouslySetInnerHTML={rawMarkup(question && question.question)}/> 
+          {question && question.questionPic && <img src={question.questionPic}/>}
+          {question && renderTags(answerSelectionTypeState, question.correctAnswer.length)}
+          {question && renderAnswers(question, buttons)}
+          {showNextQuestionButton &&
+            <div>
+              <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">
+                {appLocale.nextQuestionBtn}
+              </button>
             </div>
-        }
-
-        {
-          endQuiz && onComplete != undefined &&
-             onComplete(questionSummary)
-        }
-
-        {
-          endQuiz && !showDefaultResult  && customResultPage != undefined &&
-             customResultPage(questionSummary)
-        }
+          }
         </div>
-    );
-  }
+      }
+      {endQuiz && showDefaultResultState && customResultPage === null && 
+        renderResult()
+      }
+    </div>
+  );
 }
 
 Core.propTypes = {
