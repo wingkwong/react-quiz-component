@@ -155,3 +155,7 @@
 .react-quiz-container .selection-tag.multiple {
   background: #FF9800;
 }
+.react-quiz-container .selection-tag.segment {
+  background: #3db4b9;
+  margin-left: 5px;
+}

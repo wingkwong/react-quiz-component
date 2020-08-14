@@ -4,22 +4,24 @@ import Quiz from "../../lib/Quiz";
 import { quiz } from './quiz';
 
 function App() {
-  const [quizResult, setQuizResult] = useState(undefined)
+  const [quizResult, setQuizResult] = useState()
 
   useEffect(() => {
-    console.log('quizResult', quizResult);
+      if(quizResult) {
+          console.log('quizResult', quizResult);
+      }
   }, [quizResult])
 
   return (
-    <div>
-      <Quiz 
+    <>
+      <Quiz
         quiz={quiz}
-        shuffle={true}
-        showInstantFeedback={true}
-        continueTillCorrect={true}
+        shuffle={false}
+        showInstantFeedback={false}
+        continueTillCorrect={false}
         onComplete={setQuizResult}
       />
-    </div>
+    </>
   );
 }
 
