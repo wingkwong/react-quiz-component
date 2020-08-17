@@ -1,4 +1,5 @@
 import React from "react";
+import Explanation from "./Explanation";
 
 const InstantFeedback = ({showInstantFeedback, incorrectAnswer, correctAnswer, question}) => {
 
@@ -12,27 +13,6 @@ const InstantFeedback = ({showInstantFeedback, incorrectAnswer, correctAnswer, q
         return question.messageForIncorrectAnswer || defaultMessage;
     };
 
-    const renderExplanation = (question, isResultPage) => {
-        const explanation = question.explanation;
-        if (!explanation) {
-            return null;
-        }
-
-        if (isResultPage) {
-            return (
-                <div className="explanation">
-                    {explanation}
-                </div>
-            )
-        }
-
-        return (
-            <div>
-                <br/>
-                {explanation}
-            </div>
-        )
-    };
 
     return (
         <>
@@ -42,7 +22,7 @@ const InstantFeedback = ({showInstantFeedback, incorrectAnswer, correctAnswer, q
             {correctAnswer && showInstantFeedback &&
             <div className="alert correct">
                 {renderMessageForCorrectAnswer(question)}
-                {renderExplanation(question, false)}
+                <Explanation question={question} isResultPage={false}/>
             </div>
             }
         </>)

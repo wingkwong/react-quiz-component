@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import QuizResultFilter from "./core-components/QuizResultFilter";
 import {checkAnswer, rawMarkup} from "./core-components/helpers";
 import InstantFeedback from "./core-components/InstantFeedback";
+import Explanation from "./core-components/Explanation";
 
 const Card = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
@@ -160,7 +161,7 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
             <div className="result-answer">
               {renderAnswerInResult(question, userInputIndex)}
             </div>
-            {renderExplanation(question, true)}
+            <Explanation question={question} isResultPage={true}/>
           </div>
       )
     })
