@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
-import Quiz from "../../lib/Quiz";
+import Quiz from "../lib/Quiz";
 import { quiz } from './quiz';
 
 function App() {
-  const [quizResult, setQuizResult] = useState()
+  const [quizResult, setQuizResult] = useState();
 
   useEffect(() => {
       if(quizResult) {
           console.log('quizResult', quizResult);
       }
-  }, [quizResult])
+  }, [quizResult]);
 
   return (
     <>
