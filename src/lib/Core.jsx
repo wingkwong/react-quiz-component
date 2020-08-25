@@ -114,9 +114,11 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
 
     return answers.map((answer, index) => {
       if (answerSelectionType === 'single') {
-        answerBtnCorrectClassName = (index + 1 === correctAnswer ? 'correct' : '');
-        answerBtnIncorrectClassName = (userInputIndex !== correctAnswer && index + 1 === userInputIndex ? 'incorrect' : '')
+          // correctAnswer - is string
+        answerBtnCorrectClassName = (`${index + 1}` === correctAnswer ? 'correct' : '');
+        answerBtnIncorrectClassName = (`${userInputIndex}` !== correctAnswer && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '');
       } else {
+          // correctAnswer - is array of numbers
         answerBtnCorrectClassName = (correctAnswer.includes(index + 1) ? 'correct' : '');
         answerBtnIncorrectClassName = (!correctAnswer.includes(index + 1) && userInputIndex.includes(index + 1) ? 'incorrect' : '')
       }

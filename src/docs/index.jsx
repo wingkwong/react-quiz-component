@@ -16,9 +16,9 @@ function App() {
     <>
       <Quiz
         quiz={quiz}
-        shuffle={false}
-        showInstantFeedback={false}
-        continueTillCorrect={false}
+        shuffle={true}
+        showInstantFeedback={true}
+        continueTillCorrect={true}
         onComplete={setQuizResult}
       />
     </>
