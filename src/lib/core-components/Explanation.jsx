@@ -1,7 +1,8 @@
 import React from "react";
 
-const Explanation = (question, isResultPage) => {
+const Explanation = ({question, isResultPage}) => {
     const explanation = question.explanation;
+
     if (!explanation) {
         return null;
     }
