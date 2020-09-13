@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.3.6
+- Added Segment to quiz config 
+
 ## 0.3.5
 - Fixed issue #48 - Maximum update depth exceeded with onComplete props
 - Upgraded react version
