@@ -1,3 +1,9 @@
+const segment = {
+  basic: "basic",
+  medium: "medium",
+  advanced: "advanced",
+};
+
 export const quiz =  {
   "quizTitle": "React Quiz Component Demo",
   "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
@@ -17,7 +23,8 @@ export const quiz =  {
       "messageForCorrectAnswer": "Correct answer. Good job.",
       "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
+      "point": "20",
+      "segment": segment.advanced
     },
     {
       "question": "ReactJS is developed by _____?",
@@ -31,7 +38,8 @@ export const quiz =  {
       "messageForCorrectAnswer": "Correct answer. Good job.",
       "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
+      "point": "20",
+      "segment": segment.basic
     },
     {
       "question": "ReactJS is an MVC based framework?",
@@ -60,7 +68,8 @@ export const quiz =  {
       "messageForCorrectAnswer": "Correct answer. Good job.",
       "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
       "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "30"
+      "point": "30",
+      "segment": segment.medium
     },
     {
       "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
@@ -95,4 +104,4 @@ export const quiz =  {
       "point": "20"
     },
   ]
-} 
+}

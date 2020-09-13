@@ -38,7 +38,8 @@
     "style-loader": "^0.21.0",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "prop-types": "latest"
   },
   "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
