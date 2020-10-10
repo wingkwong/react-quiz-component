@@ -5,7 +5,7 @@ import {checkAnswer, rawMarkup} from "./core-components/helpers";
 import InstantFeedback from "./core-components/InstantFeedback";
 import Explanation from "./core-components/Explanation";
 
-const Card = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
+const Core = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
@@ -76,12 +76,6 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
   useEffect(() => {
     if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
       onComplete(questionSummary)
-    }
-  }, [endQuiz, questionSummary]);
-
-  useEffect(() => {
-    if (endQuiz && !showDefaultResultState && customResultPage !== undefined && questionSummary !== undefined) {
-      customResultPage(questionSummary)
     }
   }, [endQuiz, questionSummary]);
 
@@ -283,13 +277,16 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
         </div>
         }
         {endQuiz && showDefaultResultState && customResultPage === undefined &&
-        renderResult()
+          renderResult()
+        }
+        {endQuiz && !showDefaultResultState && customResultPage !== undefined &&
+          customResultPage(questionSummary)
         }
       </div>
   );
 };
 
-Card.propTypes = {
+Core.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
@@ -299,4 +296,4 @@ Card.propTypes = {
   appLocale: PropTypes.object
 };
 
-export default Card;
+export default Core;
