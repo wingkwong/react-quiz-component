@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
