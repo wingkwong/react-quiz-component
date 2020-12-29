@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.3.8
+- Fixed wrong npm version in 0.3.7
+
+## 0.3.7
+- Fixed issue #54 - Custom result page is not displayed  
+
 ## 0.3.6
 - Added Segment to quiz config 
 
