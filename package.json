@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component-estefiversion",
-  "version": "0.3.8",
+  "version": "0.0.1",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -11,11 +11,7 @@
     "docs:prod": "webpack --mode production"
   },
   "keywords": [
-    "react",
-    "reactjs",
-    "react-quiz-component",
-    "react-quiz",
-    "quiz"
+    "react-quiz-component-estefiversion"
   ],
   "license": "MIT",
   "peerDependencies": {
@@ -42,10 +38,10 @@
     "prop-types": "^15.7.2"
   },
   "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
-  "homepage": "https://github.com/wingkwong/react-quiz-component",
+  "homepage": "https://github.com/estefaniatc/react-quiz-component",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wingkwong/react-quiz-component.git"
+    "url": "https://github.com/estefaniatc/react-quiz-component"
   },
   "dependencies": {
     "dompurify": "^2.0.8",
