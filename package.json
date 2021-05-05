@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component-estefiversion",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {

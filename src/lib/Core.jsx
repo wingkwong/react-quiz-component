@@ -62,7 +62,7 @@ const Core = ({questions, appLocale, showDefaultResult, onComplete, customResult
           setUserInput,
           setUserAttempt
         });
-        if(ques.correctAnswer == quizSummaryObject.userInput[index] && !correct.includes(index) && !incorrect.includes(index)) {
+        if(parseInt(ques.correctAnswer) == quizSummaryObject.userInput[index] && !correct.includes(index) && !incorrect.includes(index)) {
           correct.push(index);
         }
         else{
