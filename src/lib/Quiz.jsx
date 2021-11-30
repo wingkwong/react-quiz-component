@@ -7,7 +7,7 @@ import "./styles.css";
 const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect }) => {
   const [start, setStart] = useState(false)
   const [questions, setQuestions] = useState(quiz.questions)
-  const nrOfQuestions = quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length
+  const nrOfQuestions = (quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length) ? quiz.nrOfQuestions : quiz.questions.length
 
   useEffect(() => {
     if(shuffle) {
