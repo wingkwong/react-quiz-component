@@ -7,11 +7,13 @@ import "./styles.css";
 const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect }) => {
   const [start, setStart] = useState(false)
   const [questions, setQuestions] = useState(quiz.questions)
+  const nrOfQuestions = quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length
 
   useEffect(() => {
     if(shuffle) {
-      setQuestions(shuffleQuestions(quiz.questions, quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length ));
+      setQuestions(shuffleQuestions(quiz.questions));
     } else {
+      quiz.questions.length = nrOfQuestions;
       setQuestions(quiz.questions);
     }
 
@@ -22,10 +24,9 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
 
   }, [start])
 
-  const shuffleQuestions = useCallback((questions, nrOfQuestions) => {
+  const shuffleQuestions = useCallback((questions) => {
     for (let i = nrOfQuestions - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      console.log("j", j);
       [questions[i], questions[j]] = [questions[j], questions[i]];
     }
     questions.length = nrOfQuestions;
@@ -39,7 +40,6 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
     }
 
     for(let i=0; i<questions.length; i++) {
-      console.log("questions.length: ", questions.length)
       const { question, questionType, questionPic, answerSelectionType, answers, correctAnswer } = questions[i];
       if(!question) {
         console.error("Field 'question' is required.");
@@ -106,7 +106,7 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
         {!start &&
           <div>
             <h2>{quiz.quizTitle}</h2>
-            <div>{appLocale.landingHeaderText.replace("<questionLength>" , quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length)}</div>
+            <div>{appLocale.landingHeaderText.replace("<questionLength>" , nrOfQuestions)}</div>
             {quiz.quizSynopsis &&
               <div className="quiz-synopsis">
                   {quiz.quizSynopsis}
