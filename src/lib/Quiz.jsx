@@ -10,7 +10,7 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
 
   useEffect(() => {
     if(shuffle) {
-      setQuestions(shuffleQuestions(quiz.questions));
+      setQuestions(shuffleQuestions(quiz.questions, quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length ));
     } else {
       setQuestions(quiz.questions);
     }
@@ -22,11 +22,13 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
 
   }, [start])
 
-  const shuffleQuestions = useCallback((questions) => {
-    for (let i = questions.length - 1; i > 0; i--) {
+  const shuffleQuestions = useCallback((questions, nrOfQuestions) => {
+    for (let i = nrOfQuestions - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
+      console.log("j", j);
       [questions[i], questions[j]] = [questions[j], questions[i]];
     }
+    questions.length = nrOfQuestions;
     return questions;
   }, [])
 
@@ -36,13 +38,8 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
       return false;
     }
 
-    const { questions } = quiz;
-    if(!questions ) {
-      console.error("Field 'questions' is required.");
-      return false;
-    }
-
     for(let i=0; i<questions.length; i++) {
+      console.log("questions.length: ", questions.length)
       const { question, questionType, questionPic, answerSelectionType, answers, correctAnswer } = questions[i];
       if(!question) {
         console.error("Field 'question' is required.");
@@ -109,7 +106,7 @@ const Quiz = ({ quiz, shuffle, showDefaultResult, onComplete, customResultPage, 
         {!start &&
           <div>
             <h2>{quiz.quizTitle}</h2>
-            <div>{appLocale.landingHeaderText.replace("<questionLength>" , quiz.questions.length)}</div>
+            <div>{appLocale.landingHeaderText.replace("<questionLength>" , quiz.nrOfQuestions ? quiz.nrOfQuestions : quiz.questions.length)}</div>
             {quiz.quizSynopsis &&
               <div className="quiz-synopsis">
                   {quiz.quizSynopsis}
