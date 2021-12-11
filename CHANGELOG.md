@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.9
+- Added support for choosing number of questions to be used
+- Added eslint
+
 ## 0.3.8
 - Fixed wrong npm version in 0.3.7
 

@@ -38,6 +38,7 @@ The quiz source is a JSON object. You can use [react-quiz-form](https://github.c
 export const quiz =  {
   "quizTitle": "React Quiz Component Demo",
   "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
+  "nrOfQuestions": "4",
   "questions": [
     {
       "question": "How can you access the state of a component from inside of a member function?",
@@ -192,12 +193,12 @@ If you want to use your customized text, you can add appLocale into your quiz so
 ```javascript
  import { quiz } from './quiz';
  ...
-  const onCompleteAction = (obj) => {
+  const setQuizResult = (obj) => {
     console.log(obj);
     // YOUR LOGIC GOES HERE
   }
  ...
-  <Quiz quiz={quiz} showDefaultResult={false} onComplete={onCompleteAction}/>
+  <Quiz quiz={quiz} showDefaultResult={false} onComplete={setQuizResult}/>
 ```
 
 ## Example of Quiz Summary returned to customResultPage and onComplete
@@ -246,8 +247,10 @@ Object
 
 ## Contribution 
 - Clone the project and choose `feature/contributors` branch
-- run `npm install`
-- run `npm run dev`
+- Run `npm install`
+- Run `npm run dev`
+- Run `npm run lint`
+- Make a PR and describe the changes
 
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz-component/

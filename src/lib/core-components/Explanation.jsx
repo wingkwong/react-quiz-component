@@ -1,26 +1,26 @@
-import React from "react";
+import React from 'react';
 
-const Explanation = ({question, isResultPage}) => {
-    const explanation = question.explanation;
+const Explanation = function ({ question, isResultPage }) {
+  const { explanation } = question;
 
-    if (!explanation) {
-        return null;
-    }
+  if (!explanation) {
+    return null;
+  }
 
-    if (isResultPage) {
-        return (
-            <div className="explanation">
-                {explanation}
-            </div>
-        )
-    }
-
+  if (isResultPage) {
     return (
-        <div>
-            <br/>
-            {explanation}
-        </div>
-    )
+      <div className="explanation">
+        {explanation}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <br />
+      {explanation}
+    </div>
+  );
 };
 
 export default Explanation;
