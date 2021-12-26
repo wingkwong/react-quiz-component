@@ -66,6 +66,11 @@
   width: 100%;
 }
 
+.react-quiz-container .selected {
+  background: #007bff;
+  color: white;
+}
+
 .react-quiz-container .startQuizWrapper .startQuizBtn {
   font-size: 15px;
   border-radius: 2px;

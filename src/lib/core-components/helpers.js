@@ -147,3 +147,78 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
     }
   }
 };
+
+export const selectAnswer = (index, answerSelectionType, {
+  userInput,
+  currentQuestionIndex,
+  setButtons,
+  setShowNextQuestionButton,
+}) => {
+  const selectedButtons = {
+    0: { selected: false },
+    1: { selected: false },
+    2: { selected: false },
+    3: { selected: false },
+  };
+  if (answerSelectionType === 'single') {
+    if (userInput[currentQuestionIndex] === undefined) {
+      userInput.push(index);
+    }
+
+    setButtons((prevState) => ({
+      ...prevState,
+      ...selectedButtons,
+      [index - 1]: {
+        className: 'selected',
+      },
+    }));
+
+    setShowNextQuestionButton(true);
+  } else {
+    if (userInput[currentQuestionIndex] === undefined) {
+      userInput[currentQuestionIndex] = [];
+    }
+    if (userInput[currentQuestionIndex].includes(index)) {
+      userInput[currentQuestionIndex].splice(userInput[currentQuestionIndex].indexOf(index), 1);
+    } else {
+      userInput[currentQuestionIndex].push(index);
+    }
+    setButtons((prevState) => ({
+      ...prevState,
+      [index - 1]: {
+        className: userInput[currentQuestionIndex].includes(index) ? 'selected' : undefined,
+      },
+    }));
+
+    if (userInput[currentQuestionIndex].length > 0) {
+      setShowNextQuestionButton(true);
+    }
+  }
+};
+
+export const calculateResult = (questions, userInput) => {
+  let correct = 0;
+  let correctPoints = 0;
+
+  for (let i = 0; i < questions.length; i += 1) {
+    if (questions[i].answerSelectionType === 'single') {
+      if (Number(questions[i].correctAnswer) === userInput[i]) {
+        correct += 1;
+        correctPoints += Number(questions[i].point);
+      }
+    } else if (questions[i].correctAnswer.length === userInput[i].length) {
+      let exactMatch = true;
+      for (const input of userInput[i]) {
+        if (!questions[i].correctAnswer.includes(input)) {
+          exactMatch=false;
+          break;
+        }
+      }
+      if (exactMatch) {
+        correct += 1;
+        correctPoints += Number(questions[i].point);
+      }
+    }
+    }
+  return [correct, correctPoints];
+};
