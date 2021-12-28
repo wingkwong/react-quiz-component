@@ -15,9 +15,6 @@ const App = function () {
   return (
     <Quiz
       quiz={quiz}
-      shuffle
-      showInstantFeedback
-      continueTillCorrect
       onComplete={setQuizResult}
     />
   );
