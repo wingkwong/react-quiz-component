@@ -148,12 +148,17 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
   }
 };
 
-export const selectAnswer = (index, answerSelectionType, {
+export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   userInput,
   currentQuestionIndex,
   setButtons,
   setShowNextQuestionButton,
+  incorrect,
+  correct,
+  setCorrect,
+  setIncorrect,
 }) => {
+  console.log(correctAnswer, correct, incorrect);
   const selectedButtons = {
     0: { selected: false },
     1: { selected: false },
@@ -161,9 +166,28 @@ export const selectAnswer = (index, answerSelectionType, {
     3: { selected: false },
   };
   if (answerSelectionType === 'single') {
+    correctAnswer = Number(correctAnswer);
     if (userInput[currentQuestionIndex] === undefined) {
       userInput.push(index);
     }
+
+    if (index === correctAnswer) {
+      if (correct.indexOf(currentQuestionIndex) < 0) {
+        correct.push(currentQuestionIndex);
+      }
+      if (incorrect.indexOf(currentQuestionIndex) >= 0) {
+        incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
+      }
+    } else {
+      if (incorrect.indexOf(currentQuestionIndex) < 0) {
+        incorrect.push(currentQuestionIndex);
+      }
+      if (correct.indexOf(currentQuestionIndex) >= 0) {
+        correct.splice(correct.indexOf(currentQuestionIndex), 1);
+      }
+    }
+    setCorrect(correct);
+    setIncorrect(incorrect);
 
     setButtons((prevState) => ({
       ...prevState,
@@ -183,6 +207,39 @@ export const selectAnswer = (index, answerSelectionType, {
     } else {
       userInput[currentQuestionIndex].push(index);
     }
+
+    if (userInput[currentQuestionIndex].length === correctAnswer.length) {
+      let exactMatch = true;
+      for (const input of userInput[currentQuestionIndex]) {
+        if (!correctAnswer.includes(input)) {
+          exactMatch=false;
+          if (incorrect.indexOf(currentQuestionIndex) < 0) {
+            incorrect.push(currentQuestionIndex);
+          }
+          if (correct.indexOf(currentQuestionIndex) >= 0) {
+            correct.splice(correct.indexOf(currentQuestionIndex), 1);
+          }
+          break;
+        }
+      }
+      if (exactMatch) {
+        if (correct.indexOf(currentQuestionIndex) < 0) {
+          correct.push(currentQuestionIndex);
+        }
+        if (incorrect.indexOf(currentQuestionIndex) >= 0) {
+          incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
+        }
+      }
+    } else {
+      if (incorrect.indexOf(currentQuestionIndex) < 0) {
+        incorrect.push(currentQuestionIndex);
+      }
+      if (correct.indexOf(currentQuestionIndex) >= 0) {
+        correct.splice(correct.indexOf(currentQuestionIndex), 1);
+      }
+    }
+    setCorrect(correct);
+    setIncorrect(incorrect);
     setButtons((prevState) => ({
       ...prevState,
       [index - 1]: {
@@ -194,31 +251,4 @@ export const selectAnswer = (index, answerSelectionType, {
       setShowNextQuestionButton(true);
     }
   }
-};
-
-export const calculateResult = (questions, userInput) => {
-  let correct = 0;
-  let correctPoints = 0;
-
-  for (let i = 0; i < questions.length; i += 1) {
-    if (questions[i].answerSelectionType === 'single') {
-      if (Number(questions[i].correctAnswer) === userInput[i]) {
-        correct += 1;
-        correctPoints += Number(questions[i].point);
-      }
-    } else if (questions[i].correctAnswer.length === userInput[i].length) {
-      let exactMatch = true;
-      for (const input of userInput[i]) {
-        if (!questions[i].correctAnswer.includes(input)) {
-          exactMatch=false;
-          break;
-        }
-      }
-      if (exactMatch) {
-        correct += 1;
-        correctPoints += Number(questions[i].point);
-      }
-    }
-    }
-  return [correct, correctPoints];
 };

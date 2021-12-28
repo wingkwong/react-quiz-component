@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
 import QuizResultFilter from './core-components/QuizResultFilter';
-import { checkAnswer, selectAnswer, rawMarkup, calculateResult } from './core-components/helpers';
+import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
@@ -188,16 +188,16 @@ const Core = function ({
       setUserAttempt,
     });
 
-    const onSelectAnswer = (index) => selectAnswer(index+1, answerSelectionType, {
+    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, {
       userInput,
-      userAttempt,
       currentQuestionIndex,
-      showNextQuestionButton,
       setButtons,
       setShowNextQuestionButton,
-      setUserInput,
-      setUserAttempt,
-    })
+      incorrect,
+      correct,
+      setCorrect,
+      setIncorrect,
+    });
 
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
@@ -251,36 +251,27 @@ const Core = function ({
     );
   };
 
-  const renderResult = () => {
-    let currCorrect = correct !== undefined ? correct.length : 0;
-    let currCorrectPoints = correctPoints;
-    if (revealAnswerOnSubmit) {
-      [currCorrect, currCorrectPoints] = [...calculateResult(questions, userInput, { setCorrect, setCorrectPoints })];
-    }
-    console.log(currCorrect, currCorrectPoints);
-    return (
-      <div className="card-body">
-        <h2>
-          {appLocale.resultPageHeaderText
-            .replace('<correctIndexLength>', currCorrect)
-            .replace('<questionLength>', questions.length)}
-        </h2>
-        <h2>
-          {appLocale.resultPagePoint
-            .replace('<correctPoints>', currCorrectPoints)
-            .replace('<totalPoints>', totalPoints)}
-        </h2>
-        <br />
-        <QuizResultFilter
-          filteredValue={filteredValue}
-          handleChange={handleChange}
-          appLocale={appLocale}
-        />
-        {renderQuizResultQuestions()}
-      </div>
-    )
-  };
-
+  const renderResult = () => (
+    <div className="card-body">
+      <h2>
+        {appLocale.resultPageHeaderText
+          .replace('<correctIndexLength>', correct.length)
+          .replace('<questionLength>', questions.length)}
+      </h2>
+      <h2>
+        {appLocale.resultPagePoint
+          .replace('<correctPoints>', correctPoints)
+          .replace('<totalPoints>', totalPoints)}
+      </h2>
+      <br />
+      <QuizResultFilter
+        filteredValue={filteredValue}
+        handleChange={handleChange}
+        appLocale={appLocale}
+      />
+      {renderQuizResultQuestions()}
+    </div>
+  );
   return (
     <div className="questionWrapper">
       {!endQuiz
