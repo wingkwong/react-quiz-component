@@ -5,7 +5,7 @@ import './styles.css';
 
 const Quiz = function ({
   quiz, shuffle, showDefaultResult, onComplete, customResultPage,
-  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
+  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -131,6 +131,7 @@ const Quiz = function ({
           showInstantFeedback={showInstantFeedback}
           continueTillCorrect={continueTillCorrect}
           revealAnswerOnSubmit={revealAnswerOnSubmit}
+          allowNavigation={allowNavigation}
           appLocale={appLocale}
         />
       )}

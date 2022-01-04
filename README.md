@@ -146,6 +146,7 @@ If you want to use your customized text, you can add appLocale into your quiz so
     "resultFilterAll": "All",
     "resultFilterCorrect": "Correct",
     "resultFilterIncorrect": "Incorrect",
+    "prevQuestionBtn": "Prev",
     "nextQuestionBtn": "Next",
     "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
   } 

@@ -164,3 +164,8 @@
   background: #3db4b9;
   margin-left: 5px;
 }
+
+.react-quiz-container .questionBtnContainer{
+  display:flex;
+  justify-content: space-between;
+}

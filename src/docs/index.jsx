@@ -16,9 +16,11 @@ const App = function () {
     <Quiz
       quiz={quiz}
       shuffle
-      showInstantFeedback
-      continueTillCorrect
+      // showInstantFeedback
+      // continueTillCorrect
       onComplete={setQuizResult}
+      revealAnswerOnSubmit
+      allowNavigation
     />
   );
 };

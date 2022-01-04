@@ -8,7 +8,7 @@ import Explanation from './core-components/Explanation';
 
 const Core = function ({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
-  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
+  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
@@ -82,6 +82,10 @@ const Core = function ({
     }
   }, [endQuiz, questionSummary]);
 
+  const renderQuizImcomplete = () => {
+    alert("Quiz is incomplete");
+  }
+
   const nextQuestion = (currentQuestionIndex) => {
     setIncorrectAnswer(false);
     setCorrectAnswer(false);
@@ -89,7 +93,11 @@ const Core = function ({
     setButtons({});
 
     if (currentQuestionIndex + 1 === questions.length) {
-      setEndQuiz(true);
+      if (userInput.length !== questions.length) {
+        renderQuizImcomplete();
+      } else {
+        setEndQuiz(true);
+      }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -133,6 +141,7 @@ const Core = function ({
     });
   };
 
+
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -168,7 +177,7 @@ const Core = function ({
   }, [endQuiz, filteredValue]);
 
   const renderAnswers = (question, buttons) => {
-    const { answers, correctAnswer, questionType } = question;
+    const { answers, correctAnswer, questionType, questionIndex } = question;
     let { answerSelectionType } = question;
     const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, {
       userInput,
@@ -199,6 +208,16 @@ const Core = function ({
       setIncorrect,
     });
 
+    const checkSelectedAnswer = (index) => {
+      if (userInput[questionIndex - 1] === undefined) {
+        return false;
+      }
+      if (answerSelectionType === 'single') {
+        return userInput[questionIndex - 1] === index;
+      }
+      return Array.isArray(userInput[questionIndex - 1]) && userInput[questionIndex - 1].includes(index);
+    };
+
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
 
@@ -220,7 +239,7 @@ const Core = function ({
             <button
               type="button"
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-              className="answerBtn btn"
+              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
             >
               {questionType === 'text' && answer}
               {questionType === 'photo' && <img src={answer} alt="image" />}
@@ -295,10 +314,19 @@ const Core = function ({
           {question && question.questionPic && <img src={question.questionPic} alt="image" />}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
-          {showNextQuestionButton
+          {(showNextQuestionButton || allowNavigation)
           && (
-          <div>
-            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">
+          <div className="questionBtnContainer">
+            {(allowNavigation && currentQuestionIndex > 0) && (
+              <button
+                onClick={() => nextQuestion(currentQuestionIndex - 2)}
+                className="prevQuestionBtn btn"
+                type="button"
+              >
+                {appLocale.prevQuestionBtn}
+              </button>
+            )}
+            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn" type="button">
               {appLocale.nextQuestionBtn}
             </button>
           </div>

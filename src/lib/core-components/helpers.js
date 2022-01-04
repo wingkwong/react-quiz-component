@@ -32,7 +32,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
   };
   if (answerSelectionType === 'single') {
     if (userInput[currentQuestionIndex] === undefined) {
-      userInput.push(index);
+      userInput[currentQuestionIndex] = index;
     }
 
     if (indexStr === correctAnswer) {
