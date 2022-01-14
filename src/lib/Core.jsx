@@ -82,9 +82,7 @@ const Core = function ({
     }
   }, [endQuiz, questionSummary]);
 
-  const renderQuizImcomplete = () => {
-    alert("Quiz is incomplete");
-  }
+
 
   const nextQuestion = (currentQuestionIndex) => {
     setIncorrectAnswer(false);
@@ -94,9 +92,16 @@ const Core = function ({
 
     if (currentQuestionIndex + 1 === questions.length) {
       if (userInput.length !== questions.length) {
-        renderQuizImcomplete();
+        alert("Quiz is incomplete");
       } else {
-        setEndQuiz(true);
+        if(allowNavigation){
+          const submitQuiz = confirm("You have finished all the questions. Submit Quiz now?");
+          if(submitQuiz){
+            setEndQuiz(true);
+          }
+        }else{
+          setEndQuiz(true);
+        }
       }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
