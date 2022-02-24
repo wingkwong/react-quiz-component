@@ -8,7 +8,6 @@ const App = function () {
 
   useEffect(() => {
     if (quizResult) {
-      console.log('quizResult', quizResult);
     }
   }, [quizResult]);
 
