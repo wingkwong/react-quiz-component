@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import dompurify from 'dompurify';
 
 export const rawMarkup = (data) => {
@@ -32,7 +32,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
   };
   if (answerSelectionType === 'single') {
     if (userInput[currentQuestionIndex] === undefined) {
-      userInput.push(index);
+      userInput[currentQuestionIndex] = index;
     }
 
     if (indexStr === correctAnswer) {
@@ -144,6 +144,109 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
     } else if (!showNextQuestionButton) {
       setUserInput(userInput);
       setUserAttempt(userAttempt + 1);
+    }
+  }
+};
+
+export const selectAnswer = (index, correctAnswer, answerSelectionType, {
+  userInput,
+  currentQuestionIndex,
+  setButtons,
+  setShowNextQuestionButton,
+  incorrect,
+  correct,
+  setCorrect,
+  setIncorrect,
+}) => {
+  const selectedButtons = {
+    0: { selected: false },
+    1: { selected: false },
+    2: { selected: false },
+    3: { selected: false },
+  };
+  if (answerSelectionType === 'single') {
+    correctAnswer = Number(correctAnswer);
+    userInput[currentQuestionIndex] = index;
+    
+
+    if (index === correctAnswer) {
+      if (correct.indexOf(currentQuestionIndex) < 0) {
+        correct.push(currentQuestionIndex);
+      }
+      if (incorrect.indexOf(currentQuestionIndex) >= 0) {
+        incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
+      }
+    } else {
+      if (incorrect.indexOf(currentQuestionIndex) < 0) {
+        incorrect.push(currentQuestionIndex);
+      }
+      if (correct.indexOf(currentQuestionIndex) >= 0) {
+        correct.splice(correct.indexOf(currentQuestionIndex), 1);
+      }
+    }
+    setCorrect(correct);
+    setIncorrect(incorrect);
+
+    setButtons((prevState) => ({
+      ...prevState,
+      ...selectedButtons,
+      [index - 1]: {
+        className: 'selected',
+      },
+    }));
+
+    setShowNextQuestionButton(true);
+  } else {
+    if (userInput[currentQuestionIndex] === undefined) {
+      userInput[currentQuestionIndex] = [];
+    }
+    if (userInput[currentQuestionIndex].includes(index)) {
+      userInput[currentQuestionIndex].splice(userInput[currentQuestionIndex].indexOf(index), 1);
+    } else {
+      userInput[currentQuestionIndex].push(index);
+    }
+
+    if (userInput[currentQuestionIndex].length === correctAnswer.length) {
+      let exactMatch = true;
+      for (const input of userInput[currentQuestionIndex]) {
+        if (!correctAnswer.includes(input)) {
+          exactMatch = false;
+          if (incorrect.indexOf(currentQuestionIndex) < 0) {
+            incorrect.push(currentQuestionIndex);
+          }
+          if (correct.indexOf(currentQuestionIndex) >= 0) {
+            correct.splice(correct.indexOf(currentQuestionIndex), 1);
+          }
+          break;
+        }
+      }
+      if (exactMatch) {
+        if (correct.indexOf(currentQuestionIndex) < 0) {
+          correct.push(currentQuestionIndex);
+        }
+        if (incorrect.indexOf(currentQuestionIndex) >= 0) {
+          incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
+        }
+      }
+    } else {
+      if (incorrect.indexOf(currentQuestionIndex) < 0) {
+        incorrect.push(currentQuestionIndex);
+      }
+      if (correct.indexOf(currentQuestionIndex) >= 0) {
+        correct.splice(correct.indexOf(currentQuestionIndex), 1);
+      }
+    }
+    setCorrect(correct);
+    setIncorrect(incorrect);
+    setButtons((prevState) => ({
+      ...prevState,
+      [index - 1]: {
+        className: userInput[currentQuestionIndex].includes(index) ? 'selected' : undefined,
+      },
+    }));
+
+    if (userInput[currentQuestionIndex].length > 0) {
+      setShowNextQuestionButton(true);
     }
   }
 };
