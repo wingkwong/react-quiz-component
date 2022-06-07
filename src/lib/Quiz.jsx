@@ -11,7 +11,7 @@ const Quiz = function ({
   const nrOfQuestions = (quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length) ? quiz.nrOfQuestions : quiz.questions.length;
 
   const shuffleQuestions = useCallback((q) => {
-    for (let i = nrOfQuestions - 1; i > 0; i -= 1) {
+    for (let i = q.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
     }

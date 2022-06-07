@@ -92,6 +92,7 @@ const Core = function ({
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
+    window.scrollTo(0, 0);
   };
 
   const handleChange = (event) => {
