@@ -246,6 +246,7 @@ Object
 |showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
 |continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
 |onQuestionSubmit|`function`|`null`|N|A user response for a question will be returned|
+|disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
 
 ## Contribution 
 - Clone the project and choose `feature/contributors` branch

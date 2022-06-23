@@ -6,7 +6,7 @@ import './styles.css';
 const Quiz = function ({
   quiz, shuffle, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
-  allowNavigation, onQuestionSubmit,
+  allowNavigation, onQuestionSubmit, disableSynopsis,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -19,6 +19,10 @@ const Quiz = function ({
     }
     q.length = nrOfQuestions;
     return q;
+  }, []);
+
+  useEffect(() => {
+    if (disableSynopsis) setStart(true);
   }, []);
 
   useEffect(() => {

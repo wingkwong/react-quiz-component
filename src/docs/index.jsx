@@ -19,6 +19,9 @@ const App = function () {
       // continueTillCorrect
       onComplete={setQuizResult}
       onQuestionSubmit={(obj) => console.log('user question results:', obj)}
+      disableSynopsis
+      // revealAnswerOnSubmit
+      // allowNavigation
     />
   );
 };
