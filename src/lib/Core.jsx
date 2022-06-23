@@ -212,6 +212,7 @@ const Core = function ({
       correct,
       setCorrect,
       setIncorrect,
+      setUserInput,
     });
 
     const checkSelectedAnswer = (index) => {

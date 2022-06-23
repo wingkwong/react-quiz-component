@@ -30,9 +30,10 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
     2: { disabled: true },
     3: { disabled: true },
   };
+  const userInputCopy = [...userInput];
   if (answerSelectionType === 'single') {
-    if (userInput[currentQuestionIndex] === undefined) {
-      userInput[currentQuestionIndex] = index;
+    if (userInputCopy[currentQuestionIndex] === undefined) {
+      userInputCopy[currentQuestionIndex] = index;
     }
 
     if (indexStr === correctAnswer) {
@@ -89,15 +90,15 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
   } else {
     const maxNumberOfMultipleSelection = correctAnswer.length;
 
-    if (userInput[currentQuestionIndex] === undefined) {
-      userInput[currentQuestionIndex] = [];
+    if (userInputCopy[currentQuestionIndex] === undefined) {
+      userInputCopy[currentQuestionIndex] = [];
     }
 
-    if (userInput[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
-      userInput[currentQuestionIndex].push(index);
+    if (userInputCopy[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
+      userInputCopy[currentQuestionIndex].push(index);
 
       if (correctAnswer.includes(index)) {
-        if (userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
+        if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
           setButtons((prevState) => ({
             ...prevState,
             [index - 1]: {
@@ -106,7 +107,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
             },
           }));
         }
-      } else if (userInput[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
+      } else if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
         setButtons((prevState) => ({
           ...prevState,
           [index - 1]: {
@@ -119,7 +120,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
     if (maxNumberOfMultipleSelection === userAttempt) {
       let cnt = 0;
       for (let i = 0; i < correctAnswer.length; i += 1) {
-        if (userInput[currentQuestionIndex].includes(correctAnswer[i])) {
+        if (userInputCopy[currentQuestionIndex].includes(correctAnswer[i])) {
           cnt += 1;
         }
       }
@@ -142,10 +143,10 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
         setUserAttempt(1);
       }
     } else if (!showNextQuestionButton) {
-      setUserInput(userInput);
       setUserAttempt(userAttempt + 1);
     }
   }
+  setUserInput(userInputCopy);
 };
 
 export const selectAnswer = (index, correctAnswer, answerSelectionType, {
@@ -157,6 +158,7 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   correct,
   setCorrect,
   setIncorrect,
+  setUserInput,
 }) => {
   const selectedButtons = {
     0: { selected: false },
@@ -164,9 +166,10 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
     2: { selected: false },
     3: { selected: false },
   };
+  const userInputCopy = [...userInput];
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);
-    userInput[currentQuestionIndex] = index;
+    userInputCopy[currentQuestionIndex] = index;
     
 
     if (index === correctAnswer) {
@@ -197,16 +200,16 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
 
     setShowNextQuestionButton(true);
   } else {
-    if (userInput[currentQuestionIndex] === undefined) {
-      userInput[currentQuestionIndex] = [];
+    if (userInputCopy[currentQuestionIndex] === undefined) {
+      userInputCopy[currentQuestionIndex] = [];
     }
-    if (userInput[currentQuestionIndex].includes(index)) {
-      userInput[currentQuestionIndex].splice(userInput[currentQuestionIndex].indexOf(index), 1);
+    if (userInputCopy[currentQuestionIndex].includes(index)) {
+      userInputCopy[currentQuestionIndex].splice(userInputCopy[currentQuestionIndex].indexOf(index), 1);
     } else {
-      userInput[currentQuestionIndex].push(index);
+      userInputCopy[currentQuestionIndex].push(index);
     }
 
-    if (userInput[currentQuestionIndex].length === correctAnswer.length) {
+    if (userInputCopy[currentQuestionIndex].length === correctAnswer.length) {
       let exactMatch = true;
       for (const input of userInput[currentQuestionIndex]) {
         if (!correctAnswer.includes(input)) {
@@ -241,12 +244,13 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
     setButtons((prevState) => ({
       ...prevState,
       [index - 1]: {
-        className: userInput[currentQuestionIndex].includes(index) ? 'selected' : undefined,
+        className: userInputCopy[currentQuestionIndex].includes(index) ? 'selected' : undefined,
       },
     }));
 
-    if (userInput[currentQuestionIndex].length > 0) {
+    if (userInputCopy[currentQuestionIndex].length > 0) {
       setShowNextQuestionButton(true);
     }
   }
+  setUserInput(userInputCopy);
 };
