@@ -2,12 +2,14 @@ import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
 import QuizResultFilter from './core-components/QuizResultFilter';
-import { checkAnswer, rawMarkup } from './core-components/helpers';
+import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
-const Core = function ({
-  questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect,
+function Core({
+  questions, appLocale, showDefaultResult, onComplete, customResultPage,
+  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
+  onQuestionSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
@@ -81,17 +83,27 @@ const Core = function ({
     }
   }, [endQuiz, questionSummary]);
 
-  const nextQuestion = (currentQuestionIndex) => {
+  const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
     setCorrectAnswer(false);
     setShowNextQuestionButton(false);
     setButtons({});
 
-    if (currentQuestionIndex + 1 === questions.length) {
-      setEndQuiz(true);
+    if (currentQuestionIdx + 1 === questions.length) {
+      if (userInput.length !== questions.length) {
+        alert('Quiz is incomplete');
+      } else if (allowNavigation) {
+        const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
+        if (submitQuiz) {
+          setEndQuiz(true);
+        }
+      } else {
+        setEndQuiz(true);
+      }
     } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(currentQuestionIdx + 1);
     }
+    window.scrollTo(0, 0);
   };
 
   const handleChange = (event) => {
@@ -167,7 +179,9 @@ const Core = function ({
   }, [endQuiz, filteredValue]);
 
   const renderAnswers = (question, buttons) => {
-    const { answers, correctAnswer, questionType } = question;
+    const {
+      answers, correctAnswer, questionType, questionIndex,
+    } = question;
     let { answerSelectionType } = question;
     const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, {
       userInput,
@@ -187,6 +201,28 @@ const Core = function ({
       setUserAttempt,
     });
 
+    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, {
+      userInput,
+      currentQuestionIndex,
+      setButtons,
+      setShowNextQuestionButton,
+      incorrect,
+      correct,
+      setCorrect,
+      setIncorrect,
+      setUserInput,
+    });
+
+    const checkSelectedAnswer = (index) => {
+      if (userInput[questionIndex - 1] === undefined) {
+        return false;
+      }
+      if (answerSelectionType === 'single') {
+        return userInput[questionIndex - 1] === index;
+      }
+      return Array.isArray(userInput[questionIndex - 1]) && userInput[questionIndex - 1].includes(index);
+    };
+
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
 
@@ -195,9 +231,10 @@ const Core = function ({
         {(buttons[index] !== undefined)
           ? (
             <button
+              type="button"
               disabled={buttons[index].disabled || false}
               className={`${buttons[index].className} answerBtn btn`}
-              onClick={() => onClickAnswer(index)}
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
               {questionType === 'photo' && <img src={answer} alt="image" />}
@@ -205,8 +242,9 @@ const Core = function ({
           )
           : (
             <button
-              onClick={() => onClickAnswer(index)}
-              className="answerBtn btn"
+              type="button"
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
+              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
             >
               {questionType === 'text' && answer}
               {questionType === 'photo' && <img src={answer} alt="image" />}
@@ -240,10 +278,14 @@ const Core = function ({
   const renderResult = () => (
     <div className="card-body">
       <h2>
-        {appLocale.resultPageHeaderText.replace('<correctIndexLength>', correct.length).replace('<questionLength>', questions.length)}
+        {appLocale.resultPageHeaderText
+          .replace('<correctIndexLength>', correct.length)
+          .replace('<questionLength>', questions.length)}
       </h2>
       <h2>
-        {appLocale.resultPagePoint.replace('<correctPoints>', correctPoints).replace('<totalPoints>', totalPoints)}
+        {appLocale.resultPagePoint
+          .replace('<correctPoints>', correctPoints)
+          .replace('<totalPoints>', totalPoints)}
       </h2>
       <br />
       <QuizResultFilter
@@ -254,7 +296,6 @@ const Core = function ({
       {renderQuizResultQuestions()}
     </div>
   );
-
   return (
     <div className="questionWrapper">
       {!endQuiz
@@ -266,6 +307,8 @@ const Core = function ({
               showInstantFeedback={showInstantFeedback}
               correctAnswer={correctAnswer}
               incorrectAnswer={incorrectAnswer}
+              onQuestionSubmit={onQuestionSubmit}
+              userAnswer={[...userInput].pop()}
             />
           </div>
           <div>
@@ -278,10 +321,19 @@ const Core = function ({
           {question && question.questionPic && <img src={question.questionPic} alt="image" />}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
-          {showNextQuestionButton
+          {(showNextQuestionButton || allowNavigation)
           && (
-          <div>
-            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">
+          <div className="questionBtnContainer">
+            {(allowNavigation && currentQuestionIndex > 0) && (
+              <button
+                onClick={() => nextQuestion(currentQuestionIndex - 2)}
+                className="prevQuestionBtn btn"
+                type="button"
+              >
+                {appLocale.prevQuestionBtn}
+              </button>
+            )}
+            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn" type="button">
               {appLocale.nextQuestionBtn}
             </button>
           </div>
@@ -294,6 +346,6 @@ const Core = function ({
           && customResultPage(questionSummary)}
     </div>
   );
-};
+}
 
 export default Core;

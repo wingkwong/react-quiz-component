@@ -66,6 +66,11 @@
   width: 100%;
 }
 
+.react-quiz-container .selected {
+  background: #007bff;
+  color: white;
+}
+
 .react-quiz-container .startQuizWrapper .startQuizBtn {
   font-size: 15px;
   border-radius: 2px;
@@ -158,4 +163,9 @@
 .react-quiz-container .selection-tag.segment {
   background: #3db4b9;
   margin-left: 5px;
+}
+
+.react-quiz-container .questionBtnContainer{
+  display:flex;
+  justify-content: space-between;
 }

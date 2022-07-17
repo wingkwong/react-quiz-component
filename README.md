@@ -146,6 +146,7 @@ If you want to use your customized text, you can add appLocale into your quiz so
     "resultFilterAll": "All",
     "resultFilterCorrect": "Correct",
     "resultFilterIncorrect": "Incorrect",
+    "prevQuestionBtn": "Prev",
     "nextQuestionBtn": "Next",
     "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
   } 
@@ -244,6 +245,8 @@ Object
 |onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
 |showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
 |continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
+|onQuestionSubmit|`function`|`null`|N|A user response for a question will be returned|
+|disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
 
 ## Contribution 
 - Clone the project and choose `feature/contributors` branch
