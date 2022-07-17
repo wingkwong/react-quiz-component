@@ -18,8 +18,10 @@ const App = function () {
       // showInstantFeedback
       // continueTillCorrect
       onComplete={setQuizResult}
-      revealAnswerOnSubmit
-      allowNavigation
+      onQuestionSubmit={(obj) => console.log('user question results:', obj)}
+      disableSynopsis
+      // revealAnswerOnSubmit
+      // allowNavigation
     />
   );
 };

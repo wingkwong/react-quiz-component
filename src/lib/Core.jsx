@@ -9,6 +9,7 @@ import Explanation from './core-components/Explanation';
 const Core = function ({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
+  onQuestionSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
@@ -212,6 +213,7 @@ const Core = function ({
       correct,
       setCorrect,
       setIncorrect,
+      setUserInput,
     });
 
     const checkSelectedAnswer = (index) => {
@@ -308,6 +310,8 @@ const Core = function ({
               showInstantFeedback={showInstantFeedback}
               correctAnswer={correctAnswer}
               incorrectAnswer={incorrectAnswer}
+              onQuestionSubmit={onQuestionSubmit}
+              userAnswer={[...userInput].pop()}
             />
           </div>
           <div>
