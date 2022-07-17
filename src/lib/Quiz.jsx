@@ -4,19 +4,25 @@ import defaultLocale from './Locale';
 import './styles.css';
 
 const Quiz = function ({
-  quiz, shuffle, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect,
+  quiz, shuffle, showDefaultResult, onComplete, customResultPage,
+  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
+  allowNavigation, onQuestionSubmit, disableSynopsis,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
   const nrOfQuestions = (quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length) ? quiz.nrOfQuestions : quiz.questions.length;
 
   const shuffleQuestions = useCallback((q) => {
-    for (let i = nrOfQuestions - 1; i > 0; i -= 1) {
+    for (let i = q.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
     }
     q.length = nrOfQuestions;
     return q;
+  }, []);
+
+  useEffect(() => {
+    if (disableSynopsis) setStart(true);
   }, []);
 
   useEffect(() => {
@@ -129,7 +135,10 @@ const Quiz = function ({
           customResultPage={customResultPage}
           showInstantFeedback={showInstantFeedback}
           continueTillCorrect={continueTillCorrect}
+          revealAnswerOnSubmit={revealAnswerOnSubmit}
+          allowNavigation={allowNavigation}
           appLocale={appLocale}
+          onQuestionSubmit={onQuestionSubmit}
         />
       )}
     </div>

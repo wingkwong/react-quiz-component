@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Explanation from './Explanation';
 
 const renderMessageForCorrectAnswer = (question) => {
@@ -11,9 +11,15 @@ const renderMessageForIncorrectAnswer = (question) => {
   return question.messageForIncorrectAnswer || defaultMessage;
 };
 
-const InstantFeedback = function ({
-  showInstantFeedback, incorrectAnswer, correctAnswer, question,
+function InstantFeedback({
+  showInstantFeedback, incorrectAnswer, correctAnswer, question, onQuestionSubmit, userAnswer,
 }) {
+  useEffect(() => {
+    if (onQuestionSubmit && (correctAnswer || incorrectAnswer)) {
+      onQuestionSubmit({ question, userAnswer, isCorrect: correctAnswer });
+    }
+  }, [correctAnswer, incorrectAnswer]);
+
   return (
     <>
       {incorrectAnswer && showInstantFeedback
@@ -27,6 +33,6 @@ const InstantFeedback = function ({
             )}
     </>
   );
-};
+}
 
 export default InstantFeedback;

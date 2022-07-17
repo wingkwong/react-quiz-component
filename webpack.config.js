@@ -7,7 +7,7 @@ module.exports = {
     path: path.join(__dirname, 'docs'),
     filename: 'bundle.js',
   },
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-module-source-map', // dev only
   module: {
     rules: [
       {
@@ -27,11 +27,10 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['', '.js', '.jsx'],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'docs'),
+    static: path.join(__dirname, 'docs'),
     port: 8000,
-    stats: 'minimal',
   },
 };
