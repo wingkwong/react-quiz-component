@@ -170,7 +170,6 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);
     userInputCopy[currentQuestionIndex] = index;
-    
 
     if (index === correctAnswer) {
       if (correct.indexOf(currentQuestionIndex) < 0) {

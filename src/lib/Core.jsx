@@ -6,7 +6,7 @@ import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers'
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
-const Core = function ({
+function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
   onQuestionSubmit,
@@ -83,29 +83,25 @@ const Core = function ({
     }
   }, [endQuiz, questionSummary]);
 
-
-
-  const nextQuestion = (currentQuestionIndex) => {
+  const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
     setCorrectAnswer(false);
     setShowNextQuestionButton(false);
     setButtons({});
 
-    if (currentQuestionIndex + 1 === questions.length) {
+    if (currentQuestionIdx + 1 === questions.length) {
       if (userInput.length !== questions.length) {
-        alert("Quiz is incomplete");
-      } else {
-        if(allowNavigation){
-          const submitQuiz = confirm("You have finished all the questions. Submit Quiz now?");
-          if(submitQuiz){
-            setEndQuiz(true);
-          }
-        }else{
+        alert('Quiz is incomplete');
+      } else if (allowNavigation) {
+        const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
+        if (submitQuiz) {
           setEndQuiz(true);
         }
+      } else {
+        setEndQuiz(true);
       }
     } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(currentQuestionIdx + 1);
     }
     window.scrollTo(0, 0);
   };
@@ -148,7 +144,6 @@ const Core = function ({
     });
   };
 
-
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -184,7 +179,9 @@ const Core = function ({
   }, [endQuiz, filteredValue]);
 
   const renderAnswers = (question, buttons) => {
-    const { answers, correctAnswer, questionType, questionIndex } = question;
+    const {
+      answers, correctAnswer, questionType, questionIndex,
+    } = question;
     let { answerSelectionType } = question;
     const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, {
       userInput,
@@ -349,6 +346,6 @@ const Core = function ({
           && customResultPage(questionSummary)}
     </div>
   );
-};
+}
 
 export default Core;

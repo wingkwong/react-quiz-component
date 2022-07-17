@@ -3,13 +3,8 @@ import { render } from 'react-dom';
 import Quiz from '../lib/Quiz';
 import quiz from './quiz';
 
-const App = function () {
+function App() {
   const [quizResult, setQuizResult] = useState();
-
-  useEffect(() => {
-    if (quizResult) {
-    }
-  }, [quizResult]);
 
   return (
     <Quiz
@@ -24,6 +19,6 @@ const App = function () {
       // allowNavigation
     />
   );
-};
+}
 
 render(<App />, document.getElementById('app'));
