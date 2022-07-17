@@ -246,11 +246,11 @@ Object
 |continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
 
 ## Contribution 
-- Clone the project and choose `feature/contributors` branch
+- Clone the repository
 - Run `npm install`
 - Run `npm run dev`
 - Run `npm run lint`
-- Make a PR and describe the changes
+- Make a PR to `develop` and describe the changes
 
 ## Demo
 The demo is available at https://wingkwong.github.io/react-quiz-component/

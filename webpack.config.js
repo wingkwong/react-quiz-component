@@ -7,7 +7,7 @@ module.exports = {
     path: path.join(__dirname, 'docs'),
     filename: 'bundle.js',
   },
-  devtool: 'cheap-module-eval-source-map', // dev only
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {

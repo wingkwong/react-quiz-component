@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "dompurify": "^2.0.8",
-    "marked": "^0.7.0"
+    "marked": "^0.7.0",
+    "uglifyjs-webpack-plugin": "^2.2.0"
   }
 }

@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.4.0
+
+- Shuffle among all questions
+- Scroll up on next question
+- Show result after completing the quiz (without nav)
+- Fix code to show correct and incorrect filter correctly on result page
+- Enable navigation
+- Sdded quiz confirmation and fixed navigation
+- Fixed modifying copy of state instead of directly
+- Callback option for question submission
+- Option to disable synopsis
+
 ## 0.3.9
 - Added support for choosing number of questions to be used
 - Added eslint
@@ -60,28 +72,28 @@
 - Fixed potential security vulnerabilities
 
 ## 0.2.3
-* Added filter question select tag
-* Revised result page
-* Revised styles
-* Updated README.md for shuffling questions set in v0.2.2
+- Added filter question select tag
+- Revised result page
+- Revised styles
+- Updated README.md for shuffling questions set in v0.2.2
 
 ## 0.2.2
-* Added messageForCorrectAnswer
-* Added messageForIncorrectAnswer
-* Added explanation
-* Added quizSynopsis
-* Revised result page style
+- Added messageForCorrectAnswer
+- Added messageForIncorrectAnswer
+- Added explanation
+- Added quizSynopsis
+- Revised result page style
 
 ## 0.2.1
 - Minor Fix
 
 ## 0.2.0
-* Removed Paper CSS
-* Added total number of questions & current question being answered (Refer to issue #3)
-* Removed Answer.jsx and Result.jsx
-* Added Instant feedback after answering the question
-* Allowed to retry until the correct one is selected
-* Allowed to review questions at the end
+- Removed Paper CSS
+- Added total number of questions & current question being answered (Refer to issue #3)
+- Removed Answer.jsx and Result.jsx
+- Added Instant feedback after answering the question
+- Allowed to retry until the correct one is selected
+- Allowed to review questions at the end
 
 ## 0.1.2
 - Minor Fix
