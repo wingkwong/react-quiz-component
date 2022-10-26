@@ -6,7 +6,7 @@ import quiz from './quiz';
 const container = document.getElementById('app');
 const root = createRoot(container);
 
-function App() {
+const App = function () {
   const [quizResult, setQuizResult] = useState();
 
   return (
@@ -22,6 +22,6 @@ function App() {
       // allowNavigation
     />
   );
-}
+};
 
 root.render(<App />);

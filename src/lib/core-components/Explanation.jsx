@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Explanation({ question, isResultPage }) {
+const Explanation = function ({ question, isResultPage }) {
   const { explanation } = question;
 
   if (!explanation) {
@@ -21,6 +21,6 @@ function Explanation({ question, isResultPage }) {
       {explanation}
     </div>
   );
-}
+};
 
 export default Explanation;
