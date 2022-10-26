@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
+import React, { useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import Quiz from '../lib/Quiz';
 import quiz from './quiz';
+
+const container = document.getElementById('app');
+const root = createRoot(container);
 
 function App() {
   const [quizResult, setQuizResult] = useState();
@@ -21,4 +24,4 @@ function App() {
   );
 }
 
-render(<App />, document.getElementById('app'));
+root.render(<App />);
