@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.0
+
+- Upgrade to React 18
+
 ## 0.4.0
 
 - Shuffle among all questions
