@@ -1,6 +1,6 @@
 import React from 'react';
 
-function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
+const QuizResultFilter = function ({ filteredValue, handleChange, appLocale }) {
   return (
     <div className="quiz-result-filter">
       <select value={filteredValue} onChange={handleChange}>
@@ -10,6 +10,6 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
       </select>
     </div>
   );
-}
+};
 
 export default QuizResultFilter;

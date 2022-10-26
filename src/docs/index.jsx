@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
+import React, { useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import Quiz from '../lib/Quiz';
 import quiz from './quiz';
 
-function App() {
+const container = document.getElementById('app');
+const root = createRoot(container);
+
+const App = function () {
   const [quizResult, setQuizResult] = useState();
 
   return (
@@ -19,6 +22,6 @@ function App() {
       // allowNavigation
     />
   );
-}
+};
 
-render(<App />, document.getElementById('app'));
+root.render(<App />);

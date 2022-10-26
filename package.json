@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -19,10 +19,6 @@
     "quiz"
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^15.3.0 || ^16.2.0",
-    "react-dom": "^15.3.0 || ^16.2.0"
-  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.2.2",
@@ -41,8 +37,8 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-webpack-plugin": "5.3.2",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "style-loader": "^0.21.0",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
@@ -57,6 +53,6 @@
   "dependencies": {
     "@webpack-cli/serve": "^1.6.1",
     "dompurify": "^2.0.8",
-    "marked": "4.0.10"
+    "marked": "^4.1.1"
   }
 }
