@@ -53,6 +53,6 @@
   "dependencies": {
     "@webpack-cli/serve": "^1.6.1",
     "dompurify": "^2.0.8",
-    "marked": "^4.1.1"
+    "snarkdown": "^2.0.0"
   }
 }
