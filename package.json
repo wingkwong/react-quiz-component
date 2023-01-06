@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -53,6 +53,6 @@
   "dependencies": {
     "@webpack-cli/serve": "^1.6.1",
     "dompurify": "^2.0.8",
-    "marked": "^4.1.1"
+    "snarkdown": "^2.0.0"
   }
 }
