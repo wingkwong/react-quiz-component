@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.1
+
+- Replace `marked` by `snarkdown`
+
 ## 0.5.0
 
 - Upgrade to React 18

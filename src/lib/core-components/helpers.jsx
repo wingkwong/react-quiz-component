@@ -1,9 +1,9 @@
-import { marked } from 'marked';
+import snarkdown from 'snarkdown';
 import dompurify from 'dompurify';
 
 export const rawMarkup = (data) => {
   const sanitizer = dompurify.sanitize;
-  return { __html: marked(sanitizer(data)) };
+  return { __html: snarkdown(sanitizer(data)) };
 };
 
 export const checkAnswer = (index, correctAnswer, answerSelectionType, {
