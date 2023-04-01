@@ -81,7 +81,7 @@ const Core = function ({
     if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
       onComplete(questionSummary);
     }
-  }, [endQuiz, questionSummary]);
+  }, [questionSummary]);
 
   const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
