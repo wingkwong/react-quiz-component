@@ -1,4 +1,3 @@
-/* eslint-disable */ 
 import React, { useEffect } from 'react';
 import Explanation from './Explanation';
 

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect, useCallback, Fragment } from "react";
 import QuizResultFilter from "./core-components/QuizResultFilter";
 import {

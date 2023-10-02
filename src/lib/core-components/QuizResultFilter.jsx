@@ -1,4 +1,3 @@
-/* eslint-disable */ 
 import React from 'react';
 
 const QuizResultFilter = function ({ filteredValue, handleChange, appLocale }) {

@@ -1,4 +1,3 @@
-/* eslint-disable */ 
 function Restart() {
     return (
         <h1>Hello</h1>
