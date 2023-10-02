@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import Quiz from '../lib/Quiz';
@@ -12,14 +13,14 @@ const App = function () {
   return (
     <Quiz
       quiz={quiz}
-      shuffle
-      // showInstantFeedback
-      // continueTillCorrect
+      shuffle={true}
+      showInstantFeedback
+      continueTillCorrect
       onComplete={setQuizResult}
       onQuestionSubmit={(obj) => console.log('user question results:', obj)}
       disableSynopsis
-      // revealAnswerOnSubmit
-      // allowNavigation
+      revealAnswerOnSubmit
+      allowNavigation
     />
   );
 };

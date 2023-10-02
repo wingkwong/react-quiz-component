@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 const segment = {
   basic: 'basic',
   medium: 'medium',

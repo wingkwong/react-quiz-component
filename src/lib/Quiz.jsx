@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
@@ -110,7 +111,7 @@ const Quiz = function ({
 
   return (
     <div className="react-quiz-container">
-      {!start
+      {start
           && (
           <div>
             <h2>{quiz.quizTitle}</h2>
@@ -122,12 +123,12 @@ const Quiz = function ({
               </div>
               )}
             <div className="startQuizWrapper">
-              <button onClick={() => setStart(true)} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
+              <button onClick={() => setStart(false)} className="startQuizBtn btn">{appLocale.startQuizBtn}</button>
             </div>
           </div>
           )}
 
-      {start && (
+      {!start && (
         <Core
           questions={questions}
           showDefaultResult={showDefaultResult}
