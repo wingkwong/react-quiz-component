@@ -37,7 +37,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-webpack-plugin": "5.5.3",
     "prop-types": "^15.7.2",
-    "react-dom": "^18.2.0",
     "style-loader": "^0.23.0",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
@@ -53,6 +52,7 @@
     "@webpack-cli/serve": "^1.6.1",
     "dompurify": "^2.0.8",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "snarkdown": "^2.0.0"
   }
 }
