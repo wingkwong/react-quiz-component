@@ -169,3 +169,15 @@
   display:flex;
   justify-content: space-between;
 }
+.red-button {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  background-color: darkred;
+}
