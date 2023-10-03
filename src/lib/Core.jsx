@@ -7,7 +7,6 @@ import {
 } from "./core-components/helpers";
 import InstantFeedback from "./core-components/InstantFeedback";
 import Explanation from "./core-components/Explanation";
-
 const Core = function ({
   questions,
   appLocale,
@@ -20,6 +19,7 @@ const Core = function ({
   allowNavigation,
   onQuestionSubmit,
 }) {
+  const SEC_PER_QUES=60;
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
@@ -39,6 +39,7 @@ const Core = function ({
   const [correctPoints, setCorrectPoints] = useState(0);
   const [question, setQuestion] = useState(questions[currentQuestionIndex]);
   const [questionSummary, setQuestionSummary] = useState(undefined);
+  const[timer,setTimer]=useState(questions.length*SEC_PER_QUES);
 
   useEffect(() => {
     setShowDefaultResult(
@@ -410,6 +411,7 @@ const Core = function ({
           {(showNextQuestionButton || allowNavigation) && (
             <div className="questionBtnContainer">
               {allowNavigation && currentQuestionIndex > 0 && (
+                <>
                 <button
                   onClick={() => nextQuestion(currentQuestionIndex - 2)}
                   className="prevQuestionBtn btn"
@@ -417,6 +419,8 @@ const Core = function ({
                 >
                   {appLocale.prevQuestionBtn}
                 </button>
+                <Timer/>
+                </>
               )}
               <button
                 onClick={() => nextQuestion(currentQuestionIndex)}
