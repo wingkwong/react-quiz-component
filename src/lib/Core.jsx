@@ -221,7 +221,7 @@ const Core = function ({
           <div>
             {index === 5 ? (
               <button onClick={() => location.reload()} className="red-button">
-                RESTART
+                {appLocale.restartButton}
               </button>
             ) : (
               ''
