@@ -39,8 +39,6 @@ const Core = function ({
   const [correctPoints, setCorrectPoints] = useState(0);
   const [question, setQuestion] = useState(questions[currentQuestionIndex]);
   const [questionSummary, setQuestionSummary] = useState(undefined);
-  const[timer,setTimer]=useState(questions.length*SEC_PER_QUES);
-
   useEffect(() => {
     setShowDefaultResult(
       showDefaultResult !== undefined ? showDefaultResult : true
