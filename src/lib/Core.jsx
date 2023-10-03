@@ -219,7 +219,7 @@ const Core = function ({
             <Explanation question={question} isResultPage />
           </div>
           <div>
-            {index === 5 ? (
+            {index === (questions.length-1) ? (
               <button onClick={() => location.reload()} className="red-button">
                 {appLocale.restartButton}
               </button>
