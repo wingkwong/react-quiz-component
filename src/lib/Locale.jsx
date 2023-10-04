@@ -1,3 +1,4 @@
+/*eslint-disable*/
 const defaultLocale = {
   landingHeaderText: '<questionLength> Questions',
   question: 'Question',

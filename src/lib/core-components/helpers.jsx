@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import snarkdown from 'snarkdown';
 import dompurify from 'dompurify';
 

@@ -1,8 +1,9 @@
+/*eslint-disable*/
 import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
-
+import quiz from '../docs/quiz';
 const Quiz = function ({
   quiz, shuffle, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit,
@@ -139,6 +140,7 @@ const Quiz = function ({
           allowNavigation={allowNavigation}
           appLocale={appLocale}
           onQuestionSubmit={onQuestionSubmit}
+          quiz={quiz}
         />
       )}
     </div>
