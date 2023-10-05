@@ -166,7 +166,7 @@ const Core = function ({
 
       return (
         <div className="result-answer-wrapper" key={index + 1}>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question}`)} />
+          <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question}  ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
           {question.questionPic && <img src={question.questionPic} alt="image" />}
           {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
           <div className="result-answer">
