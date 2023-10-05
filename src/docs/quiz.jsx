@@ -28,7 +28,7 @@ const quiz = {
       segment: segment.advanced,
     },
     {
-      question: 'ReactJS is developed by _____?',
+      question: 'ReactJS is developed by ?',
       questionType: 'text',
       answerSelectionType: 'single',
       answers: [
@@ -73,7 +73,7 @@ const quiz = {
       segment: segment.medium,
     },
     {
-      question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
+      question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit?',
       questionType: 'photo',
       answerSelectionType: 'single',
       answers: [
