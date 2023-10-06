@@ -1,3 +1,9 @@
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .react-quiz-container {
   margin: 20px;
   width: 500px;
@@ -168,4 +174,48 @@
 .react-quiz-container .questionBtnContainer{
   display:flex;
   justify-content: space-between;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 767px) {
+  .questionWrapperBody {
+    width: 100%;
+  }
+
+  .react-quiz-container .questionWrapper .btn {
+    /* width: 85%; */
+    object-fit:scale-down;
+  }
+
+  .react-quiz-container .tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .react-quiz-container {
+    width: 90%;
+  }
+}
+
+/* Tablet Responsive */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .questionWrapperBody {
+    width: 100%;
+  }
+
+  .react-quiz-container .questionWrapper .btn {
+    /* width: 85%; */
+    object-fit:scale-down;
+  }
+
+  .react-quiz-container .tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .react-quiz-container {
+    width: 95%;
+  }
 }
