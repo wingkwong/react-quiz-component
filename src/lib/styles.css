@@ -173,9 +173,7 @@
   justify-content: space-between;
 }
 
-/* Mobile Responsive */
 
-/* Tablet Responsive */
 @media screen and (min-width: 768px){
   .react-quiz-container {
     width: 500px;
