@@ -6,6 +6,7 @@ import "./styles.css";
 const Quiz = function ({
   quiz,
   shuffle,
+  shuffleAnswer,
   showDefaultResult,
   onComplete,
   customResultPage,
@@ -22,6 +23,8 @@ const Quiz = function ({
     quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
       ? quiz.nrOfQuestions
       : quiz.questions.length;
+
+  // Shuffle answers funtion here
   const shuffleAnswerSequence = (oldQuestions = []) => {
     const newQuestions = oldQuestions.map((question) => {
       const answerWithIndex = question.answers?.map((ans, i) => [ans, i]);
@@ -64,7 +67,9 @@ const Quiz = function ({
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
     }
-    q = shuffleAnswerSequence(q);
+    if (shuffleAnswer) {
+      q = shuffleAnswerSequence(q);
+    }
     q.length = nrOfQuestions;
     return q;
   }, []);
@@ -75,10 +80,20 @@ const Quiz = function ({
 
   useEffect(() => {
     if (shuffle) {
-      setQuestions([...shuffleQuestions(quiz.questions)]);
+      const newQuestions = shuffleQuestions(quiz.questions).map(
+        (question, index) => ({
+          ...question,
+          questionIndex: index + 1,
+        })
+      );
+      setQuestions(newQuestions);
     } else {
       quiz.questions.length = nrOfQuestions;
-      setQuestions(quiz.questions);
+      const newQuestions = quiz.questions.map((question, index) => ({
+        ...question,
+        questionIndex: index + 1,
+      }));
+      setQuestions(newQuestions);
     }
 
     // setQuestions(
@@ -103,7 +118,6 @@ const Quiz = function ({
         answers,
         correctAnswer,
       } = questions[i];
-      console.log({ q: questions[i] });
       if (!question) {
         console.error("Field 'question' is required.");
         return false;
