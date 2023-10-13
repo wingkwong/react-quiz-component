@@ -23,6 +23,7 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Allow markdown in Question
 - Allow Picture in Question
 - Scoring System
+- Shuffling Questions / Answers
 
 ## Installing
 
@@ -167,7 +168,7 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz}/>
 ```
 
-## Shuffling question set
+## Shuffling Question Set
 
 ```js
 import { quiz } from './quiz';
@@ -175,7 +176,7 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} shuffle={true}/>
 ```
 
-## Shuffling answer set
+## Shuffling Answer Set
 
 ```js
 import { quiz } from './quiz';
@@ -225,8 +226,8 @@ const setQuizResult = (obj) => {
 
 ## Example of Quiz Summary returned to customResultPage and onComplete
 
-```javascript
-{
+````
+Object
   numberOfCorrectAnswers: 4
   numberOfIncorrectAnswers: 1
   numberOfQuestions: 5
@@ -239,9 +240,7 @@ const setQuizResult = (obj) => {
   userInput: (5) [1, 2, 1, 2, 3]
   totalPoints: 100
   correctPoints: 40
-}
-
-```
+````
 
 ## Showing Instant Feedback
 
@@ -265,7 +264,7 @@ import { quiz } from './quiz';
 |:--|:--:|:-----:|:--|:----------|
 |quiz|`object`|`null`|Y|Quiz Json Object|
 |shuffle|`boolean`|`false`|N|Shuffle the questions|
-|shuffleAnswer|`boolean`|`false`|N|Shuffle the Answers|
+|shuffleAnswer|`boolean`|`false`|N|Shuffle the answers|
 |showDefaultResult|`boolean`|`true`|N|Show the default result page|
 |customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
 |onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
