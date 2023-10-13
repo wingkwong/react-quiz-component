@@ -67,10 +67,9 @@ const Quiz = function ({
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
     }
-    if (shuffleAnswer) {
-      q = shuffleAnswerSequence(q);
-    }
-    q.length = nrOfQuestions;
+    // commented below line, because the job is going to be done in where 
+    // this function is called from for all common options 
+    // q.length = nrOfQuestions;
     return q;
   }, []);
 
@@ -79,29 +78,29 @@ const Quiz = function ({
   }, []);
 
   useEffect(() => {
+    // declaring a common variale for all operation
+    let newQuestions = quiz.questions;
+
+    // shuffling questions  if shuffle is true
     if (shuffle) {
-      const newQuestions = shuffleQuestions(quiz.questions).map(
-        (question, index) => ({
-          ...question,
-          questionIndex: index + 1,
-        })
-      );
-      setQuestions(newQuestions);
-    } else {
-      quiz.questions.length = nrOfQuestions;
-      const newQuestions = quiz.questions.map((question, index) => ({
+      newQuestions = shuffleQuestions(newQuestions).map((question, index) => ({
         ...question,
         questionIndex: index + 1,
       }));
-      setQuestions(newQuestions);
     }
 
-    // setQuestions(
-    //   questions.map((question, index) => ({
-    //     ...question,
-    //     questionIndex: index + 1,
-    //   }))
-    // );
+    // shuffling answers if shuffleAnswer is true
+    if (shuffleAnswer) {
+      newQuestions = shuffleAnswerSequence(newQuestions);
+    }
+
+    // setting number of question by defining array length(used min function for if )
+    newQuestions.length = nrOfQuestions;
+    newQuestions = newQuestions.map((question, index) => ({
+      ...question,
+      questionIndex: index + 1,
+    }));
+    setQuestions(newQuestions);
   }, [start]);
 
   const validateQuiz = (q) => {
