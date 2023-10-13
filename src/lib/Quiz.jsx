@@ -67,7 +67,6 @@ const Quiz = function ({
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
     }
-    q.length = nrOfQuestions;
     return q;
   }, []);
 
