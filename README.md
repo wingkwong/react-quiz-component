@@ -226,8 +226,8 @@ const setQuizResult = (obj) => {
 
 ## Example of Quiz Summary returned to customResultPage and onComplete
 
-```javascript
-{
+````
+Object
   numberOfCorrectAnswers: 4
   numberOfIncorrectAnswers: 1
   numberOfQuestions: 5
@@ -240,9 +240,7 @@ const setQuizResult = (obj) => {
   userInput: (5) [1, 2, 1, 2, 3]
   totalPoints: 100
   correctPoints: 40
-}
-
-```
+````
 
 ## Showing Instant Feedback
 
