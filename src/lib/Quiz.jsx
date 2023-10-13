@@ -192,7 +192,7 @@ const Quiz = function ({
             <div className="quiz-synopsis">{quiz.quizSynopsis}</div>
           )}
           <div className="startQuizWrapper">
-            <button onClick={() => setStart(true)} className="startQuizBtn btn">
+            <button type="button" onClick={() => setStart(true)} className="startQuizBtn btn">
               {appLocale.startQuizBtn}
             </button>
           </div>
