@@ -92,13 +92,6 @@ const Quiz = function ({
       }));
       setQuestions(newQuestions);
     }
-
-    // setQuestions(
-    //   questions.map((question, index) => ({
-    //     ...question,
-    //     questionIndex: index + 1,
-    //   }))
-    // );
   }, [start]);
 
   const validateQuiz = (q) => {
