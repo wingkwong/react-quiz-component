@@ -317,8 +317,8 @@ const Core = function ({
             {currentQuestionIndex + 1}
             :
           </div>
-          <h3 dangerouslySetInnerHTML={rawMarkup(( question && question.question)+ ' ' + (appLocale.marksOfQuestion.replace('<marks>',question.point)))}/>
-          
+          <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
+
           {question && question.questionPic && <img src={question.questionPic} alt="image" />}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
