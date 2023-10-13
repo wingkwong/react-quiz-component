@@ -12,7 +12,7 @@ const defaultLocale = {
   singleSelectionTagText: 'Single Selection',
   multipleSelectionTagText: 'Multiple Selection',
   pickNumberOfSelection: 'Pick <numberOfSelection>',
-  marksOfQuestion: '(<marks> marks)'
+  marksOfQuestion: '(<marks> marks)',
 };
 
 export default defaultLocale;
