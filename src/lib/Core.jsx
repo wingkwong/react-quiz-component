@@ -5,9 +5,9 @@ import {
   selectAnswer,
   rawMarkup,
 } from "./core-components/helpers";
-import InstantFeedback from "./core-components/InstantFeedback";
 import Explanation from "./core-components/Explanation";
-import QuestionHeader from "./core-components/QuestionHeader";
+import Question from "./core-components/Question";
+import QuizFooter from "./core-components/QuizFooter";
 
 const Core = function ({
   questions,
@@ -365,70 +365,40 @@ const Core = function ({
     </div>
   );
   return (
-    <div className="questionWrapper">
-      {!endQuiz && (
-        <div className="questionWrapperBody">
-          <div className="questionModal">
-            <InstantFeedback
+    <div>
+      {questions.map((question, index) => {
+        return (
+          <Fragment>
+            <Question
+              key={`Question: ${index} - ${question.quizTitle}`}
               question={question}
               showInstantFeedback={showInstantFeedback}
               correctAnswer={correctAnswer}
               incorrectAnswer={incorrectAnswer}
               onQuestionSubmit={onQuestionSubmit}
               userAnswer={[...userInput].pop()}
+              appLocale={appLocale}
+              currentQuestionIndex={index}
+              endQuiz={endQuiz}
+              rawMarkup={rawMarkup}
+              renderTags={renderTags}
+              answerSelectionTypeState={answerSelectionTypeState}
+              renderAnswers={renderAnswers}
+              buttons={buttons}
+              showNextQuestionButton={showNextQuestionButton}
+              allowNavigation={allowNavigation}
             />
-          </div>
-          <div>
-            {appLocale.question} {currentQuestionIndex + 1}:
-          </div>
-          <h3
-            dangerouslySetInnerHTML={rawMarkup(
-              `${
-                question && question.question
-              } ${appLocale.marksOfQuestion.replace("<marks>", question.point)}`
-            )}
-          />
-
-          {question && question.questionPic && (
-            <img src={question.questionPic} alt="image" />
-          )}
-          {question &&
-            renderTags(
-              answerSelectionTypeState,
-              question.correctAnswer.length,
-              question.segment
-            )}
-          {question && renderAnswers(question, buttons)}
-          {(showNextQuestionButton || allowNavigation) && (
-            <div className="questionBtnContainer">
-              {allowNavigation && currentQuestionIndex > 0 && (
-                <button
-                  onClick={() => nextQuestion(currentQuestionIndex - 2)}
-                  className="prevQuestionBtn btn"
-                  type="button"
-                >
-                  {appLocale.prevQuestionBtn}
-                </button>
-              )}
-              <button
-                onClick={() => nextQuestion(currentQuestionIndex)}
-                className="nextQuestionBtn btn"
-                type="button"
-              >
-                {appLocale.nextQuestionBtn}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-      {endQuiz &&
-        showDefaultResultState &&
-        customResultPage === undefined &&
-        renderResult()}
-      {endQuiz &&
-        !showDefaultResultState &&
-        customResultPage !== undefined &&
-        customResultPage(questionSummary)}
+            <QuizFooter
+              key={`Footer: ${index} - ${question.quizTitle}`}
+              showNextQuestionButton={showNextQuestionButton}
+              allowNavigation={allowNavigation}
+              currentQuestionIndex={index}
+              appLocale={appLocale}
+              nextQuestion={nextQuestion}
+            />
+          </Fragment>
+        );
+      })}
     </div>
   );
 };
