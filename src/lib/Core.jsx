@@ -204,7 +204,9 @@ const Core = function ({
         <div className="result-answer-wrapper" key={index + 1}>
           <h3
             dangerouslySetInnerHTML={rawMarkup(
-              `Q${question.questionIndex}: ${question.question}`
+              `Q${question.questionIndex}: ${
+                question.question
+              } ${appLocale.marksOfQuestion.replace("<marks>", question.point)}`
             )}
           />
           {question.questionPic && (
@@ -376,13 +378,17 @@ const Core = function ({
               userAnswer={[...userInput].pop()}
             />
           </div>
-          <QuestionHeader
-            questionName={appLocale.question}
-            questionNumber={currentQuestionIndex + 1}
-          />
+          <div>
+            {appLocale.question} {currentQuestionIndex + 1}:
+          </div>
           <h3
-            dangerouslySetInnerHTML={rawMarkup(question && question.question)}
+            dangerouslySetInnerHTML={rawMarkup(
+              `${
+                question && question.question
+              } ${appLocale.marksOfQuestion.replace("<marks>", question.point)}`
+            )}
           />
+
           {question && question.questionPic && (
             <img src={question.questionPic} alt="image" />
           )}

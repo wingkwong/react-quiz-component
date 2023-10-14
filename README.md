@@ -23,6 +23,7 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Allow markdown in Question
 - Allow Picture in Question
 - Scoring System
+- Shuffling Questions / Answers
 
 ## Installing
 
@@ -32,13 +33,14 @@ npm i react-quiz-component
 
 ## Importing react-quiz-component
 
-```
+```js
 import Quiz from 'react-quiz-component';
 ```
 
 ## Defining Your Quiz Source
 The quiz source is a JSON object. You can use [react-quiz-form](https://github.com/wingkwong/react-quiz-form/) to generate it.
-```javascript
+
+```js
 export const quiz =  {
   "quizTitle": "React Quiz Component Demo",
   "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
@@ -143,73 +145,83 @@ export const quiz =  {
 ### Locale Customization
 
 If you want to use your customized text, you can add appLocale into your quiz source. Below is the default one. <questionLength> and <correctIndexLength> will be replaced dynamically.
-```javascript
- "appLocale": {
-    "landingHeaderText": "<questionLength> Questions",
-    "question": "Question",
-    "startQuizBtn": "Start Quiz",
-    "resultFilterAll": "All",
-    "resultFilterCorrect": "Correct",
-    "resultFilterIncorrect": "Incorrect",
-    "prevQuestionBtn": "Prev",
-    "nextQuestionBtn": "Next",
-    "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
-  } 
+
+```json
+"appLocale": {
+  "landingHeaderText": "<questionLength> Questions",
+  "question": "Question",
+  "startQuizBtn": "Start Quiz",
+  "resultFilterAll": "All",
+  "resultFilterCorrect": "Correct",
+  "resultFilterIncorrect": "Incorrect",
+  "prevQuestionBtn": "Prev",
+  "nextQuestionBtn": "Next",
+  "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
+} 
 ```
 
 ## Passing to Quiz container
 
-```javascript
- import { quiz } from './quiz';
- ...
- <Quiz quiz={quiz}/>
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz}/>
 ```
 
-## Shuffling question set
+## Shuffling Question Set
 
-```javascript
- import { quiz } from './quiz';
- ...
- <Quiz quiz={quiz} shuffle={true}/>
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} shuffle={true}/>
+```
+
+## Shuffling Answer Set
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} shuffleAnswer={true}/>
 ```
 
 ## Disabling Default Result Page
 
-```javascript
- import { quiz } from './quiz';
- ...
- <Quiz quiz={quiz} showDefaultResult={false}/>
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} showDefaultResult={false}/>
 ```
 
 ## Enabling Custom Result Page
 
 * In order to enable custom result page, showDefaultResult has to be false.
-```javascript
- import { quiz } from './quiz';
- ...
-  const renderCustomResultPage = (obj) => {
-    console.log(obj);
-    return (
-      <div>
-        This is a custom result page. You can use obj to render your custom result page
-      </div>
-    )
-  }
- ...
-  <Quiz quiz={quiz} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
+```js
+import { quiz } from './quiz';
+...
+const renderCustomResultPage = (obj) => {
+  console.log(obj);
+  return (
+    <div>
+      This is a custom result page. You can use obj to render your custom result page
+    </div>
+  )
+}
+
+```
+<Quiz quiz={quiz} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
 ```
 
 ## Enabling onComplete Action
 
-```javascript
- import { quiz } from './quiz';
- ...
-  const setQuizResult = (obj) => {
-    console.log(obj);
-    // YOUR LOGIC GOES HERE
-  }
- ...
-  <Quiz quiz={quiz} showDefaultResult={false} onComplete={setQuizResult}/>
+```js
+import { quiz } from './quiz';
+...
+const setQuizResult = (obj) => {
+  console.log(obj);
+  // YOUR LOGIC GOES HERE
+}
+...
+<Quiz quiz={quiz} showDefaultResult={false} onComplete={setQuizResult}/>
 ```
 
 ## Example of Quiz Summary returned to customResultPage and onComplete
@@ -228,23 +240,22 @@ Object
   userInput: (5) [1, 2, 1, 2, 3]
   totalPoints: 100
   correctPoints: 40
-
 ````
 
 ## Showing Instant Feedback
 
-```javascript
- import { quiz } from './quiz';
- ...
-  <Quiz quiz={quiz} showInstantFeedback={true}/>
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} showInstantFeedback={true}/>
 ```
 
 ## Answering the same question till it is correct
 
-```javascript
- import { quiz } from './quiz';
- ...
-  <Quiz quiz={quiz} continueTillCorrect={true}/>
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} continueTillCorrect={true}/>
 ```
 
 ## Props
@@ -253,6 +264,7 @@ Object
 |:--|:--:|:-----:|:--|:----------|
 |quiz|`object`|`null`|Y|Quiz Json Object|
 |shuffle|`boolean`|`false`|N|Shuffle the questions|
+|shuffleAnswer|`boolean`|`false`|N|Shuffle the answers|
 |showDefaultResult|`boolean`|`true`|N|Show the default result page|
 |customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
 |onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
