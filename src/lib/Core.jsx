@@ -312,11 +312,7 @@ const Core = function ({
             />
           </div>
           <div>
-          
-            {appLocale.question}
-            {' '}
-            {currentQuestionIndex + 1} / {questions.length}
-            :
+            {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
 
