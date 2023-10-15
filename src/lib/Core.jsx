@@ -315,7 +315,7 @@ const Core = function ({
             <ProgressBar  currentQuestion={currentQuestionIndex} totalQuestions={questions.length}/>
             {appLocale.question}
             {' '}
-            {currentQuestionIndex + 1} of {questions.length}
+            {currentQuestionIndex + 1} / {questions.length}
             :
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
