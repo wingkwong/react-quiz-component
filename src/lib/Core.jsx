@@ -312,7 +312,7 @@ const Core = function ({
             />
           </div>
           <div>
-            <ProgressBar  currentQuestion={currentQuestionIndex} totalQuestions={questions.length}/>
+          
             {appLocale.question}
             {' '}
             {currentQuestionIndex + 1} / {questions.length}
