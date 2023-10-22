@@ -13,6 +13,7 @@ const App = function () {
     <Quiz
       quiz={quiz}
       shuffle
+      shuffleAnswer
       // showInstantFeedback
       // continueTillCorrect
       onComplete={setQuizResult}

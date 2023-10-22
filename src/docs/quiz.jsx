@@ -1,7 +1,7 @@
 const segment = {
-  basic: 'basic',
-  medium: 'medium',
-  advanced: 'advanced',
+  basic: 'Basic',
+  medium: 'Medium',
+  advanced: 'Advanced',
 };
 
 const quiz = {
