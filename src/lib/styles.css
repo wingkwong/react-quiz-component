@@ -1,6 +1,6 @@
 .react-quiz-container {
   margin: 20px;
-  width: 90%;
+  max-width: 500px;
 }
 
 .react-quiz-container .startQuizWrapper {
@@ -171,11 +171,4 @@
 .react-quiz-container .questionBtnContainer {
   display: flex;
   justify-content: space-between;
-}
-
-
-@media screen and (min-width: 768px){
-  .react-quiz-container {
-    width: 500px;
-  }
 }
