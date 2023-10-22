@@ -81,7 +81,7 @@ const Core = function ({
     if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
       onComplete(questionSummary);
     }
-  }, [endQuiz, questionSummary]);
+  }, [questionSummary]);
 
   const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
@@ -103,7 +103,6 @@ const Core = function ({
     } else {
       setCurrentQuestionIndex(currentQuestionIdx + 1);
     }
-    window.scrollTo(0, 0);
   };
 
   const handleChange = (event) => {
@@ -166,7 +165,7 @@ const Core = function ({
 
       return (
         <div className="result-answer-wrapper" key={index + 1}>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question}`)} />
+          <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
           {question.questionPic && <img src={question.questionPic} alt="image" />}
           {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
           <div className="result-answer">
@@ -312,12 +311,10 @@ const Core = function ({
             />
           </div>
           <div>
-            {appLocale.question}
-            {' '}
-            {currentQuestionIndex + 1}
-            :
+            {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
           </div>
-          <h3 dangerouslySetInnerHTML={rawMarkup(question && question.question)} />
+          <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
+
           {question && question.questionPic && <img src={question.questionPic} alt="image" />}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}

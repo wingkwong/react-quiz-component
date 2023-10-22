@@ -10,17 +10,18 @@ const App = function () {
   const [quizResult, setQuizResult] = useState();
 
   return (
-    <Quiz
-      quiz={quiz}
-      shuffle
+    <div style={{ margin: 'auto', width: '500px' }}>
+      <Quiz
+        quiz={quiz}
+        shuffle
+        shuffleAnswer
       // showInstantFeedback
       // continueTillCorrect
-      onComplete={setQuizResult}
-      onQuestionSubmit={(obj) => console.log('user question results:', obj)}
-      disableSynopsis
-      // revealAnswerOnSubmit
-      // allowNavigation
-    />
+        onComplete={setQuizResult}
+        onQuestionSubmit={(obj) => console.log('user question results:', obj)}
+        disableSynopsis
+      />
+    </div>
   );
 };
 
