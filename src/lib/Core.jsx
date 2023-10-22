@@ -103,7 +103,6 @@ const Core = function ({
     } else {
       setCurrentQuestionIndex(currentQuestionIdx + 1);
     }
-    window.scrollTo(0, 0);
   };
 
   const handleChange = (event) => {
