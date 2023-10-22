@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.6.0
+
+- Display marks in questions (marksOfQuestion)
+- Bump dependencies
+- Add renovate
+- Add ShuffleAnswer
+- Add total count of questions
+- Responsive Design
+- Revise demo site
+- Fix Scrolling
+
 ## 0.5.1
 
 - Replace `marked` by `snarkdown`
