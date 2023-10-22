@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "React Quiz Component",
   "main": "lib/Quiz.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
   },
-  "author": "WONG, Wing Kam <wingkwong.code@gmail.com>",
+  "author": "WK Wong <wingkwong.code@gmail.com>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
   "repository": {
     "type": "git",
