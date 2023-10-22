@@ -1,108 +1,39 @@
-/* Page Font and Typography */
-body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #333;
-}
-
-/* Headings */
-h1, h2, h3, h4, h5 {
-  font-family: "Segoe UI", Tahoma, Geneva, sans-serif;
-  font-weight: bold;
-  color: #333;
-  margin: 0;
-}
-
-h1 {
-  font-size: 36px;
-}
-
-h2 {
-  font-size: 28px;
-}
-
-h3 {
-  font-size: 24px;
-}
-
-h4 {
-  font-size: 20px;
-}
-
-h5 {
-  font-size: 18px;
-}
-
-/* Improve paragraph text readability */
-p {
-  margin: 0 0 20px;
-}
-
-/* Add some spacing for lists and other content */
-ul, ol {
-  margin: 0 0 20px 20px;
-}
-
-/* Improve link styles */
-a {
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-a:hover {
-  color: #0056b3;
-}
-
-
-
-/* Quiz Container */
 .react-quiz-container {
-  margin: 20px auto;
+  margin: 20px;
   max-width: 500px;
-  padding: 20px;
-  background-color: #f0f0f0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
-  color: #333;
 }
 
-/* Start Quiz Wrapper */
 .react-quiz-container .startQuizWrapper {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-/* Buttons */
 .react-quiz-container .btn {
-  display: inline-block;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  margin-bottom: 0;
   font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
-  background-color: #007bff;
-  color: #fff;
+  text-align: center;
+  padding: 11px 12px;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 
-
-
-.react-quiz-container .next-button:hover {
-  background-color: #b9294d; /* Color on hover */
-}
-
-
-/* Question Buttons */
 .react-quiz-container .questionWrapper .btn {
-  margin: 10px 0;
-  font-size: 16px;
-  width: 100%;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #e8e8e8;
+  font-size: 15px;
+  display: block;
+  white-space: normal;
+  text-align: unset;
 }
 
 .react-quiz-container .questionWrapper .btn.correct {
@@ -110,26 +41,16 @@ a:hover {
   color: white;
 }
 
-.react-quiz-container .questionWrapper .btn.incorrect {
-  background: red;
-  color: white;
-}
-
-/* Alerts and Notifications */
 .react-quiz-container .questionModal .alert {
   padding: 20px;
   margin-bottom: 21px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #333;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: #fff;
 }
 
-/* Result Styles */
 .react-quiz-container .correct {
   background: green;
-  color: white;
 }
 
 .react-quiz-container .incorrect {
@@ -137,177 +58,158 @@ a:hover {
   color: white;
 }
 
-/* Images */
 .react-quiz-container .questionWrapper img {
   width: 100%;
 }
 
-/* Answer Button */
 .react-quiz-container .answerBtn {
   width: 100%;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-weight: 600;
 }
 
-/* Selected Answer */
 .react-quiz-container .selected {
   background: #007bff;
-  color: #fff;
+  color: white;
 }
 
-/* Start Quiz Button */
 .react-quiz-container .startQuizWrapper .startQuizBtn {
-  font-size: 16px;
-  border-radius: 5px;
-  line-height: 1.5;
-  color: #007bff;
+  font-size: 15px;
+  border-radius: 2px;
+  line-height: 1.35135;
+  color: rgba(0, 0, 0, 0.65);
   background-color: #fff;
-  border: 1px solid #007bff;
-  padding: 12px 24px;
+  border: 1px solid #d9d9d9;
 }
 
-/* Result Answer Wrapper */
 .react-quiz-container .result-answer-wrapper {
   margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .react-quiz-container .result-answer-wrapper h3 {
-  background-color: #007bff;
-  color: #fff;
-  margin: 0;
+  background-color: #fafafa;
+  opacity: 0.8;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0px;
   padding: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
-/* Result Answer Styles */
-.react-quiz-container .result-answer {
+.react-quiz-container .result-answer-wrapper .explanation {
   padding: 20px;
+  margin: 0px 20px 20px 20px;
+  border: 1px solid #e8e8e8;
 }
 
-/* Quiz Synopsis */
+.react-quiz-container .result-answer-wrapper .tag-container {
+  margin: 20px;
+}
+
+.react-quiz-container .result-answer {
+  padding: 0px 20px;
+}
+
 .react-quiz-container .quiz-synopsis {
-  margin: 15px 0;
-  font-size: 16px;
-  color: #777;
+  margin: 15px 0px;
 }
 
-
-.react-quiz-container .quiz-result-filter {
-  display: flex;
-  align-items: center;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
+/*Styling for the quiz filter*/
+.quiz-result-filter {
+  position: relative;
+  width: 160px;
+  margin-bottom: 30px;
+  background: transparent;
+  background-image: linear-gradient(to right, #92979c 0%, #d2d4d7  51%, #8e969f  100%);
+  border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
+  overflow: hidden;
 }
 
-/* Filter Label */
-.react-quiz-container .quiz-result-filter label {
-  margin-right: 10px;
-  font-weight: 600;
+/* Styling for the select element */
+.quiz-result-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  background-image: linear-gradient(to right, #92979c 0%, #d2d4d7  51%, #8e969f  100%);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+/* Style the select options */
+.quiz-result-filter select option {
+  background-color: #4a4a4a;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+}
+
+/* Hover effect for the select element */
+.quiz-result-filter select:hover {
+  background-image: linear-gradient(to right,  #606265 0%, #d2d4d7  51%,  #606265 100%);
+  text-decoration: none;
+}
+
+/* Focus effect for the select element */
+.quiz-result-filter select:focus {
+  background-color: #bab4ba;
+  box-shadow: 5px 10px 5px rgba(0, 123, 255, 0.7);
+}
+
+/* Styling for the dropdown arrow */
+.quiz-result-filter::after {
+  content: "\25BC"; 
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  pointer-events: none;
   color: #333;
 }
 
-/* Filter Dropdown */
-.react-quiz-container .quiz-result-filter select {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  padding: 5px;
-  width: 100%;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
 
-/* Filter Apply Button */
-.react-quiz-container .quiz-result-filter .apply-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
-  margin-right: 10px;
-}
-
-.react-quiz-container .quiz-result-filter .apply-button:hover {
-  background-color: #0056b3;
-}
-
-/* Filter Reset Button */
-.react-quiz-container .quiz-result-filter .reset-button {
-  background-color: #e74c3c;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.react-quiz-container .quiz-result-filter .reset-button:hover {
-  background-color: #c0392b;
-}
-
-
-
-/* Tag Container */
 .react-quiz-container .tag-container {
   margin-top: 20px;
   margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-/* Selection Tags */
 .react-quiz-container .selection-tag,
 .react-quiz-container .number-of-selection {
   padding: 7px;
   border-radius: 5px;
-  color: #fff;
+  color: #ffffff;
 }
 
 .react-quiz-container .number-of-selection {
-  background: #673AB7;
+  background: #673ab7;
   margin-left: 5px;
 }
 
 .react-quiz-container .selection-tag.single {
-  background: #3F51B5;
+  background: #3f51b5;
 }
 
 .react-quiz-container .selection-tag.multiple {
-  background: #FF9800;
+  background: #ff9800;
 }
-
 .react-quiz-container .selection-tag.segment {
   background: #3db4b9;
   margin-left: 5px;
 }
 
-/* Question Button Container */
 .react-quiz-container .questionBtnContainer {
   display: flex;
   justify-content: space-between;
-}
-
-/* Responsive Design for Smaller Screens */
-@media (max-width: 768px) {
-  .react-quiz-container {
-    max-width: 100%;
-    padding: 10px;
-  }
 }
