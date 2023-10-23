@@ -13,7 +13,7 @@ function Core({
   onQuestionSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
   const [endQuiz, setEndQuiz] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -28,7 +28,7 @@ function Core({
 
   const [totalPoints, setTotalPoints] = useState(0);
   const [correctPoints, setCorrectPoints] = useState(0);
-  const [question, setQuestion] = useState(questions[currentQuestionIndex]);
+  const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
   const [questionSummary, setQuestionSummary] = useState(undefined);
 
   useEffect(() => {
@@ -36,14 +36,14 @@ function Core({
   }, [showDefaultResult]);
 
   useEffect(() => {
-    setQuestion(questions[currentQuestionIndex]);
+    setActiveQuestion(questions[currentQuestionIndex]);
   }, [currentQuestionIndex]);
 
   useEffect(() => {
-    const { answerSelectionType } = question;
+    const { answerSelectionType } = activeQuestion;
     // Default single to avoid code breaking due to automatic version upgrade
     setAnswerSelectionType(answerSelectionType || 'single');
-  }, [question, currentQuestionIndex]);
+  }, [activeQuestion, currentQuestionIndex]);
 
   useEffect(() => {
     if (endQuiz) {
@@ -86,7 +86,7 @@ function Core({
 
   const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
-    setCorrectAnswer(false);
+    setIsCorrect(false);
     setShowNextQuestionButton(false);
     setButtons({});
 
@@ -200,7 +200,7 @@ function Core({
     });
   }, [endQuiz, filteredValue]);
 
-  const renderAnswers = (question, buttons) => {
+  const renderAnswers = (question, answerButtons) => {
     const {
       answers, correctAnswer, questionType, questionIndex,
     } = question;
@@ -214,7 +214,7 @@ function Core({
       incorrect,
       correct,
       setButtons,
-      setCorrectAnswer,
+      setIsCorrect,
       setIncorrectAnswer,
       setCorrect,
       setIncorrect,
@@ -250,12 +250,12 @@ function Core({
 
     return answers.map((answer, index) => (
       <Fragment key={uuidv4()}>
-        {(buttons[index] !== undefined)
+        {(answerButtons[index] !== undefined)
           ? (
             <button
               type="button"
-              disabled={buttons[index].disabled || false}
-              className={`${buttons[index].className} answerBtn btn`}
+              disabled={answerButtons[index].disabled || false}
+              className={`${answerButtons[index].className} answerBtn btn`}
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
@@ -304,9 +304,9 @@ function Core({
         <div className="questionWrapperBody">
           <div className="questionModal">
             <InstantFeedback
-              question={question}
+              question={activeQuestion}
               showInstantFeedback={showInstantFeedback}
-              correctAnswer={correctAnswer}
+              correctAnswer={isCorrect}
               incorrectAnswer={incorrectAnswer}
               onQuestionSubmit={onQuestionSubmit}
               userAnswer={[...userInput].pop()}
@@ -315,11 +315,11 @@ function Core({
           <div>
             {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
           </div>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
+          <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
 
-          {question && question.questionPic && <img src={question.questionPic} alt="question" />}
-          {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
-          {question && renderAnswers(question, buttons)}
+          {activeQuestion && activeQuestion.questionPic && <img src={activeQuestion.questionPic} alt="question" />}
+          {activeQuestion && renderTags(answerSelectionTypeState, activeQuestion.correctAnswer.length, activeQuestion.segment)}
+          {activeQuestion && renderAnswers(activeQuestion, buttons)}
           {(showNextQuestionButton || allowNavigation)
           && (
           <div className="questionBtnContainer">
