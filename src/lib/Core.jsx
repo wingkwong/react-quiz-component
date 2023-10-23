@@ -51,7 +51,7 @@ function Core({
       for (let i = 0; i < questions.length; i += 1) {
         let point = questions[i].point || 0;
         if (typeof point === 'string' || point instanceof String) {
-          point = parseInt(point);
+          point = parseInt(point, 10);
         }
 
         totalPointsTemp += point;
@@ -132,11 +132,12 @@ function Core({
       return (
         <div key={index}>
           <button
+            type="button"
             disabled
             className={`answerBtn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
             {questionType === 'text' && <span>{answer}</span>}
-            {questionType === 'photo' && <img src={answer} alt="image" />}
+            {questionType === 'photo' && <img src={answer} alt="answer" />}
           </button>
         </div>
       );
@@ -166,7 +167,7 @@ function Core({
       return (
         <div className="result-answer-wrapper" key={index + 1}>
           <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
-          {question.questionPic && <img src={question.questionPic} alt="image" />}
+          {question.questionPic && <img src={question.questionPic} alt="question" />}
           {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
           <div className="result-answer">
             {renderAnswerInResult(question, userInputIndex)}
@@ -236,7 +237,7 @@ function Core({
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
-              {questionType === 'photo' && <img src={answer} alt="image" />}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
           )
           : (
@@ -246,7 +247,7 @@ function Core({
               className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
             >
               {questionType === 'text' && answer}
-              {questionType === 'photo' && <img src={answer} alt="image" />}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
           )}
       </Fragment>
@@ -315,7 +316,7 @@ function Core({
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
 
-          {question && question.questionPic && <img src={question.questionPic} alt="image" />}
+          {question && question.questionPic && <img src={question.questionPic} alt="question" />}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
           {(showNextQuestionButton || allowNavigation)
