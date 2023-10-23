@@ -115,26 +115,75 @@
   margin: 15px 0px;
 }
 
-.react-quiz-container .quiz-result-filter {
-  overflow: hidden;
-  width: 120px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background-color: #fefefe;
-  margin-bottom: 10px;
-  border: 1px solid #e8e8e8;
+/* Style the dropdown container */
+.quiz-result-filter {
+  position: relative;
+  width: 200px;
 }
 
-.react-quiz-container .quiz-result-filter select {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  padding: 5px;
-  width: 100%;
-  height: 30px;
-  border: 1px solid #ffffff;
+/* Style the custom-select */
+ .custom-select {
+  padding: 12px;
+  border: 2px solid #3498db;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  bottom: 10px;
+ 
 }
+
+/* Style the custom select cursor */
+.custom-select:after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #3498db;
+  font-size: 18px;
+}
+
+/* Style the custom select on hover */
+.custom-select:hover {
+  border: 2px solid #3498db; 
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); 
+}
+/* Style the custom options */
+ .custom-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #3498db;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  
+}
+
+/* Style the individual custom options */
+.custom-options .custom-options-item {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Style the custom options on hover */
+.custom-options .custom-options-item:hover {
+ border: 2px solid #3498db; 
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+/* Style the custom options on click */
+.custom-select:focus + .custom-options {
+  display: block;
+} 
 
 .react-quiz-container .tag-container {
   margin-top: 20px;
@@ -172,3 +221,4 @@
   display: flex;
   justify-content: space-between;
 }
+
