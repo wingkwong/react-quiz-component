@@ -145,6 +145,27 @@ function Core({
     });
   };
 
+  const renderTags = (answerSelectionType, numberOfSelection, segment) => {
+    const {
+      singleSelectionTagText,
+      multipleSelectionTagText,
+      pickNumberOfSelection,
+    } = appLocale;
+
+    return (
+      <div className="tag-container">
+        {answerSelectionType === 'single'
+          && <span className="single selection-tag">{singleSelectionTagText}</span>}
+        {answerSelectionType === 'multiple'
+          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        <span className="number-of-selection">
+          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
+        </span>
+        {segment && <span className="selection-tag segment">{segment}</span>}
+      </div>
+    );
+  };
+
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -253,27 +274,6 @@ function Core({
           )}
       </Fragment>
     ));
-  };
-
-  const renderTags = (answerSelectionType, numberOfSelection, segment) => {
-    const {
-      singleSelectionTagText,
-      multipleSelectionTagText,
-      pickNumberOfSelection,
-    } = appLocale;
-
-    return (
-      <div className="tag-container">
-        {answerSelectionType === 'single'
-          && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
-          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
-        <span className="number-of-selection">
-          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
-        </span>
-        {segment && <span className="selection-tag segment">{segment}</span>}
-      </div>
-    );
   };
 
   const renderResult = () => (
