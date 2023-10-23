@@ -1,6 +1,7 @@
 import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
@@ -130,7 +131,7 @@ function Core({
       }
 
       return (
-        <div key={index}>
+        <div key={uuidv4()}>
           <button
             type="button"
             disabled
@@ -165,7 +166,7 @@ function Core({
       const answerSelectionType = question.answerSelectionType || 'single';
 
       return (
-        <div className="result-answer-wrapper" key={index + 1}>
+        <div className="result-answer-wrapper" key={uuidv4()}>
           <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
           {question.questionPic && <img src={question.questionPic} alt="question" />}
           {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
@@ -227,7 +228,7 @@ function Core({
     answerSelectionType = answerSelectionType || 'single';
 
     return answers.map((answer, index) => (
-      <Fragment key={index}>
+      <Fragment key={uuidv4()}>
         {(buttons[index] !== undefined)
           ? (
             <button
