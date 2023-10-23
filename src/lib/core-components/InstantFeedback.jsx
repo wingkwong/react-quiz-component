@@ -11,7 +11,7 @@ const renderMessageForIncorrectAnswer = (question) => {
   return question.messageForIncorrectAnswer || defaultMessage;
 };
 
-const InstantFeedback = function ({
+function InstantFeedback({
   showInstantFeedback, incorrectAnswer, correctAnswer, question, onQuestionSubmit, userAnswer,
 }) {
   useEffect(() => {
@@ -33,6 +33,6 @@ const InstantFeedback = function ({
             )}
     </>
   );
-};
+}
 
 export default InstantFeedback;

@@ -14,5 +14,10 @@ plugins:
 rules: {
   "no-param-reassign": 0,
   "max-len": ["error", { "code": 120 }],
-  "react/prop-types": "off"
+  "react/prop-types": "off",
+  "no-console": "off",
+  "no-alert": "off",
+  "no-unused-vars": "off",
+  "react/no-danger": "off",
+  "no-restricted-globals": "off",
 }

@@ -6,7 +6,7 @@ import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers'
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
-const Core = function ({
+function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
   onQuestionSubmit,
@@ -343,6 +343,6 @@ const Core = function ({
           && customResultPage(questionSummary)}
     </div>
   );
-};
+}
 
 export default Core;
