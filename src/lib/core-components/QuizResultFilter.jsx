@@ -12,10 +12,12 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
     setIsOpen(false);
   };
 
+  const selectedOptionClass = isOpen ? 'selected-open' : '';
+
   return (
     <div className="quiz-result-filter">
       <div
-        className="custom-select"
+        className={`filter-dropdown-select ${isOpen ? 'open' : ''}`}
         onClick={toggleDropdown}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
@@ -25,17 +27,23 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
         role="button"
         tabIndex={0}
       >
-        {filteredValue === 'all' ? appLocale.resultFilterAll : filteredValue}
+        <div className={`selected-option ${selectedOptionClass}`}>
+          {filteredValue === 'all' ? appLocale.resultFilterAll : filteredValue}
+        </div>
         <span className={`arrow ${isOpen ? 'up' : 'down'}`} />
       </div>
       {isOpen && (
-        <div className="custom-options" role="menu">
+        <div
+          className="dropdown-options"
+          role="menu"
+          aria-labelledby="quiz-filter"
+        >
           <div
-            className="custom-options-item"
-            onClick={() => handleOptionClick('All')}
+            className={`dropdown-options-item ${filteredValue === 'all' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('all')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleOptionClick('All');
+                handleOptionClick('all');
               }
             }}
             role="menuitem"
@@ -44,11 +52,11 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
             {appLocale.resultFilterAll}
           </div>
           <div
-            className="custom-options-item"
-            onClick={() => handleOptionClick('Correct')}
+            className={`dropdown-options-item ${filteredValue === 'correct' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('correct')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleOptionClick('Correct');
+                handleOptionClick('correct');
               }
             }}
             role="menuitem"
@@ -57,11 +65,11 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
             {appLocale.resultFilterCorrect}
           </div>
           <div
-            className="custom-options-item"
-            onClick={() => handleOptionClick('Incorrect')}
+            className={`dropdown-options-item ${filteredValue === 'incorrect' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('incorrect')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleOptionClick('Incorrect');
+                handleOptionClick('incorrect');
               }
             }}
             role="menuitem"
