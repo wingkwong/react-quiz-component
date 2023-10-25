@@ -73,25 +73,16 @@ const quiz = {
       segment: segment.medium,
     },
     {
-      question: ' Which of the following is a valid React component?',
-      questionType: 'text',
+      question: 'What is the correct command to create a new React project?',
+      questionType: 'photo',
       answerSelectionType: 'single',
       answers: [
-        `const MyComponent = () => {
-          return <div>Is this a react component</div>;
-        };`,
-        `const MyComponent = () => {
-          return <div>Is this a React component because it returns more than one element.</div>;
-          return <div>This is another element.</div>;
-        };`,
-        `const MyComponent = () => {
-          return <div> Is this a React component because it does not have a render() method.</div>;
-        };`,
-        ` const MyComponent = () => {
-          return <div> Is this a React component because it uses a class component syntax but does not extend the React.Component class.</div>;
-        };`,
+        'https://dummyimage.com/600x400/000/fff&text=npm+create-react-app+myReactApp',
+        'https://dummyimage.com/600x400/000/fff&text=npx+create-react-app',
+        'https://dummyimage.com/600x400/000/fff&text=npm+create-react-app',
+        'https://dummyimage.com/600x400/000/fff&text=npx+create-react-app+myReactApp',
       ],
-      correctAnswer: '1',
+      correctAnswer: '4',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
       explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
