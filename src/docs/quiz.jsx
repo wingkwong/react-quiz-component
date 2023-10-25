@@ -73,14 +73,23 @@ const quiz = {
       segment: segment.medium,
     },
     {
-      question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit?',
-      questionType: 'photo',
+      question: ' Which of the following is a valid React component?',
+      questionType: 'text',
       answerSelectionType: 'single',
       answers: [
-        'https://dummyimage.com/600x400/000/fff&text=A',
-        'https://dummyimage.com/600x400/000/fff&text=B',
-        'https://dummyimage.com/600x400/000/fff&text=C',
-        'https://dummyimage.com/600x400/000/fff&text=D',
+        `const MyComponent = () => {
+          return <div>Is this a react component</div>;
+        };`,
+        `const MyComponent = () => {
+          return <div>Is this a React component because it returns more than one element.</div>;
+          return <div>This is another element.</div>;
+        };`,
+        `const MyComponent = () => {
+          return <div> Is this a React component because it does not have a render() method.</div>;
+        };`,
+        ` const MyComponent = () => {
+          return <div> Is this a React component because it uses a class component syntax but does not extend the React.Component class.</div>;
+        };`,
       ],
       correctAnswer: '1',
       messageForCorrectAnswer: 'Correct answer. Good job.',
