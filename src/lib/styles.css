@@ -156,11 +156,11 @@
 .react-quiz-container .quiz-result-filter {
   position: relative;
   width: 120px;
-  margin-top: -18px;
-  margin-bottom: 8px;
-  
+  bottom: 15px;
+
   .filter-dropdown-select {
     padding: 8px;
+    margin-top: 2px;
     text-transform: capitalize;
     border: 2px solid #c2c5c7;
     border-radius: 7px;
@@ -168,20 +168,20 @@
     color: #333;
     font-size: 16px;
     cursor: pointer;
-    margin-bottom: -5px;
     bottom: 10px;
     position: relative; 
-    height: 12.45px;
+    height: 12px;
   }
 
   .filter-dropdown-select:after {
+    transition: all 0.3s ease;
     content: "▼";
     position: absolute;
     top: 57%;
     right: 10px;
     transform: translateY(-50%);
     color: #a5a5a5;
-    font-size: 11.5px;
+    font-size: 11px;
   }
 
   .filter-dropdown-select:hover {
@@ -194,17 +194,16 @@
     padding: 0;
     margin: 0;
     position: absolute;
-    top: 100%;
+    top: 85%;
     z-index: 1;
     left: 0;
     width: 100%;
     background-color: #fcfcfc;
     box-shadow: 0 0 10px rgba(141, 143, 145, 0.5);
     border-radius: 10px;
-    margin-bottom: 25px; 
-  }
+  } 
 
-  .filter-dropdown-select.open{
+  .filter-dropdown-select.open {
     border: 2px solid #51aae6;
     box-shadow: 0 0 6px rgba(109, 179, 250, 0.5);
   }
@@ -220,20 +219,20 @@
     border-radius: 5px;
   }
 
-  .dropdown-options .dropdown-options-item:focus{
+  .dropdown-options .dropdown-options-item:focus {
     background-color: #d7f1f9;
     font-weight: bold;
   }
 
   .filter-dropdown-select .selected-option.selected-open {
     color: #c6c2c2; 
-    font-weight:lighter; 
+    font-weight: lighter; 
   }
   
-  .filter-dropdown-select .selected-option{
-    font-size:15px;
+  .filter-dropdown-select .selected-option {
+    font-size: 16px;
     position: relative;
-    bottom: 2px;
+    bottom: 2px; 
   }
 
   .filter-dropdown-select:focus + .dropdown-options {
@@ -243,7 +242,7 @@
   .dropdown-options .dropdown-options-item.selected {
    background-color: #d7f1f9; 
    color: #333;
-   font-weight: bold; 
+   font-weight: bold;  
   }
 
   .dropdown-options.open {

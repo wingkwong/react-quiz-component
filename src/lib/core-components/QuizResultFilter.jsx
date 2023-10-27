@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -14,9 +15,24 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
 
   const selectedOptionClass = isOpen ? 'selected-open' : '';
 
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [isOpen]);
+
   return (
     <div className="quiz-result-filter">
       <div
+        ref={dropdownRef}
         className={`filter-dropdown-select ${isOpen ? 'open' : ''}`}
         onClick={toggleDropdown}
         onKeyDown={(e) => {
