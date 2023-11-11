@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.7.0
+
+- Fix lint issues
+- Refactor webpack, filter design
+- Update demo site
+- Add rollup
+- Bump dependencies
+
 ## 0.6.0
 
 - Display marks in questions (marksOfQuestion)
