@@ -1,18 +1,19 @@
 import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 
-const Core = function ({
+function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
   onQuestionSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
   const [endQuiz, setEndQuiz] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -27,7 +28,7 @@ const Core = function ({
 
   const [totalPoints, setTotalPoints] = useState(0);
   const [correctPoints, setCorrectPoints] = useState(0);
-  const [question, setQuestion] = useState(questions[currentQuestionIndex]);
+  const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
   const [questionSummary, setQuestionSummary] = useState(undefined);
 
   useEffect(() => {
@@ -35,14 +36,14 @@ const Core = function ({
   }, [showDefaultResult]);
 
   useEffect(() => {
-    setQuestion(questions[currentQuestionIndex]);
+    setActiveQuestion(questions[currentQuestionIndex]);
   }, [currentQuestionIndex]);
 
   useEffect(() => {
-    const { answerSelectionType } = question;
+    const { answerSelectionType } = activeQuestion;
     // Default single to avoid code breaking due to automatic version upgrade
     setAnswerSelectionType(answerSelectionType || 'single');
-  }, [question, currentQuestionIndex]);
+  }, [activeQuestion, currentQuestionIndex]);
 
   useEffect(() => {
     if (endQuiz) {
@@ -51,7 +52,7 @@ const Core = function ({
       for (let i = 0; i < questions.length; i += 1) {
         let point = questions[i].point || 0;
         if (typeof point === 'string' || point instanceof String) {
-          point = parseInt(point);
+          point = parseInt(point, 10);
         }
 
         totalPointsTemp += point;
@@ -85,7 +86,7 @@ const Core = function ({
 
   const nextQuestion = (currentQuestionIdx) => {
     setIncorrectAnswer(false);
-    setCorrectAnswer(false);
+    setIsCorrect(false);
     setShowNextQuestionButton(false);
     setButtons({});
 
@@ -130,17 +131,39 @@ const Core = function ({
       }
 
       return (
-        <div key={index}>
+        <div key={uuidv4()}>
           <button
+            type="button"
             disabled
             className={`answerBtn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
             {questionType === 'text' && <span>{answer}</span>}
-            {questionType === 'photo' && <img src={answer} alt="image" />}
+            {questionType === 'photo' && <img src={answer} alt="answer" />}
           </button>
         </div>
       );
     });
+  };
+
+  const renderTags = (answerSelectionType, numberOfSelection, segment) => {
+    const {
+      singleSelectionTagText,
+      multipleSelectionTagText,
+      pickNumberOfSelection,
+    } = appLocale;
+
+    return (
+      <div className="tag-container">
+        {answerSelectionType === 'single'
+          && <span className="single selection-tag">{singleSelectionTagText}</span>}
+        {answerSelectionType === 'multiple'
+          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        <span className="number-of-selection">
+          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
+        </span>
+        {segment && <span className="selection-tag segment">{segment}</span>}
+      </div>
+    );
   };
 
   const renderQuizResultQuestions = useCallback(() => {
@@ -164,9 +187,9 @@ const Core = function ({
       const answerSelectionType = question.answerSelectionType || 'single';
 
       return (
-        <div className="result-answer-wrapper" key={index + 1}>
+        <div className="result-answer-wrapper" key={uuidv4()}>
           <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
-          {question.questionPic && <img src={question.questionPic} alt="image" />}
+          {question.questionPic && <img src={question.questionPic} alt="question" />}
           {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
           <div className="result-answer">
             {renderAnswerInResult(question, userInputIndex)}
@@ -177,7 +200,7 @@ const Core = function ({
     });
   }, [endQuiz, filteredValue]);
 
-  const renderAnswers = (question, buttons) => {
+  const renderAnswers = (question, answerButtons) => {
     const {
       answers, correctAnswer, questionType, questionIndex,
     } = question;
@@ -191,7 +214,7 @@ const Core = function ({
       incorrect,
       correct,
       setButtons,
-      setCorrectAnswer,
+      setIsCorrect,
       setIncorrectAnswer,
       setCorrect,
       setIncorrect,
@@ -226,17 +249,17 @@ const Core = function ({
     answerSelectionType = answerSelectionType || 'single';
 
     return answers.map((answer, index) => (
-      <Fragment key={index}>
-        {(buttons[index] !== undefined)
+      <Fragment key={uuidv4()}>
+        {(answerButtons[index] !== undefined)
           ? (
             <button
               type="button"
-              disabled={buttons[index].disabled || false}
-              className={`${buttons[index].className} answerBtn btn`}
+              disabled={answerButtons[index].disabled || false}
+              className={`${answerButtons[index].className} answerBtn btn`}
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
-              {questionType === 'photo' && <img src={answer} alt="image" />}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
           )
           : (
@@ -246,32 +269,11 @@ const Core = function ({
               className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
             >
               {questionType === 'text' && answer}
-              {questionType === 'photo' && <img src={answer} alt="image" />}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
           )}
       </Fragment>
     ));
-  };
-
-  const renderTags = (answerSelectionType, numberOfSelection, segment) => {
-    const {
-      singleSelectionTagText,
-      multipleSelectionTagText,
-      pickNumberOfSelection,
-    } = appLocale;
-
-    return (
-      <div className="tag-container">
-        {answerSelectionType === 'single'
-          && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
-          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
-        <span className="number-of-selection">
-          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
-        </span>
-        {segment && <span className="selection-tag segment">{segment}</span>}
-      </div>
-    );
   };
 
   const renderResult = () => (
@@ -302,9 +304,9 @@ const Core = function ({
         <div className="questionWrapperBody">
           <div className="questionModal">
             <InstantFeedback
-              question={question}
+              question={activeQuestion}
               showInstantFeedback={showInstantFeedback}
-              correctAnswer={correctAnswer}
+              correctAnswer={isCorrect}
               incorrectAnswer={incorrectAnswer}
               onQuestionSubmit={onQuestionSubmit}
               userAnswer={[...userInput].pop()}
@@ -313,11 +315,11 @@ const Core = function ({
           <div>
             {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
           </div>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`${question && question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
+          <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
 
-          {question && question.questionPic && <img src={question.questionPic} alt="image" />}
-          {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
-          {question && renderAnswers(question, buttons)}
+          {activeQuestion && activeQuestion.questionPic && <img src={activeQuestion.questionPic} alt="question" />}
+          {activeQuestion && renderTags(answerSelectionTypeState, activeQuestion.correctAnswer.length, activeQuestion.segment)}
+          {activeQuestion && renderAnswers(activeQuestion, buttons)}
           {(showNextQuestionButton || allowNavigation)
           && (
           <div className="questionBtnContainer">
@@ -343,6 +345,6 @@ const Core = function ({
           && customResultPage(questionSummary)}
     </div>
   );
-};
+}
 
 export default Core;

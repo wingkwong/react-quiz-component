@@ -6,7 +6,7 @@ import quiz from './quiz';
 const container = document.getElementById('app');
 const root = createRoot(container);
 
-const App = function () {
+function App() {
   const [quizResult, setQuizResult] = useState();
 
   return (
@@ -23,6 +23,6 @@ const App = function () {
       />
     </div>
   );
-};
+}
 
 root.render(<App />);

@@ -15,7 +15,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
   incorrect,
   correct,
   setButtons,
-  setCorrectAnswer,
+  setIsCorrect,
   setIncorrectAnswer,
   setCorrect,
   setIncorrect,
@@ -49,7 +49,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
         },
       }));
 
-      setCorrectAnswer(true);
+      setIsCorrect(true);
       setIncorrectAnswer(false);
       setCorrect(correct);
       setShowNextQuestionButton(true);
@@ -84,7 +84,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
       }
 
       setIncorrectAnswer(true);
-      setCorrectAnswer(false);
+      setIsCorrect(false);
       setIncorrect(incorrect);
     }
   } else {
@@ -128,7 +128,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
       if (cnt === maxNumberOfMultipleSelection) {
         correct.push(currentQuestionIndex);
 
-        setCorrectAnswer(true);
+        setIsCorrect(true);
         setIncorrectAnswer(false);
         setCorrect(correct);
         setShowNextQuestionButton(true);
@@ -137,7 +137,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
         incorrect.push(currentQuestionIndex);
 
         setIncorrectAnswer(true);
-        setCorrectAnswer(false);
+        setIsCorrect(false);
         setIncorrect(incorrect);
         setShowNextQuestionButton(true);
         setUserAttempt(1);

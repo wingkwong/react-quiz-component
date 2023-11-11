@@ -1,14 +1,13 @@
 {
   "name": "react-quiz-component",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "React Quiz Component",
-  "main": "lib/Quiz.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "scripts": {
-    "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
-    "lib": "babel src/lib -d lib --copy-files",
-    "lib:watch": "babel src/lib -w -d lib --copy-files",
-    "docs": "webpack-dev-server --mode development",
-    "docs:prod": "webpack --mode production",
+    "dev": "webpack-dev-server --mode development",
+    "docs": "webpack --mode production",
+    "build": "rollup -c",
     "lint": "eslint src --ext .jsx --ext .js --fix"
   },
   "keywords": [
@@ -20,15 +19,18 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
     "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
     "@babel/preset-env": "^7.3.1",
-    "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^9.0.0",
-    "concurrently": "^8.0.0",
-    "css-loader": "^6.0.0",
+    "@babel/preset-react": "^7.23.3",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-html": "^1.0.3",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
+    "babel-loader": "^9.1.3",
     "eslint": "^8.4.1",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-plugin-import": "^2.25.3",
@@ -37,10 +39,16 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-webpack-plugin": "5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
+    "css-minimizer-webpack-plugin": "^5.0.1",
     "prop-types": "^15.7.2",
+    "rollup": "^4.3.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-dev-server": "^4.7.4",
+    "css-loader": "^6.0.0"
   },
   "author": "WK Wong <wingkwong.code@gmail.com>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
@@ -49,10 +57,10 @@
     "url": "https://github.com/wingkwong/react-quiz-component.git"
   },
   "dependencies": {
-    "@webpack-cli/serve": "^1.6.1",
     "dompurify": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "snarkdown": "^2.0.0"
+    "snarkdown": "^2.0.0",
+    "uuid": "^9.0.1"
   }
 }

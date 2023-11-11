@@ -1,4 +1,10 @@
 docs
 src
 .babelrc
+.eslintrc.yml
+.gitignore
+.npmignore
 webpack.config.js
+rollup.config.mjs
+renovate.json
+package-lock.json

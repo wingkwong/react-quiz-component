@@ -3,7 +3,7 @@ import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
 
-const Quiz = function ({
+function Quiz({
   quiz,
   shuffle,
   shuffleAnswer,
@@ -212,6 +212,6 @@ const Quiz = function ({
       )}
     </div>
   );
-};
+}
 
 export default Quiz;

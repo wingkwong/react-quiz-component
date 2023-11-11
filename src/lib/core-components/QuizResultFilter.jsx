@@ -1,15 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const QuizResultFilter = function ({ filteredValue, handleChange, appLocale }) {
+function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (value) => {
+    handleChange({ target: { value } });
+    setIsOpen(false);
+  };
+
+  const selectedOptionClass = isOpen ? 'selected-open' : '';
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [isOpen]);
+
   return (
     <div className="quiz-result-filter">
-      <select value={filteredValue} onChange={handleChange}>
-        <option value="all">{appLocale.resultFilterAll}</option>
-        <option value="correct">{appLocale.resultFilterCorrect}</option>
-        <option value="incorrect">{appLocale.resultFilterIncorrect}</option>
-      </select>
+      <div
+        ref={dropdownRef}
+        className={`filter-dropdown-select ${isOpen ? 'open' : ''}`}
+        onClick={toggleDropdown}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            toggleDropdown();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <div className={`selected-option ${selectedOptionClass}`}>
+          {filteredValue === 'all' ? appLocale.resultFilterAll : filteredValue}
+        </div>
+        <span className={`arrow ${isOpen ? 'up' : 'down'}`} />
+      </div>
+      {isOpen && (
+        <div
+          className="dropdown-options"
+          role="menu"
+          aria-labelledby="quiz-filter"
+        >
+          <div
+            className={`dropdown-options-item ${filteredValue === 'all' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('all')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleOptionClick('all');
+              }
+            }}
+            role="menuitem"
+            tabIndex={0}
+          >
+            {appLocale.resultFilterAll}
+          </div>
+          <div
+            className={`dropdown-options-item ${filteredValue === 'correct' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('correct')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleOptionClick('correct');
+              }
+            }}
+            role="menuitem"
+            tabIndex={0}
+          >
+            {appLocale.resultFilterCorrect}
+          </div>
+          <div
+            className={`dropdown-options-item ${filteredValue === 'incorrect' ? 'selected' : ''}`}
+            onClick={() => handleOptionClick('incorrect')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleOptionClick('incorrect');
+              }
+            }}
+            role="menuitem"
+            tabIndex={0}
+          >
+            {appLocale.resultFilterIncorrect}
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default QuizResultFilter;
