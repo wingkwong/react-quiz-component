@@ -45,6 +45,8 @@ function Core({
     setAnswerSelectionType(answerSelectionType || 'single');
   }, [activeQuestion, currentQuestionIndex]);
 
+// todo: i have no idea, i'm just testing 
+
   useEffect(() => {
     if (endQuiz) {
       let totalPointsTemp = 0;
