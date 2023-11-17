@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
+import {useState} from 'react'
+import Countdown from 'react-countdown-simple';
 import './styles.css';
 
 function Quiz({
@@ -18,6 +20,7 @@ function Quiz({
   disableSynopsis,
 }) {
   const [start, setStart] = useState(false);
+    const [oneHour,setOneHour]=useState('')
   const [questions, setQuestions] = useState(quiz.questions);
   const nrOfQuestions = quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
     ? quiz.nrOfQuestions
@@ -70,7 +73,10 @@ function Quiz({
   useEffect(() => {
     if (disableSynopsis) setStart(true);
   }, []);
-
+    const Hour = new Date(
+  new Date().setHours(new Date().getHours() + 1)
+).toISOString()
+  setOneHour(Hour)
   useEffect(() => {
     let newQuestions = quiz.questions;
 
@@ -178,7 +184,7 @@ function Quiz({
     <div className="react-quiz-container">
       {!start && (
         <div>
-          <h2>{quiz.quizTitle}</h2>
+          <h2 className='font-semibold'>{quiz.quizTitle}</h2>
           <div>
             {appLocale.landingHeaderText.replace(
               '<questionLength>',
@@ -197,6 +203,7 @@ function Quiz({
       )}
 
       {start && (
+      <Countdown targetDate={oneHour} />
         <Core
           questions={questions}
           showDefaultResult={showDefaultResult}
