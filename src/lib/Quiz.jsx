@@ -178,7 +178,7 @@ function Quiz({
     <div className="react-quiz-container">
       {!start && (
         <div>
-          <h2>{quiz.quizTitle}</h2>
+          <h2 className='font-semibold'>{quiz.quizTitle}</h2>
           <div>
             {appLocale.landingHeaderText.replace(
               '<questionLength>',
