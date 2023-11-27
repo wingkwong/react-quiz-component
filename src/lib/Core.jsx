@@ -10,7 +10,7 @@ import Explanation from './core-components/Explanation';
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit,
+  onQuestionSubmit,questionSolved
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -297,6 +297,7 @@ function Core({
       {renderQuizResultQuestions()}
     </div>
   );
+
   return (
     <div className="questionWrapper">
       {!endQuiz
@@ -312,8 +313,10 @@ function Core({
               userAnswer={[...userInput].pop()}
             />
           </div>
-          <div>
+          <div style={{display: 'flex',justifyContent: 'space-between',alignItems:'center'}}>
             {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
+            {/* Timer will come here */}
+            
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
 
@@ -332,7 +335,9 @@ function Core({
                 {appLocale.prevQuestionBtn}
               </button>
             )}
-            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn" type="button">
+            <button onClick={() => {
+              questionSolved()
+              nextQuestion(currentQuestionIndex)}} className="nextQuestionBtn btn" type="button">
               {appLocale.nextQuestionBtn}
             </button>
           </div>

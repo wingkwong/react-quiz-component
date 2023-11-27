@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
+import Timer from './Timer'
 
 function Quiz({
   quiz,
@@ -174,6 +175,12 @@ function Quiz({
     ...quiz.appLocale,
   };
 
+  //Timer----------------------------
+  const [noOfQuestionAttempted,setNoOfQuestionAttempted] = useState(1)
+  const questionSolved = ()=>{
+    console.log(noOfQuestionAttempted)
+    setNoOfQuestionAttempted(noOfQuestionAttempted+1)
+  }
   return (
     <div className="react-quiz-container">
       {!start && (
@@ -195,9 +202,13 @@ function Quiz({
           </div>
         </div>
       )}
+      
 
       {start && (
+        <>
+        <Timer stopTimer={noOfQuestionAttempted>quiz.questions.length}/>
         <Core
+          questionSolved={questionSolved}
           questions={questions}
           showDefaultResult={showDefaultResult}
           onComplete={onComplete}
@@ -209,6 +220,8 @@ function Quiz({
           appLocale={appLocale}
           onQuestionSubmit={onQuestionSubmit}
         />
+        </>
+        
       )}
     </div>
   );
