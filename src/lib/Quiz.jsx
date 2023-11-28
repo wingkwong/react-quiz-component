@@ -20,6 +20,7 @@ function Quiz({
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
+  const [endQuiz, setEndQuiz] = useState(false);
   const nrOfQuestions = quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
     ? quiz.nrOfQuestions
     : quiz.questions.length;
@@ -175,14 +176,9 @@ function Quiz({
     ...quiz.appLocale,
   };
 
-  //Timer----------------------------
-  const [noOfQuestionAttempted,setNoOfQuestionAttempted] = useState(1)
-  const questionSolved = ()=>{
-    console.log(noOfQuestionAttempted)
-    setNoOfQuestionAttempted(noOfQuestionAttempted+1)
-  }
   return (
     <div className="react-quiz-container">
+      <Timer stopTimer={endQuiz}/>
       {!start && (
         <div>
           <h2>{quiz.quizTitle}</h2>
@@ -206,9 +202,9 @@ function Quiz({
 
       {start && (
         <>
-        <Timer stopTimer={noOfQuestionAttempted>quiz.questions.length}/>
         <Core
-          questionSolved={questionSolved}
+          endQuiz={endQuiz}
+          setEndQuiz={setEndQuiz}
           questions={questions}
           showDefaultResult={showDefaultResult}
           onComplete={onComplete}

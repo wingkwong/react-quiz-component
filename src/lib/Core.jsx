@@ -10,12 +10,12 @@ import Explanation from './core-components/Explanation';
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit,questionSolved
+  onQuestionSubmit,endQuiz,setEndQuiz
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
-  const [endQuiz, setEndQuiz] = useState(false);
+  // const [endQuiz, setEndQuiz] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [buttons, setButtons] = useState({});
   const [correct, setCorrect] = useState([]);
@@ -290,12 +290,14 @@ function Core({
       </h2>
       <br />
       <QuizResultFilter
+        endQuiz = {endQuiz}
         filteredValue={filteredValue}
         handleChange={handleChange}
         appLocale={appLocale}
       />
       {renderQuizResultQuestions()}
     </div>
+    
   );
 
   return (
@@ -315,8 +317,6 @@ function Core({
           </div>
           <div style={{display: 'flex',justifyContent: 'space-between',alignItems:'center'}}>
             {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
-            {/* Timer will come here */}
-            
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
 
@@ -336,7 +336,6 @@ function Core({
               </button>
             )}
             <button onClick={() => {
-              questionSolved()
               nextQuestion(currentQuestionIndex)}} className="nextQuestionBtn btn" type="button">
               {appLocale.nextQuestionBtn}
             </button>
