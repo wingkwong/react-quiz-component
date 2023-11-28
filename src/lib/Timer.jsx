@@ -1,4 +1,7 @@
+// Timer.jsx
+
 import React, { useState, useEffect } from 'react';
+import './styles.css';
 
 const Timer = ({ stopTimer }) => {
   const [minute, setMinute] = useState(0);
@@ -23,14 +26,14 @@ const Timer = ({ stopTimer }) => {
   }, [stopTimer, second]);
 
   return (
-    <div>
+    <div className="timer-container">
       {stopTimer ? (
         <div>
-          <h3>Total time taken: {`${minute}:${second} seconds`}</h3>
+          <h3 className="total-time">Total time taken: {`${minute}:${second} seconds`}</h3>
         </div>
       ) : (
-        <p>
-          {`${minute}:${second < 10 ? '0' : ''}${second}`}
+        <p className="timer">
+          {`Time: ${minute}:${second < 10 ? '0' : ''}${second}`}
         </p>
       )}
     </div>

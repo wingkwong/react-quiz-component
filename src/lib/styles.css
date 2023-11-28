@@ -249,3 +249,23 @@
     max-height: 200px;  
   }
 }
+
+/* timer css */
+/* Timer.css */
+
+.timer-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.timer {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.total-time {
+  font-size: 18px;
+  color: green;
+}
+
+/* Add more styles as needed */

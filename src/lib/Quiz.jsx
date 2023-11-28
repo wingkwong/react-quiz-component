@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
-import Timer from './Timer'
 
 function Quiz({
   quiz,
@@ -178,7 +177,6 @@ function Quiz({
 
   return (
     <div className="react-quiz-container">
-      <Timer stopTimer={endQuiz}/>
       {!start && (
         <div>
           <h2>{quiz.quizTitle}</h2>
@@ -203,8 +201,6 @@ function Quiz({
       {start && (
         <>
         <Core
-          endQuiz={endQuiz}
-          setEndQuiz={setEndQuiz}
           questions={questions}
           showDefaultResult={showDefaultResult}
           onComplete={onComplete}

@@ -6,16 +6,17 @@ import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
+import Timer from './Timer'
 
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit,endQuiz,setEndQuiz
+  onQuestionSubmit
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
-  // const [endQuiz, setEndQuiz] = useState(false);
+  const [endQuiz, setEndQuiz] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [buttons, setButtons] = useState({});
   const [correct, setCorrect] = useState([]);
@@ -302,6 +303,7 @@ function Core({
 
   return (
     <div className="questionWrapper">
+      <Timer stopTimer={endQuiz}/>
       {!endQuiz
         && (
         <div className="questionWrapperBody">
@@ -315,7 +317,7 @@ function Core({
               userAnswer={[...userInput].pop()}
             />
           </div>
-          <div style={{display: 'flex',justifyContent: 'space-between',alignItems:'center'}}>
+          <div>
             {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
           </div>
           <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
