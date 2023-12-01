@@ -6,12 +6,12 @@ import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
-import Timer from './Timer'
+import Timer from './Timer';
 
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit
+  onQuestionSubmit,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -291,19 +291,18 @@ function Core({
       </h2>
       <br />
       <QuizResultFilter
-        endQuiz = {endQuiz}
         filteredValue={filteredValue}
         handleChange={handleChange}
         appLocale={appLocale}
       />
       {renderQuizResultQuestions()}
     </div>
-    
+
   );
 
   return (
     <div className="questionWrapper">
-      <Timer stopTimer={endQuiz}/>
+      <Timer stopTimer={endQuiz} />
       {!endQuiz
         && (
         <div className="questionWrapperBody">
@@ -337,8 +336,13 @@ function Core({
                 {appLocale.prevQuestionBtn}
               </button>
             )}
-            <button onClick={() => {
-              nextQuestion(currentQuestionIndex)}} className="nextQuestionBtn btn" type="button">
+            <button
+              onClick={() => {
+                nextQuestion(currentQuestionIndex);
+              }}
+              className="nextQuestionBtn btn"
+              type="button"
+            >
               {appLocale.nextQuestionBtn}
             </button>
           </div>

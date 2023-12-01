@@ -19,7 +19,6 @@ function Quiz({
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
-  const [endQuiz, setEndQuiz] = useState(false);
   const nrOfQuestions = quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
     ? quiz.nrOfQuestions
     : quiz.questions.length;
@@ -196,10 +195,8 @@ function Quiz({
           </div>
         </div>
       )}
-      
 
       {start && (
-        <>
         <Core
           questions={questions}
           showDefaultResult={showDefaultResult}
@@ -212,8 +209,7 @@ function Quiz({
           appLocale={appLocale}
           onQuestionSubmit={onQuestionSubmit}
         />
-        </>
-        
+
       )}
     </div>
   );
