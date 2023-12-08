@@ -255,9 +255,10 @@ function Core({
             <button
               type="button"
               disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className} answerBtn btn`}
+              className={`${answerButtons[index].className} answerBtn btn ${(index+1==correctAnswer&&showInstantFeedback)?'correct':''}`}
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
+              {/* {<div>index +{index}and correct answer is:{correctAnswer}</div>} */}
               {questionType === 'text' && <span>{answer}</span>}
               {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
@@ -268,6 +269,8 @@ function Core({
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
               className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
             >
+{/* {<div>before Trinh selelct</div>} */}
+
               {questionType === 'text' && answer}
               {questionType === 'photo' && <img src={answer} alt="answer" />}
             </button>
