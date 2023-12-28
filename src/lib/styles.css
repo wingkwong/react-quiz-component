@@ -249,3 +249,34 @@
     max-height: 200px;  
   }
 }
+
+
+.timer-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.timer {
+  font-size: 20px;
+  color: #333;
+}
+
+.total-time {
+  font-size: 20px;
+  color: #008000; /* Green color for total time */
+}
+
+.hide-show-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4caf50; /* Green background color */
+  color: #fff; /* White text color */
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.hide-show-btn:hover {
+  background-color: #45a049; /* Darker green color on hover */
+}

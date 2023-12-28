@@ -6,6 +6,7 @@ import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
+import Timer from './Timer'
 
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
@@ -299,6 +300,7 @@ function Core({
   );
   return (
     <div className="questionWrapper">
+    <Timer stopTimer={endQuiz} />
       {!endQuiz
         && (
         <div className="questionWrapperBody">
