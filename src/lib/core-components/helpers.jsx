@@ -6,7 +6,7 @@ export const rawMarkup = (data) => {
   return { __html: snarkdown(sanitizer(data)) };
 };
 
-export const checkAnswer = (index, correctAnswer, answerSelectionType, {
+export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, {
   userInput,
   userAttempt,
   currentQuestionIndex,
@@ -125,6 +125,15 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, {
         }
       }
 
+      for (let i = 0; i < answers.length; i += 1) {
+        if (correctAnswer.includes(i + 1)) {
+          setButtons((prevState) => ({
+            ...prevState,
+            [i]: {},
+          }));
+        }
+      }
+
       if (cnt === maxNumberOfMultipleSelection) {
         correct.push(currentQuestionIndex);
 
@@ -210,6 +219,7 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
 
     if (userInputCopy[currentQuestionIndex].length === correctAnswer.length) {
       let exactMatch = true;
+      // eslint-disable-next-line no-restricted-syntax
       for (const input of userInput[currentQuestionIndex]) {
         if (!correctAnswer.includes(input)) {
           exactMatch = false;

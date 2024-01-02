@@ -166,6 +166,15 @@ function Core({
     );
   };
 
+  const isCorrectCheck = (index, correctA) => {
+    if (typeof correctA === 'string') {
+      return index === Number(correctA);
+    } if (typeof correctA === 'object') {
+      return String(correctA).includes(String(index));
+    }
+    return false;
+  };
+
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -205,7 +214,7 @@ function Core({
       answers, correctAnswer, questionType, questionIndex,
     } = question;
     let { answerSelectionType } = question;
-    const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, {
+    const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
       userInput,
       userAttempt,
       currentQuestionIndex,
@@ -255,7 +264,11 @@ function Core({
             <button
               type="button"
               disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className} answerBtn btn`}
+              className={`${answerButtons[index].className} answerBtn btn ${
+                isCorrectCheck(index + 1, correctAnswer) && showInstantFeedback
+                  ? 'correct'
+                  : ''
+              }`}
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
