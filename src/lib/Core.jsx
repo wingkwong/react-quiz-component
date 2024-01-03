@@ -37,11 +37,7 @@ function Core({
 
   useEffect(() => {
     setActiveQuestion(questions[currentQuestionIndex]);
-  }, [questions]);
-
-  useEffect(() => {
-    setActiveQuestion(questions[currentQuestionIndex]);
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, questions]);
 
   useEffect(() => {
     const { answerSelectionType } = activeQuestion;
