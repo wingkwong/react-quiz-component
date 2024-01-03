@@ -169,9 +169,12 @@ function Core({
   const isCorrectCheck = (index, correctAnswerIndex) => {
     if (typeof correctAnswerIndex === 'string') {
       return index === Number(correctAnswerIndex);
-    } if (typeof correctAnswerIndex === 'object') {
-      return correctAnswerIndex.some((element) => element === index);
     }
+
+    if (typeof correctAnswerIndex === 'object') {
+      return correctAnswerIndex.find((element) => element === index) !== undefined;
+    }
+
     return false;
   };
 
