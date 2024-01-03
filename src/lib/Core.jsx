@@ -166,11 +166,11 @@ function Core({
     );
   };
 
-  const isCorrectCheck = (index, correctA) => {
-    if (typeof correctA === 'string') {
-      return index === Number(correctA);
-    } if (typeof correctA === 'object') {
-      return String(correctA).includes(String(index));
+  const isCorrectCheck = (index, correctAnswerIndex) => {
+    if (typeof correctAnswerIndex === 'string') {
+      return index === Number(correctAnswerIndex);
+    } if (typeof correctAnswerIndex === 'object') {
+      return correctAnswerIndex.some((element) => element === index);
     }
     return false;
   };
