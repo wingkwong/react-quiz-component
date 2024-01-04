@@ -16,6 +16,8 @@ function Quiz({
   allowNavigation,
   onQuestionSubmit,
   disableSynopsis,
+  timer,
+  allowPauseTimer,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -208,6 +210,8 @@ function Quiz({
           allowNavigation={allowNavigation}
           appLocale={appLocale}
           onQuestionSubmit={onQuestionSubmit}
+          timer={timer}
+          allowPauseTimer={allowPauseTimer}
         />
       )}
     </div>
