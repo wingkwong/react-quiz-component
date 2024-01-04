@@ -15,7 +15,7 @@ function App() {
         quiz={quiz}
         shuffle
         shuffleAnswer
-      // showInstantFeedback
+        showInstantFeedback
       // continueTillCorrect
         onComplete={setQuizResult}
         onQuestionSubmit={(obj) => console.log('user question results:', obj)}
