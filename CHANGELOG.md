@@ -1,23 +1,29 @@
 # CHANGELOG
 
+## 0.7.1
+
+- Bumped dependencies
+- Fixed duplicate question on shuffle
+- Fixed missing correct answers when setting showInstantfeedback to true
+
 ## 0.7.0
 
-- Fix lint issues
-- Refactor webpack, filter design
-- Update demo site
-- Add rollup
-- Bump dependencies
+- Fixed lint issues
+- Refactored webpack, filter design
+- Updated demo site
+- Added rollup
+- Bumped dependencies
 
 ## 0.6.0
 
-- Display marks in questions (marksOfQuestion)
-- Bump dependencies
-- Add renovate
-- Add ShuffleAnswer
-- Add total count of questions
+- Displayed marks in questions (marksOfQuestion)
+- Bumped dependencies
+- Added renovate
+- Added ShuffleAnswer
+- Added total count of questions
 - Responsive Design
-- Revise demo site
-- Fix Scrolling
+- Revised demo site
+- Fixed Scrolling
 
 ## 0.5.1
 
