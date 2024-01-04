@@ -98,6 +98,16 @@ function Quiz({
       return false;
     }
 
+    if ((timer && typeof timer !== 'number') || (timer < 1)) {
+      console.error(timer && typeof timer !== 'number' ? 'timer must be a number' : 'timer must be a number greater than 0');
+      return false;
+    }
+
+    if (allowPauseTimer && typeof allowPauseTimer !== 'boolean') {
+      console.error('allowPauseTimer must be a Boolean');
+      return false;
+    }
+
     for (let i = 0; i < questions.length; i += 1) {
       const {
         question,

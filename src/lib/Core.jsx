@@ -131,7 +131,7 @@ function Core({
         && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '';
 
         if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
-          answerBtnIncorrectClassName = ' unanswered';
+          answerBtnIncorrectClassName = 'unanswered';
         }
       } else {
         // correctAnswer - is array of numbers
@@ -142,7 +142,7 @@ function Core({
         && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
 
         if (userInputIndex === undefined && !correctAnswer.includes(index + 1)) {
-          answerBtnIncorrectClassName = ' unanswered';
+          answerBtnIncorrectClassName = 'unanswered';
         }
       }
 
@@ -199,28 +199,18 @@ function Core({
     let filteredUserInput;
 
     if (filteredValue !== 'all') {
+      let targetQuestions = unanswered;
       if (filteredValue === 'correct') {
-        filteredQuestions = questions.filter(
-          (question, index) => correct.indexOf(index) !== -1,
-        );
-        filteredUserInput = userInput.filter(
-          (input, index) => correct.indexOf(index) !== -1,
-        );
+        targetQuestions = correct;
       } else if (filteredValue === 'incorrect') {
-        filteredQuestions = questions.filter(
-          (question, index) => incorrect.indexOf(index) !== -1,
-        );
-        filteredUserInput = userInput.filter(
-          (input, index) => incorrect.indexOf(index) !== -1,
-        );
-      } else if (filteredValue === 'unanswered') {
-        filteredQuestions = questions.filter(
-          (question, index) => unanswered.indexOf(index) !== -1,
-        );
-        filteredUserInput = userInput.filter(
-          (input, index) => unanswered.indexOf(index) !== -1,
-        );
+        targetQuestions = incorrect;
       }
+      filteredQuestions = questions.filter(
+        (_, index) => targetQuestions.indexOf(index) !== -1,
+      );
+      filteredUserInput = userInput.filter(
+        (_, index) => targetQuestions.indexOf(index) !== -1,
+      );
     }
 
     return (filteredQuestions || questions).map((question, index) => {
@@ -382,13 +372,14 @@ function Core({
     setIsRunning(!isRunning);
   };
 
+  const formatTime = (time) => (time < 10 ? '0' : '');
   const displayTime = (time) => {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
 
-    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${
-      seconds < 10 ? '0' : ''
+    return `${formatTime(hours)}${hours}:${formatTime(minutes)}${minutes}:${
+      formatTime(seconds)
     }${seconds}`;
   };
 
@@ -402,14 +393,16 @@ function Core({
     <div className="questionWrapper">
       {timer && !isRunning && (
         <div>
-          Time Taken:
+          {appLocale.timerTimeTaken}
+          :
           <b>{displayTime(timer - timeRemaining)}</b>
         </div>
       )}
 
       {timer && isRunning && (
         <div>
-          Time Remaining:
+          {appLocale.timerTimeRemaining}
+          :
           <b>{displayTime(timeRemaining)}</b>
         </div>
       )}
@@ -424,7 +417,7 @@ function Core({
             <br />
             {timer && allowPauseTimer && (
               <button type="button" className="timerBtn" onClick={toggleTimer}>
-                {isRunning ? 'Pause' : 'Resume'}
+                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
               </button>
             )}
           </div>
@@ -449,6 +442,16 @@ function Core({
                   activeQuestion.correctAnswer.length,
                   activeQuestion.segment,
                 )}
+              <div className="questionModal">
+                <InstantFeedback
+                  question={activeQuestion}
+                  showInstantFeedback={showInstantFeedback}
+                  correctAnswer={isCorrect}
+                  incorrectAnswer={incorrectAnswer}
+                  onQuestionSubmit={onQuestionSubmit}
+                  userAnswer={[...userInput].pop()}
+                />
+              </div>
               {activeQuestion && renderAnswers(activeQuestion, buttons)}
               {(showNextQuestionButton || allowNavigation) && (
                 <div className="questionBtnContainer">
@@ -469,17 +472,6 @@ function Core({
                   >
                     {appLocale.nextQuestionBtn}
                   </button>
-
-                  <div className="questionModal">
-                    <InstantFeedback
-                      question={activeQuestion}
-                      showInstantFeedback={showInstantFeedback}
-                      correctAnswer={isCorrect}
-                      incorrectAnswer={incorrectAnswer}
-                      onQuestionSubmit={onQuestionSubmit}
-                      userAnswer={[...userInput].pop()}
-                    />
-                  </div>
                 </div>
               )}
             </>
