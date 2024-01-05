@@ -55,7 +55,9 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
           aria-labelledby="quiz-filter"
         >
           <div
-            className={`dropdown-options-item ${filteredValue === 'all' ? 'selected' : ''}`}
+            className={`dropdown-options-item ${
+              filteredValue === 'all' ? 'selected' : ''
+            }`}
             onClick={() => handleOptionClick('all')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -68,7 +70,9 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
             {appLocale.resultFilterAll}
           </div>
           <div
-            className={`dropdown-options-item ${filteredValue === 'correct' ? 'selected' : ''}`}
+            className={`dropdown-options-item ${
+              filteredValue === 'correct' ? 'selected' : ''
+            }`}
             onClick={() => handleOptionClick('correct')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -81,7 +85,9 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
             {appLocale.resultFilterCorrect}
           </div>
           <div
-            className={`dropdown-options-item ${filteredValue === 'incorrect' ? 'selected' : ''}`}
+            className={`dropdown-options-item ${
+              filteredValue === 'incorrect' ? 'selected' : ''
+            }`}
             onClick={() => handleOptionClick('incorrect')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -92,6 +98,21 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
             tabIndex={0}
           >
             {appLocale.resultFilterIncorrect}
+          </div>
+          <div
+            className={`dropdown-options-item ${
+              filteredValue === 'unanswered' ? 'selected' : ''
+            }`}
+            onClick={() => handleOptionClick('unanswered')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleOptionClick('unanswered');
+              }
+            }}
+            role="menuitem"
+            tabIndex={0}
+          >
+            {appLocale.resultFilterUnanswered}
           </div>
         </div>
       )}

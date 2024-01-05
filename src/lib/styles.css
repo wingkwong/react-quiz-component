@@ -41,6 +41,24 @@
   color: white;
 }
 
+.timerBtn {
+  background: green;
+  border: 0 !important;
+  width: 80px;
+  color: #fff;
+  padding: 5px;
+  top: -35px;
+  border-radius: 10px;
+  position: relative;
+  float: right;
+  cursor: pointer;
+}
+
+.timerPauseScreen {
+  font-size: 30px;
+}
+
+
 .react-quiz-container .questionModal .alert {
   padding: 20px;
   margin-bottom: 21px;
@@ -55,6 +73,11 @@
 
 .react-quiz-container .incorrect {
   background: red;
+  color: white;
+}
+
+.react-quiz-container .unanswered {
+  background: grey;
   color: white;
 }
 

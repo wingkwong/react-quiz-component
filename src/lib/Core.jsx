@@ -10,7 +10,7 @@ import Explanation from './core-components/Explanation';
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit,
+  onQuestionSubmit, timer, allowPauseTimer,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -20,6 +20,7 @@ function Core({
   const [buttons, setButtons] = useState({});
   const [correct, setCorrect] = useState([]);
   const [incorrect, setIncorrect] = useState([]);
+  const [unanswered, setUnanswered] = useState([]);
   const [userInput, setUserInput] = useState([]);
   const [filteredValue, setFilteredValue] = useState('all');
   const [userAttempt, setUserAttempt] = useState(1);
@@ -30,6 +31,8 @@ function Core({
   const [correctPoints, setCorrectPoints] = useState(0);
   const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
   const [questionSummary, setQuestionSummary] = useState(undefined);
+  const [timeRemaining, setTimeRemaining] = useState(timer);
+  const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
     setShowDefaultResult(showDefaultResult !== undefined ? showDefaultResult : true);
@@ -47,6 +50,7 @@ function Core({
 
   useEffect(() => {
     if (endQuiz) {
+      setIsRunning(false);
       let totalPointsTemp = 0;
       let correctPointsTemp = 0;
       for (let i = 0; i < questions.length; i += 1) {
@@ -122,12 +126,24 @@ function Core({
     return answers.map((answer, index) => {
       if (answerSelectionType === 'single') {
         // correctAnswer - is string
-        answerBtnCorrectClassName = (`${index + 1}` === correctAnswer ? 'correct' : '');
-        answerBtnIncorrectClassName = (`${userInputIndex}` !== correctAnswer && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '');
+        answerBtnCorrectClassName = `${index + 1}` === correctAnswer ? 'correct' : '';
+        answerBtnIncorrectClassName = `${userInputIndex}` !== correctAnswer
+        && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '';
+
+        if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
+          answerBtnIncorrectClassName = 'unanswered';
+        }
       } else {
         // correctAnswer - is array of numbers
-        answerBtnCorrectClassName = (correctAnswer.includes(index + 1) ? 'correct' : '');
-        answerBtnIncorrectClassName = (!correctAnswer.includes(index + 1) && userInputIndex.includes(index + 1) ? 'incorrect' : '');
+        answerBtnCorrectClassName = correctAnswer.includes(index + 1)
+          ? 'correct'
+          : '';
+        answerBtnIncorrectClassName = !correctAnswer.includes(index + 1)
+        && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
+
+        if (userInputIndex === undefined && !correctAnswer.includes(index + 1)) {
+          answerBtnIncorrectClassName = 'unanswered';
+        }
       }
 
       return (
@@ -183,26 +199,45 @@ function Core({
     let filteredUserInput;
 
     if (filteredValue !== 'all') {
+      let targetQuestions = unanswered;
       if (filteredValue === 'correct') {
-        filteredQuestions = questions.filter((question, index) => correct.indexOf(index) !== -1);
-        filteredUserInput = userInput.filter((input, index) => correct.indexOf(index) !== -1);
-      } else {
-        filteredQuestions = questions.filter((question, index) => incorrect.indexOf(index) !== -1);
-        filteredUserInput = userInput.filter((input, index) => incorrect.indexOf(index) !== -1);
+        targetQuestions = correct;
+      } else if (filteredValue === 'incorrect') {
+        targetQuestions = incorrect;
       }
+      filteredQuestions = questions.filter(
+        (_, index) => targetQuestions.indexOf(index) !== -1,
+      );
+      filteredUserInput = userInput.filter(
+        (_, index) => targetQuestions.indexOf(index) !== -1,
+      );
     }
 
     return (filteredQuestions || questions).map((question, index) => {
-      const userInputIndex = filteredUserInput ? filteredUserInput[index] : userInput[index];
+      const userInputIndex = filteredUserInput
+        ? filteredUserInput[index]
+        : userInput[index];
 
       // Default single to avoid code breaking due to automatic version upgrade
       const answerSelectionType = question.answerSelectionType || 'single';
 
       return (
         <div className="result-answer-wrapper" key={uuidv4()}>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question} ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`)} />
-          {question.questionPic && <img src={question.questionPic} alt="question" />}
-          {renderTags(answerSelectionType, question.correctAnswer.length, question.segment)}
+          <h3
+            dangerouslySetInnerHTML={rawMarkup(
+              `Q${question.questionIndex}: ${
+                question.question
+              } ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`,
+            )}
+          />
+          {question.questionPic && (
+            <img src={question.questionPic} alt="question" />
+          )}
+          {renderTags(
+            answerSelectionType,
+            question.correctAnswer.length,
+            question.segment,
+          )}
           <div className="result-answer">
             {renderAnswerInResult(question, userInputIndex)}
           </div>
@@ -292,6 +327,14 @@ function Core({
     ));
   };
 
+  const getUnansweredQuestions = () => {
+    questions.forEach((question, index) => {
+      if (userInput[index] === undefined) {
+        setUnanswered((oldArray) => [...oldArray, index]);
+      }
+    });
+  };
+
   const renderResult = () => (
     <div className="card-body">
       <h2>
@@ -313,48 +356,134 @@ function Core({
       {renderQuizResultQuestions()}
     </div>
   );
+
+  useEffect(() => {
+    let countdown;
+
+    if (timer && isRunning && timeRemaining > 0) {
+      countdown = setInterval(() => {
+        setTimeRemaining((prevTime) => prevTime - 1);
+      }, 1000);
+    }
+    return () => timer && clearInterval(countdown);
+  }, [isRunning, timeRemaining, timer]);
+
+  const toggleTimer = () => {
+    setIsRunning(!isRunning);
+  };
+
+  const formatTime = (time) => (time < 10 ? '0' : '');
+  const displayTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+
+    return `${formatTime(hours)}${hours}:${formatTime(minutes)}${minutes}:${
+      formatTime(seconds)
+    }${seconds}`;
+  };
+
+  const handleTimeUp = () => {
+    setIsRunning(false);
+    setEndQuiz(true);
+    getUnansweredQuestions();
+  };
+
   return (
     <div className="questionWrapper">
-      {!endQuiz
-        && (
-        <div className="questionWrapperBody">
-          <div className="questionModal">
-            <InstantFeedback
-              question={activeQuestion}
-              showInstantFeedback={showInstantFeedback}
-              correctAnswer={isCorrect}
-              incorrectAnswer={incorrectAnswer}
-              onQuestionSubmit={onQuestionSubmit}
-              userAnswer={[...userInput].pop()}
-            />
-          </div>
-          <div>
-            {`${appLocale.question} ${(currentQuestionIndex + 1)} / ${questions.length}:`}
-          </div>
-          <h3 dangerouslySetInnerHTML={rawMarkup(`${activeQuestion && activeQuestion.question} ${appLocale.marksOfQuestion.replace('<marks>', activeQuestion.point)}`)} />
+      {timer && !isRunning && (
+        <div>
+          {appLocale.timerTimeTaken}
+          :
+          <b>{displayTime(timer - timeRemaining)}</b>
+        </div>
+      )}
 
-          {activeQuestion && activeQuestion.questionPic && <img src={activeQuestion.questionPic} alt="question" />}
-          {activeQuestion && renderTags(answerSelectionTypeState, activeQuestion.correctAnswer.length, activeQuestion.segment)}
-          {activeQuestion && renderAnswers(activeQuestion, buttons)}
-          {(showNextQuestionButton || allowNavigation)
-          && (
-          <div className="questionBtnContainer">
-            {(allowNavigation && currentQuestionIndex > 0) && (
-              <button
-                onClick={() => nextQuestion(currentQuestionIndex - 2)}
-                className="prevQuestionBtn btn"
-                type="button"
-              >
-                {appLocale.prevQuestionBtn}
+      {timer && isRunning && (
+        <div>
+          {appLocale.timerTimeRemaining}
+          :
+          <b>{displayTime(timeRemaining)}</b>
+        </div>
+      )}
+      {timer && timeRemaining === 0 && isRunning && handleTimeUp()}
+
+      {!endQuiz && (
+        <div className="questionWrapperBody">
+          <div>
+            {`${appLocale.question} ${currentQuestionIndex + 1} / ${
+              questions.length
+            }:`}
+            <br />
+            {timer && allowPauseTimer && (
+              <button type="button" className="timerBtn" onClick={toggleTimer}>
+                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
               </button>
             )}
-            <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn" type="button">
-              {appLocale.nextQuestionBtn}
-            </button>
           </div>
+          {isRunning ? (
+            <>
+              <h3
+                dangerouslySetInnerHTML={rawMarkup(
+                  `${
+                    activeQuestion && activeQuestion.question
+                  } ${appLocale.marksOfQuestion.replace(
+                    '<marks>',
+                    activeQuestion.point,
+                  )}`,
+                )}
+              />
+              {activeQuestion && activeQuestion.questionPic && (
+                <img src={activeQuestion.questionPic} alt="question" />
+              )}
+              {activeQuestion
+                && renderTags(
+                  answerSelectionTypeState,
+                  activeQuestion.correctAnswer.length,
+                  activeQuestion.segment,
+                )}
+              <div className="questionModal">
+                <InstantFeedback
+                  question={activeQuestion}
+                  showInstantFeedback={showInstantFeedback}
+                  correctAnswer={isCorrect}
+                  incorrectAnswer={incorrectAnswer}
+                  onQuestionSubmit={onQuestionSubmit}
+                  userAnswer={[...userInput].pop()}
+                />
+              </div>
+              {activeQuestion && renderAnswers(activeQuestion, buttons)}
+              {(showNextQuestionButton || allowNavigation) && (
+                <div className="questionBtnContainer">
+                  {allowNavigation && currentQuestionIndex > 0 && (
+                    <button
+                      onClick={() => nextQuestion(currentQuestionIndex - 2)}
+                      className="prevQuestionBtn btn"
+                      type="button"
+                    >
+                      {appLocale.prevQuestionBtn}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => nextQuestion(currentQuestionIndex)}
+                    className="nextQuestionBtn btn"
+                    type="button"
+                  >
+                    {appLocale.nextQuestionBtn}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <span className="timerPauseScreen dark:text-white text-black">
+              <br />
+              <br />
+              {appLocale.pauseScreenDisplay}
+            </span>
           )}
         </div>
-        )}
+      )}
       {endQuiz && showDefaultResultState && customResultPage === undefined
           && renderResult()}
       {endQuiz && !showDefaultResultState && customResultPage !== undefined
