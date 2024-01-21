@@ -395,6 +395,7 @@ function Core({
         <div>
           {appLocale.timerTimeTaken}
           :
+          {' '}
           <b>{displayTime(timer - timeRemaining)}</b>
         </div>
       )}
@@ -403,7 +404,10 @@ function Core({
         <div>
           {appLocale.timerTimeRemaining}
           :
-          <b>{displayTime(timeRemaining)}</b>
+          {' '}
+          <b>
+            {displayTime(timeRemaining)}
+          </b>
         </div>
       )}
       {timer && timeRemaining === 0 && isRunning && handleTimeUp()}
