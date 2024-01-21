@@ -16,6 +16,8 @@ function Quiz({
   allowNavigation,
   onQuestionSubmit,
   disableSynopsis,
+  timer,
+  allowPauseTimer,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -93,6 +95,16 @@ function Quiz({
   const validateQuiz = (q) => {
     if (!q) {
       console.error('Quiz object is required.');
+      return false;
+    }
+
+    if ((timer && typeof timer !== 'number') || (timer < 1)) {
+      console.error(timer && typeof timer !== 'number' ? 'timer must be a number' : 'timer must be a number greater than 0');
+      return false;
+    }
+
+    if (allowPauseTimer && typeof allowPauseTimer !== 'boolean') {
+      console.error('allowPauseTimer must be a Boolean');
       return false;
     }
 
@@ -208,6 +220,8 @@ function Quiz({
           allowNavigation={allowNavigation}
           appLocale={appLocale}
           onQuestionSubmit={onQuestionSubmit}
+          timer={timer}
+          allowPauseTimer={allowPauseTimer}
         />
       )}
     </div>

@@ -24,6 +24,9 @@ react-quiz-component is a ReactJS component allowing users to attempt a quiz.
 - Allow Picture in Question
 - Scoring System
 - Shuffling Questions / Answers
+- Timer Support
+- Support Pause/Resume Timer
+- Shows unanswered questions
 
 ## Installing
 
@@ -258,6 +261,24 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} continueTillCorrect={true}/>
 ```
 
+
+## Timer Feature
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} timer={60}/>
+```
+
+
+## Pause / Resume Timer Feature
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} timer={60} allowPauseTimer={true}/>
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|
@@ -272,6 +293,8 @@ import { quiz } from './quiz';
 |continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
 |onQuestionSubmit|`function`|`null`|N|A user response for a question will be returned|
 |disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
+|timer|`number`|`false`|N|Sets timer in seconds|
+|allowPauseTimer|`boolean`|`false`|N|Pause / Resume timer|
 
 ## Contribution 
 
