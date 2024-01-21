@@ -271,7 +271,7 @@ import { quiz } from './quiz';
 ```
 
 
-## Pause/Resume Timer Feature
+## Pause / Resume Timer Feature
 
 ```js
 import { quiz } from './quiz';
@@ -294,7 +294,7 @@ import { quiz } from './quiz';
 |onQuestionSubmit|`function`|`null`|N|A user response for a question will be returned|
 |disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
 |timer|`number`|`false`|N|Sets timer in seconds|
-|allowPauseTimer|`boolean`|`false`|N|Pause/Resume timer|
+|allowPauseTimer|`boolean`|`false`|N|Pause / Resume timer|
 
 ## Contribution 
 
