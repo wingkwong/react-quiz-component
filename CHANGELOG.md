@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.8.0
+
+- Bumped dependencies
+- Introduced Timer Support with Pause / Resume
+- Supported unanswered questions
+
 ## 0.7.1
 
 - Bumped dependencies
