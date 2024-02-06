@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
@@ -147,7 +147,7 @@ function Core({
       }
 
       return (
-        <div key={uuidv4()}>
+        <div key={nanoid()}>
           <button
             type="button"
             disabled
@@ -222,7 +222,7 @@ function Core({
       const answerSelectionType = question.answerSelectionType || 'single';
 
       return (
-        <div className="result-answer-wrapper" key={uuidv4()}>
+        <div className="result-answer-wrapper" key={nanoid()}>
           <h3
             dangerouslySetInnerHTML={rawMarkup(
               `Q${question.questionIndex}: ${
@@ -296,7 +296,7 @@ function Core({
     answerSelectionType = answerSelectionType || 'single';
 
     return answers.map((answer, index) => (
-      <Fragment key={uuidv4()}>
+      <Fragment key={nanoid()}>
         {(answerButtons[index] !== undefined)
           ? (
             <button
