@@ -164,7 +164,7 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, answers,
   setIncorrect,
   setUserInput,
 }) => {
-  const selectedButtons = Object.keys(answers).map(() => ({ selected: true }));
+  const selectedButtons = Object.keys(answers).map(() => ({ selected: false }));
   const userInputCopy = [...userInput];
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);
