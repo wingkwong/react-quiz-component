@@ -24,12 +24,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
   setUserAttempt,
 }) => {
   const indexStr = `${index}`;
-  const disabledAll = {
-    0: { disabled: true },
-    1: { disabled: true },
-    2: { disabled: true },
-    3: { disabled: true },
-  };
+  const disabledAll = Object.keys(answers).map(() => ({ disabled: true }));
   const userInputCopy = [...userInput];
   if (answerSelectionType === 'single') {
     if (userInputCopy[currentQuestionIndex] === undefined) {
@@ -158,7 +153,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
   setUserInput(userInputCopy);
 };
 
-export const selectAnswer = (index, correctAnswer, answerSelectionType, {
+export const selectAnswer = (index, correctAnswer, answerSelectionType, answers, {
   userInput,
   currentQuestionIndex,
   setButtons,
@@ -169,12 +164,7 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, {
   setIncorrect,
   setUserInput,
 }) => {
-  const selectedButtons = {
-    0: { selected: false },
-    1: { selected: false },
-    2: { selected: false },
-    3: { selected: false },
-  };
+  const selectedButtons = Object.keys(answers).map(() => ({ selected: false }));
   const userInputCopy = [...userInput];
   if (answerSelectionType === 'single') {
     correctAnswer = Number(correctAnswer);

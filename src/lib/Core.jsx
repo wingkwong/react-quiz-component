@@ -270,7 +270,7 @@ function Core({
       setUserAttempt,
     });
 
-    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, {
+    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
       userInput,
       currentQuestionIndex,
       setButtons,
