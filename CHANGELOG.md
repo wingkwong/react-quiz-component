@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.8.1
+
+- Bumped dependencies
+- Fixed incorrect disableAll & selectedButtons
+- Replaced uuidv4 by nanoid
+
 ## 0.8.0
 
 - Bumped dependencies
