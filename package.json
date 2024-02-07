@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "React Quiz Component",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
