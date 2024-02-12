@@ -48,7 +48,7 @@
     "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-dev-server": "^5.0.0"
   },
   "author": "WK Wong <wingkwong.code@gmail.com>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
