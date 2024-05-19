@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.8.2
+
+- Bumped dependencies
+- Fixed missing locale text in answers dropdown filter
+
 ## 0.8.1
 
 - Bumped dependencies
