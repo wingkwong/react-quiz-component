@@ -41,7 +41,10 @@ module.exports = {
     extensions: ['', '.js', '.jsx'],
   },
   devServer: {
-    static: path.join(__dirname, 'docs'),
-    port: 8000,
+    static: {
+      directory: path.join(__dirname, 'docs'),
+    },
+    compress: true,
+    port: 8080,
   },
 };

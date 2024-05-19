@@ -14,10 +14,20 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
   };
 
   const selectedOptionClass = isOpen ? 'selected-open' : '';
+  const selectedValuesLocale = {
+    all: appLocale.resultFilterAll,
+    correct: appLocale.resultFilterCorrect,
+    incorrect: appLocale.resultFilterIncorrect,
+    unanswered: appLocale.resultFilterUnanswered,
+  };
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        isOpen
+        && dropdownRef.current
+        && !dropdownRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -44,7 +54,7 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }) {
         tabIndex={0}
       >
         <div className={`selected-option ${selectedOptionClass}`}>
-          {filteredValue === 'all' ? appLocale.resultFilterAll : filteredValue}
+          {selectedValuesLocale[filteredValue]}
         </div>
         <span className={`arrow ${isOpen ? 'up' : 'down'}`} />
       </div>
