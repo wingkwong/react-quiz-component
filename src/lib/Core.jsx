@@ -3,14 +3,30 @@ import React, {
 } from 'react';
 import { nanoid } from 'nanoid';
 import QuizResultFilter from './core-components/QuizResultFilter';
-import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
+import {
+  checkAnswer,
+  selectAnswer,
+  rawMarkup,
+} from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
+import ProgressBar from './core-components/ProgressBar';
 
 function Core({
-  questions, appLocale, showDefaultResult, onComplete, customResultPage,
-  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit, timer, allowPauseTimer,
+  questions,
+  appLocale,
+  showDefaultResult,
+  onComplete,
+  customResultPage,
+  showInstantFeedback,
+  continueTillCorrect,
+  revealAnswerOnSubmit,
+  allowNavigation,
+  onQuestionSubmit,
+  timer,
+  allowPauseTimer,
+  enableProgressBar,
+  progressBarColor,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -29,13 +45,17 @@ function Core({
 
   const [totalPoints, setTotalPoints] = useState(0);
   const [correctPoints, setCorrectPoints] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
+  const [activeQuestion, setActiveQuestion] = useState(
+    questions[currentQuestionIndex],
+  );
   const [questionSummary, setQuestionSummary] = useState(undefined);
   const [timeRemaining, setTimeRemaining] = useState(timer);
   const [isRunning, setIsRunning] = useState(true);
 
   useEffect(() => {
-    setShowDefaultResult(showDefaultResult !== undefined ? showDefaultResult : true);
+    setShowDefaultResult(
+      showDefaultResult !== undefined ? showDefaultResult : true,
+    );
   }, [showDefaultResult]);
 
   useEffect(() => {
@@ -98,7 +118,9 @@ function Core({
       if (userInput.length !== questions.length) {
         alert('Quiz is incomplete');
       } else if (allowNavigation) {
-        const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
+        const submitQuiz = confirm(
+          'You have finished all the questions. Submit Quiz now?',
+        );
         if (submitQuiz) {
           setEndQuiz(true);
         }
@@ -128,7 +150,9 @@ function Core({
         // correctAnswer - is string
         answerBtnCorrectClassName = `${index + 1}` === correctAnswer ? 'correct' : '';
         answerBtnIncorrectClassName = `${userInputIndex}` !== correctAnswer
-        && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '';
+          && `${index + 1}` === `${userInputIndex}`
+          ? 'incorrect'
+          : '';
 
         if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
           answerBtnIncorrectClassName = 'unanswered';
@@ -139,9 +163,14 @@ function Core({
           ? 'correct'
           : '';
         answerBtnIncorrectClassName = !correctAnswer.includes(index + 1)
-        && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
+          && userInputIndex?.includes(index + 1)
+          ? 'incorrect'
+          : '';
 
-        if (userInputIndex === undefined && !correctAnswer.includes(index + 1)) {
+        if (
+          userInputIndex === undefined
+          && !correctAnswer.includes(index + 1)
+        ) {
           answerBtnIncorrectClassName = 'unanswered';
         }
       }
@@ -170,12 +199,19 @@ function Core({
 
     return (
       <div className="tag-container">
-        {answerSelectionType === 'single'
-          && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
-          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        {answerSelectionType === 'single' && (
+          <span className="single selection-tag">{singleSelectionTagText}</span>
+        )}
+        {answerSelectionType === 'multiple' && (
+          <span className="multiple selection-tag">
+            {multipleSelectionTagText}
+          </span>
+        )}
         <span className="number-of-selection">
-          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
+          {pickNumberOfSelection.replace(
+            '<numberOfSelection>',
+            numberOfSelection,
+          )}
         </span>
         {segment && <span className="selection-tag segment">{segment}</span>}
       </div>
@@ -188,7 +224,9 @@ function Core({
     }
 
     if (typeof correctAnswerIndex === 'object') {
-      return correctAnswerIndex.find((element) => element === index) !== undefined;
+      return (
+        correctAnswerIndex.find((element) => element === index) !== undefined
+      );
     }
 
     return false;
@@ -289,7 +327,10 @@ function Core({
       if (answerSelectionType === 'single') {
         return userInput[questionIndex - 1] === index;
       }
-      return Array.isArray(userInput[questionIndex - 1]) && userInput[questionIndex - 1].includes(index);
+      return (
+        Array.isArray(userInput[questionIndex - 1])
+        && userInput[questionIndex - 1].includes(index)
+      );
     };
 
     // Default single to avoid code breaking due to automatic version upgrade
@@ -297,32 +338,38 @@ function Core({
 
     return answers.map((answer, index) => (
       <Fragment key={nanoid()}>
-        {(answerButtons[index] !== undefined)
-          ? (
-            <button
-              type="button"
-              disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className} answerBtn btn ${
-                isCorrectCheck(index + 1, correctAnswer) && showInstantFeedback
-                  ? 'correct'
-                  : ''
-              }`}
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-            >
-              {questionType === 'text' && <span>{answer}</span>}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )
-          : (
-            <button
-              type="button"
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
-            >
-              {questionType === 'text' && answer}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )}
+        {answerButtons[index] !== undefined ? (
+          <button
+            type="button"
+            disabled={answerButtons[index].disabled || false}
+            className={`${answerButtons[index].className} answerBtn btn ${
+              isCorrectCheck(index + 1, correctAnswer) && showInstantFeedback
+                ? 'correct'
+                : ''
+            }`}
+            onClick={() => (revealAnswerOnSubmit
+              ? onSelectAnswer(index)
+              : onClickAnswer(index))}
+          >
+            {questionType === 'text' && <span>{answer}</span>}
+            {questionType === 'photo' && <img src={answer} alt="answer" />}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => (revealAnswerOnSubmit
+              ? onSelectAnswer(index)
+              : onClickAnswer(index))}
+            className={`answerBtn btn ${
+              allowNavigation && checkSelectedAnswer(index + 1)
+                ? 'selected'
+                : null
+            }`}
+          >
+            {questionType === 'text' && answer}
+            {questionType === 'photo' && <img src={answer} alt="answer" />}
+          </button>
+        )}
       </Fragment>
     ));
   };
@@ -378,9 +425,9 @@ function Core({
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
 
-    return `${formatTime(hours)}${hours}:${formatTime(minutes)}${minutes}:${
-      formatTime(seconds)
-    }${seconds}`;
+    return `${formatTime(hours)}${hours}:${formatTime(
+      minutes,
+    )}${minutes}:${formatTime(seconds)}${seconds}`;
   };
 
   const handleTimeUp = () => {
@@ -391,6 +438,18 @@ function Core({
 
   return (
     <div className="questionWrapper">
+      {enableProgressBar && (
+        <>
+          <div style={{ display: 'flex', width: '100%' }}>
+            <ProgressBar
+              progress={currentQuestionIndex + 1}
+              quizLength={questions.length}
+              progressBarColor={progressBarColor}
+            />
+          </div>
+          <br />
+        </>
+      )}
       {timer && !isRunning && (
         <div>
           {appLocale.timerTimeTaken}
@@ -404,10 +463,7 @@ function Core({
         <div>
           {appLocale.timerTimeRemaining}
           :
-          {' '}
-          <b>
-            {displayTime(timeRemaining)}
-          </b>
+          <b>{displayTime(timeRemaining)}</b>
         </div>
       )}
       {timer && timeRemaining === 0 && isRunning && handleTimeUp()}
@@ -421,7 +477,9 @@ function Core({
             <br />
             {timer && allowPauseTimer && (
               <button type="button" className="timerBtn" onClick={toggleTimer}>
-                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
+                {isRunning
+                  ? appLocale.pauseScreenPause
+                  : appLocale.pauseScreenResume}
               </button>
             )}
           </div>
@@ -488,10 +546,14 @@ function Core({
           )}
         </div>
       )}
-      {endQuiz && showDefaultResultState && customResultPage === undefined
-          && renderResult()}
-      {endQuiz && !showDefaultResultState && customResultPage !== undefined
-          && customResultPage(questionSummary)}
+      {endQuiz
+        && showDefaultResultState
+        && customResultPage === undefined
+        && renderResult()}
+      {endQuiz
+        && !showDefaultResultState
+        && customResultPage !== undefined
+        && customResultPage(questionSummary)}
     </div>
   );
 }

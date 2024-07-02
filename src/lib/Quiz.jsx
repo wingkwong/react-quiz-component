@@ -18,6 +18,8 @@ function Quiz({
   disableSynopsis,
   timer,
   allowPauseTimer,
+  enableProgressBar,
+  progressBarColor,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -98,13 +100,27 @@ function Quiz({
       return false;
     }
 
-    if ((timer && typeof timer !== 'number') || (timer < 1)) {
-      console.error(timer && typeof timer !== 'number' ? 'timer must be a number' : 'timer must be a number greater than 0');
+    if ((timer && typeof timer !== 'number') || timer < 1) {
+      console.error(
+        timer && typeof timer !== 'number'
+          ? 'timer must be a number'
+          : 'timer must be a number greater than 0',
+      );
       return false;
     }
 
     if (allowPauseTimer && typeof allowPauseTimer !== 'boolean') {
       console.error('allowPauseTimer must be a Boolean');
+      return false;
+    }
+
+    if (enableProgressBar && typeof enableProgressBar !== 'boolean') {
+      console.error('enableProgressBar must be a Boolean');
+      return false;
+    }
+
+    if (progressBarColor && typeof progressBarColor !== 'string') {
+      console.error('progressBarColor must be a String');
       return false;
     }
 
@@ -201,7 +217,11 @@ function Quiz({
             <div className="quiz-synopsis">{quiz.quizSynopsis}</div>
           )}
           <div className="startQuizWrapper">
-            <button type="button" onClick={() => setStart(true)} className="startQuizBtn btn">
+            <button
+              type="button"
+              onClick={() => setStart(true)}
+              className="startQuizBtn btn"
+            >
               {appLocale.startQuizBtn}
             </button>
           </div>
@@ -222,6 +242,8 @@ function Quiz({
           onQuestionSubmit={onQuestionSubmit}
           timer={timer}
           allowPauseTimer={allowPauseTimer}
+          enableProgressBar={enableProgressBar}
+          progressBarColor={progressBarColor}
         />
       )}
     </div>
