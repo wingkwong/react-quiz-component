@@ -2,6 +2,7 @@ import React, {
   useState, useEffect, useCallback, Fragment,
 } from 'react';
 import { nanoid } from 'nanoid';
+import ProgressBar from './core-components/ProgressBar';
 import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
@@ -10,7 +11,7 @@ import Explanation from './core-components/Explanation';
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit, timer, allowPauseTimer,
+  onQuestionSubmit, timer, allowPauseTimer, enableProgressBar, progressBarColor
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -391,6 +392,19 @@ function Core({
 
   return (
     <div className="questionWrapper">
+      {enableProgressBar && (
+        <>
+          <div style={{ display: 'flex', width: '100%' }}>
+            <ProgressBar
+              progress={currentQuestionIndex + 1}
+              quizLength={questions.length}
+              progressBarColor={progressBarColor}
+              isEndQuiz={endQuiz}
+            />
+          </div>
+          <br />
+        </>
+      )}
       {timer && !isRunning && (
         <div>
           {appLocale.timerTimeTaken}

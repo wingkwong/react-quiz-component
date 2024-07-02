@@ -18,6 +18,8 @@ function Quiz({
   disableSynopsis,
   timer,
   allowPauseTimer,
+  enableProgressBar,
+  progressBarColor,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -105,6 +107,16 @@ function Quiz({
 
     if (allowPauseTimer && typeof allowPauseTimer !== 'boolean') {
       console.error('allowPauseTimer must be a Boolean');
+      return false;
+    }
+
+    if (enableProgressBar && typeof enableProgressBar !== 'boolean') {
+      console.error('enableProgressBar must be a Boolean');
+      return false;
+    }
+
+    if (progressBarColor && typeof progressBarColor !== 'string') {
+      console.error('progressBarColor must be a String');
       return false;
     }
 
@@ -222,6 +234,8 @@ function Quiz({
           onQuestionSubmit={onQuestionSubmit}
           timer={timer}
           allowPauseTimer={allowPauseTimer}
+          enableProgressBar={enableProgressBar}
+          progressBarColor={progressBarColor}
         />
       )}
     </div>

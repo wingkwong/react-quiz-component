@@ -22,6 +22,7 @@ function App() {
         disableSynopsis
         timer={60}
         allowPauseTimer
+        enableProgressBar
       />
     </div>
   );
