@@ -94,6 +94,11 @@ function Quiz({
     setQuestions(newQuestions);
   }, [start]);
 
+  const validateProgressBarColor = (inputColor) => {
+    const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
+    return hexaPattern.test(inputColor);
+  };
+  
   const validateQuiz = (q) => {
     if (!q) {
       console.error('Quiz object is required.');
@@ -117,6 +122,11 @@ function Quiz({
 
     if (progressBarColor && typeof progressBarColor !== 'string') {
       console.error('progressBarColor must be a String');
+      return false;
+    }
+
+    if (!validateProgressBarColor(progressBarColor)) {
+      console.log('progressBarColor must be a valid Hex color value');
       return false;
     }
 

@@ -23,6 +23,7 @@ function App() {
         timer={60}
         allowPauseTimer
         enableProgressBar
+        progressBarColor="#9de1f6"
       />
     </div>
   );

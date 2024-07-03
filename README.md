@@ -279,6 +279,24 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} timer={60} allowPauseTimer={true}/>
 ```
 
+
+## Enable / Disable Progress Bar 
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} enableProgressBar={true} />
+```
+
+
+## Custom hex color for the Progress Bar
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} enableProgressBar={true} progressBarColor="#FF0000" />
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|
@@ -295,6 +313,8 @@ import { quiz } from './quiz';
 |disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
 |timer|`number`|`false`|N|Sets timer in seconds|
 |allowPauseTimer|`boolean`|`false`|N|Pause / Resume timer|
+|enableProgressBar|`boolean`|`false`|N|Enables a progress bar|
+|progressBarColor|`string`|`"#9de1f6"`|N|Sets a custom hex color for the progress bar|
 
 ## Contribution 
 
