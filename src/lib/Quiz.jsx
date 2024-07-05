@@ -19,7 +19,6 @@ function Quiz({
   timer,
   allowPauseTimer,
   enableProgressBar,
-  progressBarColor,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -120,13 +119,13 @@ function Quiz({
       return false;
     }
 
-    if (progressBarColor && typeof progressBarColor !== 'string') {
+    if (quiz.progressBarColor && typeof quiz.progressBarColor !== 'string') {
       console.error('progressBarColor must be a String');
       return false;
     }
 
-    if (!validateProgressBarColor(progressBarColor)) {
-      console.log('progressBarColor must be a valid Hex color value');
+    if ('progressBarColor' in quiz && !validateProgressBarColor(quiz.progressBarColor)) {
+      console.error('progressBarColor must be a valid hex colour');
       return false;
     }
 
@@ -245,7 +244,7 @@ function Quiz({
           timer={timer}
           allowPauseTimer={allowPauseTimer}
           enableProgressBar={enableProgressBar}
-          progressBarColor={progressBarColor}
+          progressBarColor={quiz.progressBarColor}
         />
       )}
     </div>

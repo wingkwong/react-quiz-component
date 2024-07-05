@@ -398,8 +398,8 @@ function Core({
             <ProgressBar
               progress={currentQuestionIndex + 1}
               quizLength={questions.length}
-              progressBarColor={progressBarColor}
               isEndQuiz={endQuiz}
+              progressBarColor={progressBarColor}
             />
           </div>
           <br />
