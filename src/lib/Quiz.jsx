@@ -119,14 +119,16 @@ function Quiz({
       return false;
     }
 
-    if (quiz.progressBarColor && typeof quiz.progressBarColor !== 'string') {
+    if ('progressBarColor' in quiz) {
+      if (typeof quiz.progressBarColor !==) {
       console.error('progressBarColor must be a String');
       return false;
-    }
+      }
 
-    if ('progressBarColor' in quiz && !validateProgressBarColor(quiz.progressBarColor)) {
-      console.error('progressBarColor must be a valid hex colour');
-      return false;
+      if (!validateProgressBarColor(quiz.progressBarColor)) {
+        console.error('progressBarColor must be a valid hex colour');
+        return false;
+      }
     }
 
     for (let i = 0; i < questions.length; i += 1) {

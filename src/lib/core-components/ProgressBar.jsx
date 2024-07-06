@@ -43,8 +43,8 @@ const ProgressBar = ({ progressBarColor, progress, height, quizLength, isEndQuiz
 };
 
 ProgressBar.defaultProps = {
-  progressBarColor: '#9de1f6', // Set a default value for bgcolor
-  height: '25px', // Set a default value for bar's heigth
+  progressBarColor: '#9de1f6', // Set a default value for background color
+  height: '25px', // Set a default value for bar's height
 };
 
 export default ProgressBar;
