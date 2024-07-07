@@ -8,6 +8,7 @@ const quiz = {
   quizTitle: 'React Quiz Component Demo',
   quizSynopsis: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim',
   nrOfQuestions: '6',
+  progressBarColor: '#9de1f6',
   questions: [
     {
       question: 'How can you access the state of a component from inside of a member function?',
