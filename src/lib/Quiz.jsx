@@ -120,9 +120,9 @@ function Quiz({
     }
 
     if ('progressBarColor' in quiz) {
-      if (typeof quiz.progressBarColor !==) {
-      console.error('progressBarColor must be a String');
-      return false;
+      if (typeof quiz.progressBarColor !== 'string') {
+        console.error('progressBarColor must be a String');
+        return false;
       }
 
       if (!validateProgressBarColor(quiz.progressBarColor)) {
