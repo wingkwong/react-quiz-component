@@ -80,6 +80,7 @@ function Core({
       userInput,
       totalPoints,
       correctPoints,
+      timeTaken: timer - timeRemaining,
     });
   }, [totalPoints, correctPoints]);
 
