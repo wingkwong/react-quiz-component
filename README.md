@@ -47,6 +47,7 @@ The quiz source is a JSON object. You can use [react-quiz-form](https://github.c
 export const quiz =  {
   "quizTitle": "React Quiz Component Demo",
   "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
+  "progressBarColor": "#9de1f6", 
   "nrOfQuestions": "4",
   "questions": [
     {
@@ -279,6 +280,15 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} timer={60} allowPauseTimer={true}/>
 ```
 
+
+## Enable / Disable Progress Bar 
+
+```js
+import { quiz } from './quiz';
+...
+<Quiz quiz={quiz} enableProgressBar={true} />
+```
+
 ## Props
 
 |Name|Type|Default|Required|Description|
@@ -295,6 +305,7 @@ import { quiz } from './quiz';
 |disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
 |timer|`number`|`false`|N|Sets timer in seconds|
 |allowPauseTimer|`boolean`|`false`|N|Pause / Resume timer|
+|enableProgressBar|`boolean`|`false`|N|Enable a progress bar|
 
 ## Contribution 
 

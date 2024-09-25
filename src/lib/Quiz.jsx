@@ -18,6 +18,7 @@ function Quiz({
   disableSynopsis,
   timer,
   allowPauseTimer,
+  enableProgressBar,
 }) {
   const [start, setStart] = useState(false);
   const [questions, setQuestions] = useState(quiz.questions);
@@ -92,6 +93,11 @@ function Quiz({
     setQuestions(newQuestions);
   }, [start]);
 
+  const validateProgressBarColor = (inputColor) => {
+    const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
+    return hexaPattern.test(inputColor);
+  };
+
   const validateQuiz = (q) => {
     if (!q) {
       console.error('Quiz object is required.');
@@ -106,6 +112,23 @@ function Quiz({
     if (allowPauseTimer && typeof allowPauseTimer !== 'boolean') {
       console.error('allowPauseTimer must be a Boolean');
       return false;
+    }
+
+    if (enableProgressBar && typeof enableProgressBar !== 'boolean') {
+      console.error('enableProgressBar must be a Boolean');
+      return false;
+    }
+
+    if ('progressBarColor' in quiz) {
+      if (typeof quiz.progressBarColor !== 'string') {
+        console.error('progressBarColor must be a String');
+        return false;
+      }
+
+      if (!validateProgressBarColor(quiz.progressBarColor)) {
+        console.error('progressBarColor must be a valid hex colour');
+        return false;
+      }
     }
 
     for (let i = 0; i < questions.length; i += 1) {
@@ -222,6 +245,8 @@ function Quiz({
           onQuestionSubmit={onQuestionSubmit}
           timer={timer}
           allowPauseTimer={allowPauseTimer}
+          enableProgressBar={enableProgressBar}
+          progressBarColor={quiz.progressBarColor}
         />
       )}
     </div>
