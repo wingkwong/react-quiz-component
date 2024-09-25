@@ -97,7 +97,7 @@ function Quiz({
     const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
     return hexaPattern.test(inputColor);
   };
-  
+
   const validateQuiz = (q) => {
     if (!q) {
       console.error('Quiz object is required.');

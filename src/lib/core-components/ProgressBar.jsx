@@ -1,20 +1,22 @@
 import React from 'react';
 
-const ProgressBar = ({ progressBarColor, progress, height, quizLength, isEndQuiz }) => {
+function ProgressBar({
+  progressBarColor = '#9de1f6', progress, height = '25px', quizLength, isEndQuiz,
+}) {
   const fixedProgress = progress - 1;
   const progressUnit = 100 / quizLength;
 
   const progressBarContainer = {
     width: '100%',
     backgroundColor: '#D0D4CA',
-    height: height,
+    height,
     borderRadius: 40,
     position: 'relative',
     overflow: 'hidden',
   };
 
   const progressBar = {
-    width: isEndQuiz ? `100%` : `${progressUnit * fixedProgress}%`,
+    width: isEndQuiz ? '100%' : `${progressUnit * fixedProgress}%`,
     height: '100%',
     backgroundColor: progressBarColor,
     transition: 'width 0.3s ease',
@@ -40,11 +42,6 @@ const ProgressBar = ({ progressBarColor, progress, height, quizLength, isEndQuiz
       </span>
     </div>
   );
-};
-
-ProgressBar.defaultProps = {
-  progressBarColor: '#9de1f6', // Set a default value for background color
-  height: '25px', // Set a default value for bar's height
-};
+}
 
 export default ProgressBar;
