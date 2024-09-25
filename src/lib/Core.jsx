@@ -303,7 +303,7 @@ function Core({
             <button
               type="button"
               disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className} answerBtn btn ${
+              className={`${answerButtons[index].className || ''} answerBtn btn ${
                 isCorrectCheck(index + 1, correctAnswer) && showInstantFeedback
                   ? 'correct'
                   : ''
