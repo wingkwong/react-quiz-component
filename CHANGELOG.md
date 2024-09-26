@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.9.1
+
+- Bumped dependencies
+- Fixed incorrect userAttempt count
+- Fixed incorrect class names on multiple selection
+
 ## 0.9.0
 
 - Added Progress Bar
