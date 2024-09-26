@@ -111,15 +111,6 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
         }
       }
 
-      for (let i = 0; i < answers.length; i += 1) {
-        if (correctAnswer.includes(i + 1)) {
-          setButtons((prevState) => ({
-            ...prevState,
-            [i]: {},
-          }));
-        }
-      }
-
       if (cnt === maxNumberOfMultipleSelection) {
         correct.push(currentQuestionIndex);
 

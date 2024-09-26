@@ -184,18 +184,6 @@ function Core({
     );
   };
 
-  const isCorrectCheck = (index, correctAnswerIndex) => {
-    if (typeof correctAnswerIndex === 'string') {
-      return index === Number(correctAnswerIndex);
-    }
-
-    if (typeof correctAnswerIndex === 'object') {
-      return correctAnswerIndex.find((element) => element === index) !== undefined;
-    }
-
-    return false;
-  };
-
   const renderQuizResultQuestions = useCallback(() => {
     let filteredQuestions;
     let filteredUserInput;
@@ -304,11 +292,7 @@ function Core({
             <button
               type="button"
               disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className || ''} answerBtn btn ${
-                isCorrectCheck(index + 1, correctAnswer) && showInstantFeedback
-                  ? 'correct'
-                  : ''
-              }`}
+              className={`${answerButtons[index].className || ''} answerBtn btn`}
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
             >
               {questionType === 'text' && <span>{answer}</span>}
@@ -319,7 +303,7 @@ function Core({
             <button
               type="button"
               onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : null}`}
+              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : ''}`}
             >
               {questionType === 'text' && answer}
               {questionType === 'photo' && <img src={answer} alt="answer" />}
