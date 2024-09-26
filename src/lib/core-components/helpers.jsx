@@ -92,20 +92,11 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
     if (userInputCopy[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
       userInputCopy[currentQuestionIndex].push(index);
 
-      if (correctAnswer.includes(index)) {
-        if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
-          setButtons((prevState) => ({
-            ...prevState,
-            [index - 1]: {
-              disabled: !prevState[index - 1],
-              className: (correctAnswer.includes(index)) ? 'correct' : 'incorrect',
-            },
-          }));
-        }
-      } else if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
+      if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
         setButtons((prevState) => ({
           ...prevState,
           [index - 1]: {
+            disabled: !prevState[index - 1],
             className: (correctAnswer.includes(index)) ? 'correct' : 'incorrect',
           },
         }));
@@ -117,15 +108,6 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
       for (let i = 0; i < correctAnswer.length; i += 1) {
         if (userInputCopy[currentQuestionIndex].includes(correctAnswer[i])) {
           cnt += 1;
-        }
-      }
-
-      for (let i = 0; i < answers.length; i += 1) {
-        if (correctAnswer.includes(i + 1)) {
-          setButtons((prevState) => ({
-            ...prevState,
-            [i]: {},
-          }));
         }
       }
 
