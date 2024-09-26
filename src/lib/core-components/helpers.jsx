@@ -92,20 +92,11 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
     if (userInputCopy[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
       userInputCopy[currentQuestionIndex].push(index);
 
-      if (correctAnswer.includes(index)) {
-        if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
-          setButtons((prevState) => ({
-            ...prevState,
-            [index - 1]: {
-              disabled: !prevState[index - 1],
-              className: (correctAnswer.includes(index)) ? 'correct' : 'incorrect',
-            },
-          }));
-        }
-      } else if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
+      if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
         setButtons((prevState) => ({
           ...prevState,
           [index - 1]: {
+            disabled: !prevState[index - 1],
             className: (correctAnswer.includes(index)) ? 'correct' : 'incorrect',
           },
         }));
