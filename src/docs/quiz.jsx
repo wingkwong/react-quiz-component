@@ -3,10 +3,9 @@ const segment = {
   medium: 'Medium',
   advanced: 'Advanced',
 };
-
 const quiz = {
   quizTitle: 'React Quiz Component Demo',
-  quizSynopsis: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim',
+  quizSynopsis: 'Test your knowledge of React components with this quick 6-question quiz. Dive into the core concepts of React, including state, props, lifecycle methods, and more!',
   nrOfQuestions: '6',
   progressBarColor: '#9de1f6',
   questions: [
@@ -24,7 +23,7 @@ const quiz = {
       correctAnswer: '3',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'The correct way to access a component’s state in React is using `this.state`. `this.getState()` and `this.values` are incorrect, and `this.prototype.stateValue` refers to an object prototype, which is not relevant to React state management.',
       point: '20',
       segment: segment.advanced,
     },
@@ -39,7 +38,7 @@ const quiz = {
       correctAnswer: '2',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'ReactJS was developed by Facebook Engineers, particularly by Jordan Walke in 2011. Google is not associated with the development of React.',
       point: '20',
       segment: segment.basic,
     },
@@ -54,7 +53,7 @@ const quiz = {
       correctAnswer: '2',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'ReactJS is not an MVC-based framework; it is a library primarily concerned with building user interfaces. While React can work within MVC frameworks, it focuses on the "View" part of MVC.',
       point: '10',
     },
     {
@@ -69,7 +68,7 @@ const quiz = {
       correctAnswer: '3',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'Both component-oriented design and the event delegation model are key concepts in ReactJS. Component-oriented design allows reusable UI building blocks, and event delegation improves performance by managing event handlers at a higher level.',
       point: '30',
       segment: segment.medium,
     },
@@ -86,7 +85,7 @@ const quiz = {
       correctAnswer: '1',
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'When you create a React project using Vite, the initial page has a minimalist design that showcases a Vite logo and some boilerplate code instructions. The first image shows the default Vite project startup page.',
       point: '20',
     },
     {
@@ -102,7 +101,7 @@ const quiz = {
       correctAnswer: [1, 2, 4],
       messageForCorrectAnswer: 'Correct answer. Good job.',
       messageForIncorrectAnswer: 'Incorrect answer. Please try again.',
-      explanation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      explanation: 'The key advantages of React include its ability to be used on both the client and server side, improved readability and maintainability through its component-based structure, and its flexibility to be used with other frameworks since it focuses solely on the view layer.',
       point: '20',
     },
   ],
