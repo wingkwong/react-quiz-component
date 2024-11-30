@@ -61,6 +61,7 @@
     "nanoid": "^5.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-quiz-component": "^0.9.1",
     "snarkdown": "^2.0.0"
   }
 }
