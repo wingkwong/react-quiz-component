@@ -3,6 +3,7 @@
   "version": "0.9.1",
   "description": "React Quiz Component",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "module": "dist/index.es.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
@@ -24,7 +25,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.23.3",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plug-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-html": "^1.0.3",
     "@rollup/plugin-node-resolve": "^15.2.3",
