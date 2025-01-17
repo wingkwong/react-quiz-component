@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.2
+
+- Bumped dependencies
+
 ## 0.9.1
 
 - Bumped dependencies
