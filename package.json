@@ -38,7 +38,7 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
     "html-webpack-plugin": "5.6.3",
     "mini-css-extract-plugin": "^2.7.6",
     "prop-types": "^15.7.2",
@@ -59,8 +59,8 @@
   "dependencies": {
     "dompurify": "^3.0.0",
     "nanoid": "^5.0.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "snarkdown": "^2.0.0"
   }
 }
