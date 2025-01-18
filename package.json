@@ -47,7 +47,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "terser-webpack-plugin": "^5.3.9",
     "webpack": "^5.69.1",
-    "webpack-cli": "^5.1.4",
+    "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^5.0.0"
   },
   "author": "WK Wong <wingkwong.code@gmail.com>",
