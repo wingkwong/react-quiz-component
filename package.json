@@ -1,6 +1,6 @@
 {
   "name": "react-quiz-component",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "React Quiz Component",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -17,6 +17,7 @@
     "react-quiz",
     "quiz"
   ],
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.3.0",
@@ -43,6 +44,7 @@
     "mini-css-extract-plugin": "^2.7.6",
     "prop-types": "^15.7.2",
     "rollup": "^4.3.0",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "terser-webpack-plugin": "^5.3.9",
