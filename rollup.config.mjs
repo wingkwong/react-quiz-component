@@ -5,6 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import replace from '@rollup/plugin-replace';
+import copy from 'rollup-plugin-copy';
 
 const globals = {
   react: 'React',
@@ -61,6 +62,9 @@ export default [
         include: 'node_modules/**',
       }),
       terser(),
+      copy({
+        targets: [{ src: 'src/index.d.ts', dest: 'dist' }],
+      }),
     ],
   },
 ];
