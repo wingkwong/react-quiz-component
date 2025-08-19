@@ -50,6 +50,7 @@ function Core({
   const [questionSummary, setQuestionSummary] = useState(undefined);
   const [timeRemaining, setTimeRemaining] = useState(timer);
   const [isRunning, setIsRunning] = useState(true);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   useEffect(() => {
     setShowDefaultResult(
@@ -425,6 +426,11 @@ function Core({
     getUnansweredQuestions();
   };
 
+  const handleQuitQuiz = () => {
+    setShowQuitConfirm(false);
+    handleTimeUp();
+  };
+
   return (
     <div className="questionWrapper">
       {enableProgressBar && (
@@ -525,11 +531,11 @@ function Core({
               {!endQuiz && isRunning && (
                 <div className="questionBtnContainer">
                   <button
-                    onClick={handleTimeUp}
-                    className="submitQuizBtn btn"
+                    onClick={() => setShowQuitConfirm(true)}
+                    className="quitQuizBtn btn"
                     type="button"
                   >
-                    {appLocale.submitQuizBtn || "Submit & quit Quiz"}
+                    {appLocale.quitQuizBtn || "Submit and Quit"}
                   </button>
                 </div>
               )}
@@ -551,6 +557,28 @@ function Core({
         !showDefaultResultState &&
         customResultPage !== undefined &&
         customResultPage(questionSummary)}
+
+      {showQuitConfirm && (
+        <div className="quit-confirm-modal">
+          <div className="modal-content">
+            <p>
+              {appLocale.quitConfirmationText ||
+                "Are you sure you want to quit the quiz? Your progress will be saved."}
+            </p>
+            <div className="modal-buttons">
+              <button className="confirm-quit-btn btn" onClick={handleQuitQuiz}>
+                {appLocale.confirmQuitText || "Yes, Quit"}
+              </button>
+              <button
+                className="cancel-quit-btn btn"
+                onClick={() => setShowQuitConfirm(false)}
+              >
+                {appLocale.cancelQuitText || "Cancel"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
