@@ -529,10 +529,10 @@ function Core({
                 </div>
               )}
               {!endQuiz && isRunning && (
-                <div className="questionBtnContainer">
+                <div className="quitQuizBtnContainer">
                   <button
                     onClick={() => setShowQuitConfirm(true)}
-                    className="quitQuizBtn btn"
+                    className="quitQuizBtn"
                     type="button"
                   >
                     {appLocale.quitQuizBtn || "Submit and Quit"}

@@ -307,9 +307,29 @@
   margin-top: 1rem;
 }
 
+.questionBtnContainer .nextQuestionBtn {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.quitQuizBtnContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .quitQuizBtn {
   background-color: white;
-  color: red;
+  color: #7b7a7a;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 24px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.quitQuizBtn:hover {
+  color: #d9d9d9;
 }
 
 .confirm-quit-btn {
