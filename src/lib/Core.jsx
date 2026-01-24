@@ -437,7 +437,17 @@ function Core({
                 )}
               />
               {activeQuestion && activeQuestion.questionPic && (
-                <img src={activeQuestion.questionPic} alt="question" />
+                <div className="active-question-pic-container">
+                  <img
+                    src={activeQuestion.questionPic}
+                    alt="question"
+                    style={{
+                      height: activeQuestion.questionPicHeight ?? 'auto',
+                      width: activeQuestion.questionPicWidth ?? 'auto',
+                      maxWidth: '100%',
+                    }}
+                  />
+                </div>
               )}
               {activeQuestion
                 && renderTags(

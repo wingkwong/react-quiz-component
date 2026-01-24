@@ -58,6 +58,11 @@
   font-size: 30px;
 }
 
+.react-quiz-container .active-question-pic-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 
 .react-quiz-container .questionModal .alert {
   padding: 20px;
