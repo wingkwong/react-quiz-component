@@ -58,7 +58,6 @@
   font-size: 30px;
 }
 
-
 .react-quiz-container .questionModal .alert {
   padding: 20px;
   margin-bottom: 21px;
@@ -74,6 +73,14 @@
 .react-quiz-container .incorrect {
   background: red;
   color: white;
+}
+
+.react-quiz-container .submitQuizBtn {
+  margin-top: "10px";
+  padding: "10px 20px";
+  border: "none";
+  border-radius: "4px";
+  cursor: "pointer";
 }
 
 .react-quiz-container .unanswered {
@@ -192,8 +199,8 @@
     font-size: 16px;
     cursor: pointer;
     bottom: 10px;
-    position: relative; 
-    height: 12px;
+    position: relative;
+    /* height: 12px; */
   }
 
   .filter-dropdown-select:after {
@@ -224,7 +231,7 @@
     background-color: #fcfcfc;
     box-shadow: 0 0 10px rgba(141, 143, 145, 0.5);
     border-radius: 10px;
-  } 
+  }
 
   .filter-dropdown-select.open {
     border: 2px solid #51aae6;
@@ -248,27 +255,89 @@
   }
 
   .filter-dropdown-select .selected-option.selected-open {
-    color: #c6c2c2; 
-    font-weight: lighter; 
+    color: #c6c2c2;
+    font-weight: lighter;
   }
-  
+
   .filter-dropdown-select .selected-option {
     font-size: 16px;
     position: relative;
-    bottom: 2px; 
+    bottom: 2px;
   }
 
   .filter-dropdown-select:focus + .dropdown-options {
-    max-height: 200px; 
+    max-height: 200px;
   }
 
   .dropdown-options .dropdown-options-item.selected {
-   background-color: #d7f1f9; 
-   color: #333;
-   font-weight: bold;  
+    background-color: #d7f1f9;
+    color: #333;
+    font-weight: bold;
   }
 
   .dropdown-options.open {
-    max-height: 200px;  
+    max-height: 200px;
   }
+}
+
+.quit-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.questionBtnContainer .nextQuestionBtn {
+  background-color: #3f51b5;
+  color: white;
+}
+
+.quitQuizBtnContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.quitQuizBtn {
+  background-color: white;
+  color: #7b7a7a;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 24px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.quitQuizBtn:hover {
+  color: #d9d9d9;
+}
+
+.confirm-quit-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-quit-btn {
+  background-color: #e0e0e0;
 }

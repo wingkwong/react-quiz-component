@@ -1,17 +1,30 @@
-import React, {
-  useState, useEffect, useCallback, Fragment,
-} from 'react';
-import { nanoid } from 'nanoid';
-import ProgressBar from './core-components/ProgressBar';
-import QuizResultFilter from './core-components/QuizResultFilter';
-import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
-import InstantFeedback from './core-components/InstantFeedback';
-import Explanation from './core-components/Explanation';
+import React, { useState, useEffect, useCallback, Fragment } from "react";
+import { nanoid } from "nanoid";
+import ProgressBar from "./core-components/ProgressBar";
+import QuizResultFilter from "./core-components/QuizResultFilter";
+import {
+  checkAnswer,
+  selectAnswer,
+  rawMarkup,
+} from "./core-components/helpers";
+import InstantFeedback from "./core-components/InstantFeedback";
+import Explanation from "./core-components/Explanation";
 
 function Core({
-  questions, appLocale, showDefaultResult, onComplete, customResultPage,
-  showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
-  onQuestionSubmit, timer, allowPauseTimer, enableProgressBar, progressBarColor,
+  questions,
+  appLocale,
+  showDefaultResult,
+  onComplete,
+  customResultPage,
+  showInstantFeedback,
+  continueTillCorrect,
+  revealAnswerOnSubmit,
+  allowNavigation,
+  onQuestionSubmit,
+  timer,
+  allowPauseTimer,
+  enableProgressBar,
+  progressBarColor,
 }) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -23,20 +36,26 @@ function Core({
   const [incorrect, setIncorrect] = useState([]);
   const [unanswered, setUnanswered] = useState([]);
   const [userInput, setUserInput] = useState([]);
-  const [filteredValue, setFilteredValue] = useState('all');
+  const [filteredValue, setFilteredValue] = useState("all");
   const [userAttempt, setUserAttempt] = useState(1);
   const [showDefaultResultState, setShowDefaultResult] = useState(true);
-  const [answerSelectionTypeState, setAnswerSelectionType] = useState(undefined);
+  const [answerSelectionTypeState, setAnswerSelectionType] =
+    useState(undefined);
 
   const [totalPoints, setTotalPoints] = useState(0);
   const [correctPoints, setCorrectPoints] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
+  const [activeQuestion, setActiveQuestion] = useState(
+    questions[currentQuestionIndex]
+  );
   const [questionSummary, setQuestionSummary] = useState(undefined);
   const [timeRemaining, setTimeRemaining] = useState(timer);
   const [isRunning, setIsRunning] = useState(true);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   useEffect(() => {
-    setShowDefaultResult(showDefaultResult !== undefined ? showDefaultResult : true);
+    setShowDefaultResult(
+      showDefaultResult !== undefined ? showDefaultResult : true
+    );
   }, [showDefaultResult]);
 
   useEffect(() => {
@@ -46,7 +65,7 @@ function Core({
   useEffect(() => {
     const { answerSelectionType } = activeQuestion;
     // Default single to avoid code breaking due to automatic version upgrade
-    setAnswerSelectionType(answerSelectionType || 'single');
+    setAnswerSelectionType(answerSelectionType || "single");
   }, [activeQuestion, currentQuestionIndex]);
 
   useEffect(() => {
@@ -56,7 +75,7 @@ function Core({
       let correctPointsTemp = 0;
       for (let i = 0; i < questions.length; i += 1) {
         let point = questions[i].point || 0;
-        if (typeof point === 'string' || point instanceof String) {
+        if (typeof point === "string" || point instanceof String) {
           point = parseInt(point, 10);
         }
 
@@ -98,9 +117,11 @@ function Core({
 
     if (currentQuestionIdx + 1 === questions.length) {
       if (userInput.length !== questions.length) {
-        alert('Quiz is incomplete');
+        alert("Quiz is incomplete");
       } else if (allowNavigation) {
-        const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
+        const submitQuiz = confirm(
+          "You have finished all the questions. Submit Quiz now?"
+        );
         if (submitQuiz) {
           setEndQuiz(true);
         }
@@ -123,28 +144,38 @@ function Core({
     let answerBtnIncorrectClassName;
 
     // Default single to avoid code breaking due to automatic version upgrade
-    answerSelectionType = answerSelectionType || 'single';
+    answerSelectionType = answerSelectionType || "single";
 
     return answers.map((answer, index) => {
-      if (answerSelectionType === 'single') {
+      if (answerSelectionType === "single") {
         // correctAnswer - is string
-        answerBtnCorrectClassName = `${index + 1}` === correctAnswer ? 'correct' : '';
-        answerBtnIncorrectClassName = `${userInputIndex}` !== correctAnswer
-        && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '';
+        answerBtnCorrectClassName =
+          `${index + 1}` === correctAnswer ? "correct" : "";
+        answerBtnIncorrectClassName =
+          `${userInputIndex}` !== correctAnswer &&
+          `${index + 1}` === `${userInputIndex}`
+            ? "incorrect"
+            : "";
 
         if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
-          answerBtnIncorrectClassName = 'unanswered';
+          answerBtnIncorrectClassName = "unanswered";
         }
       } else {
         // correctAnswer - is array of numbers
         answerBtnCorrectClassName = correctAnswer.includes(index + 1)
-          ? 'correct'
-          : '';
-        answerBtnIncorrectClassName = !correctAnswer.includes(index + 1)
-        && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
+          ? "correct"
+          : "";
+        answerBtnIncorrectClassName =
+          !correctAnswer.includes(index + 1) &&
+          userInputIndex?.includes(index + 1)
+            ? "incorrect"
+            : "";
 
-        if (userInputIndex === undefined && !correctAnswer.includes(index + 1)) {
-          answerBtnIncorrectClassName = 'unanswered';
+        if (
+          userInputIndex === undefined &&
+          !correctAnswer.includes(index + 1)
+        ) {
+          answerBtnIncorrectClassName = "unanswered";
         }
       }
 
@@ -155,8 +186,8 @@ function Core({
             disabled
             className={`answerBtn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
-            {questionType === 'text' && <span>{answer}</span>}
-            {questionType === 'photo' && <img src={answer} alt="answer" />}
+            {questionType === "text" && <span>{answer}</span>}
+            {questionType === "photo" && <img src={answer} alt="answer" />}
           </button>
         </div>
       );
@@ -172,12 +203,19 @@ function Core({
 
     return (
       <div className="tag-container">
-        {answerSelectionType === 'single'
-          && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
-          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        {answerSelectionType === "single" && (
+          <span className="single selection-tag">{singleSelectionTagText}</span>
+        )}
+        {answerSelectionType === "multiple" && (
+          <span className="multiple selection-tag">
+            {multipleSelectionTagText}
+          </span>
+        )}
         <span className="number-of-selection">
-          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
+          {pickNumberOfSelection.replace(
+            "<numberOfSelection>",
+            numberOfSelection
+          )}
         </span>
         {segment && <span className="selection-tag segment">{segment}</span>}
       </div>
@@ -188,18 +226,18 @@ function Core({
     let filteredQuestions;
     let filteredUserInput;
 
-    if (filteredValue !== 'all') {
+    if (filteredValue !== "all") {
       let targetQuestions = unanswered;
-      if (filteredValue === 'correct') {
+      if (filteredValue === "correct") {
         targetQuestions = correct;
-      } else if (filteredValue === 'incorrect') {
+      } else if (filteredValue === "incorrect") {
         targetQuestions = incorrect;
       }
       filteredQuestions = questions.filter(
-        (_, index) => targetQuestions.indexOf(index) !== -1,
+        (_, index) => targetQuestions.indexOf(index) !== -1
       );
       filteredUserInput = userInput.filter(
-        (_, index) => targetQuestions.indexOf(index) !== -1,
+        (_, index) => targetQuestions.indexOf(index) !== -1
       );
     }
 
@@ -209,7 +247,7 @@ function Core({
         : userInput[index];
 
       // Default single to avoid code breaking due to automatic version upgrade
-      const answerSelectionType = question.answerSelectionType || 'single';
+      const answerSelectionType = question.answerSelectionType || "single";
 
       return (
         <div className="result-answer-wrapper" key={nanoid()}>
@@ -217,7 +255,7 @@ function Core({
             dangerouslySetInnerHTML={rawMarkup(
               `Q${question.questionIndex}: ${
                 question.question
-              } ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`,
+              } ${appLocale.marksOfQuestion.replace("<marks>", question.point)}`
             )}
           />
           {question.questionPic && (
@@ -226,7 +264,7 @@ function Core({
           {renderTags(
             answerSelectionType,
             question.correctAnswer.length,
-            question.segment,
+            question.segment
           )}
           <div className="result-answer">
             {renderAnswerInResult(question, userInputIndex)}
@@ -238,77 +276,90 @@ function Core({
   }, [endQuiz, filteredValue]);
 
   const renderAnswers = (question, answerButtons) => {
-    const {
-      answers, correctAnswer, questionType, questionIndex,
-    } = question;
+    const { answers, correctAnswer, questionType, questionIndex } = question;
     let { answerSelectionType } = question;
-    const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
-      userInput,
-      userAttempt,
-      currentQuestionIndex,
-      continueTillCorrect,
-      showNextQuestionButton,
-      incorrect,
-      correct,
-      setButtons,
-      setIsCorrect,
-      setIncorrectAnswer,
-      setCorrect,
-      setIncorrect,
-      setShowNextQuestionButton,
-      setUserInput,
-      setUserAttempt,
-    });
+    const onClickAnswer = (index) =>
+      checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+        userInput,
+        userAttempt,
+        currentQuestionIndex,
+        continueTillCorrect,
+        showNextQuestionButton,
+        incorrect,
+        correct,
+        setButtons,
+        setIsCorrect,
+        setIncorrectAnswer,
+        setCorrect,
+        setIncorrect,
+        setShowNextQuestionButton,
+        setUserInput,
+        setUserAttempt,
+      });
 
-    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
-      userInput,
-      currentQuestionIndex,
-      setButtons,
-      setShowNextQuestionButton,
-      incorrect,
-      correct,
-      setCorrect,
-      setIncorrect,
-      setUserInput,
-    });
+    const onSelectAnswer = (index) =>
+      selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+        userInput,
+        currentQuestionIndex,
+        setButtons,
+        setShowNextQuestionButton,
+        incorrect,
+        correct,
+        setCorrect,
+        setIncorrect,
+        setUserInput,
+      });
 
     const checkSelectedAnswer = (index) => {
       if (userInput[questionIndex - 1] === undefined) {
         return false;
       }
-      if (answerSelectionType === 'single') {
+      if (answerSelectionType === "single") {
         return userInput[questionIndex - 1] === index;
       }
-      return Array.isArray(userInput[questionIndex - 1]) && userInput[questionIndex - 1].includes(index);
+      return (
+        Array.isArray(userInput[questionIndex - 1]) &&
+        userInput[questionIndex - 1].includes(index)
+      );
     };
 
     // Default single to avoid code breaking due to automatic version upgrade
-    answerSelectionType = answerSelectionType || 'single';
+    answerSelectionType = answerSelectionType || "single";
 
     return answers.map((answer, index) => (
       <Fragment key={nanoid()}>
-        {(answerButtons[index] !== undefined)
-          ? (
-            <button
-              type="button"
-              disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className || ''} answerBtn btn`}
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-            >
-              {questionType === 'text' && <span>{answer}</span>}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )
-          : (
-            <button
-              type="button"
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : ''}`}
-            >
-              {questionType === 'text' && answer}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )}
+        {answerButtons[index] !== undefined ? (
+          <button
+            type="button"
+            disabled={answerButtons[index].disabled || false}
+            className={`${answerButtons[index].className || ""} answerBtn btn`}
+            onClick={() =>
+              revealAnswerOnSubmit
+                ? onSelectAnswer(index)
+                : onClickAnswer(index)
+            }
+          >
+            {questionType === "text" && <span>{answer}</span>}
+            {questionType === "photo" && <img src={answer} alt="answer" />}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() =>
+              revealAnswerOnSubmit
+                ? onSelectAnswer(index)
+                : onClickAnswer(index)
+            }
+            className={`answerBtn btn ${
+              allowNavigation && checkSelectedAnswer(index + 1)
+                ? "selected"
+                : ""
+            }`}
+          >
+            {questionType === "text" && answer}
+            {questionType === "photo" && <img src={answer} alt="answer" />}
+          </button>
+        )}
       </Fragment>
     ));
   };
@@ -325,13 +376,13 @@ function Core({
     <div className="card-body">
       <h2>
         {appLocale.resultPageHeaderText
-          .replace('<correctIndexLength>', correct.length)
-          .replace('<questionLength>', questions.length)}
+          .replace("<correctIndexLength>", correct.length)
+          .replace("<questionLength>", questions.length)}
       </h2>
       <h2>
         {appLocale.resultPagePoint
-          .replace('<correctPoints>', correctPoints)
-          .replace('<totalPoints>', totalPoints)}
+          .replace("<correctPoints>", correctPoints)
+          .replace("<totalPoints>", totalPoints)}
       </h2>
       <br />
       <QuizResultFilter
@@ -358,15 +409,15 @@ function Core({
     setIsRunning(!isRunning);
   };
 
-  const formatTime = (time) => (time < 10 ? '0' : '');
+  const formatTime = (time) => (time < 10 ? "0" : "");
   const displayTime = (time) => {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
 
-    return `${formatTime(hours)}${hours}:${formatTime(minutes)}${minutes}:${
-      formatTime(seconds)
-    }${seconds}`;
+    return `${formatTime(hours)}${hours}:${formatTime(
+      minutes
+    )}${minutes}:${formatTime(seconds)}${seconds}`;
   };
 
   const handleTimeUp = () => {
@@ -375,11 +426,16 @@ function Core({
     getUnansweredQuestions();
   };
 
+  const handleQuitQuiz = () => {
+    setShowQuitConfirm(false);
+    handleTimeUp();
+  };
+
   return (
     <div className="questionWrapper">
       {enableProgressBar && (
         <>
-          <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ display: "flex", width: "100%" }}>
             <ProgressBar
               progress={currentQuestionIndex + 1}
               quizLength={questions.length}
@@ -392,21 +448,14 @@ function Core({
       )}
       {timer && !isRunning && (
         <div>
-          {appLocale.timerTimeTaken}
-          :
-          {' '}
+          {appLocale.timerTimeTaken}:{" "}
           <b>{displayTime(timer - timeRemaining)}</b>
         </div>
       )}
 
       {timer && isRunning && (
         <div>
-          {appLocale.timerTimeRemaining}
-          :
-          {' '}
-          <b>
-            {displayTime(timeRemaining)}
-          </b>
+          {appLocale.timerTimeRemaining}: <b>{displayTime(timeRemaining)}</b>
         </div>
       )}
       {timer && timeRemaining === 0 && isRunning && handleTimeUp()}
@@ -420,7 +469,9 @@ function Core({
             <br />
             {timer && allowPauseTimer && (
               <button type="button" className="timerBtn" onClick={toggleTimer}>
-                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
+                {isRunning
+                  ? appLocale.pauseScreenPause
+                  : appLocale.pauseScreenResume}
               </button>
             )}
           </div>
@@ -431,19 +482,19 @@ function Core({
                   `${
                     activeQuestion && activeQuestion.question
                   } ${appLocale.marksOfQuestion.replace(
-                    '<marks>',
-                    activeQuestion.point,
-                  )}`,
+                    "<marks>",
+                    activeQuestion.point
+                  )}`
                 )}
               />
               {activeQuestion && activeQuestion.questionPic && (
                 <img src={activeQuestion.questionPic} alt="question" />
               )}
-              {activeQuestion
-                && renderTags(
+              {activeQuestion &&
+                renderTags(
                   answerSelectionTypeState,
                   activeQuestion.correctAnswer.length,
-                  activeQuestion.segment,
+                  activeQuestion.segment
                 )}
               <div className="questionModal">
                 <InstantFeedback
@@ -477,6 +528,17 @@ function Core({
                   </button>
                 </div>
               )}
+              {!endQuiz && isRunning && (
+                <div className="quitQuizBtnContainer">
+                  <button
+                    onClick={() => setShowQuitConfirm(true)}
+                    className="quitQuizBtn"
+                    type="button"
+                  >
+                    {appLocale.quitQuizBtn || "Submit and Quit"}
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <span className="timerPauseScreen dark:text-white text-black">
@@ -487,10 +549,36 @@ function Core({
           )}
         </div>
       )}
-      {endQuiz && showDefaultResultState && customResultPage === undefined
-          && renderResult()}
-      {endQuiz && !showDefaultResultState && customResultPage !== undefined
-          && customResultPage(questionSummary)}
+      {endQuiz &&
+        showDefaultResultState &&
+        customResultPage === undefined &&
+        renderResult()}
+      {endQuiz &&
+        !showDefaultResultState &&
+        customResultPage !== undefined &&
+        customResultPage(questionSummary)}
+
+      {showQuitConfirm && (
+        <div className="quit-confirm-modal">
+          <div className="modal-content">
+            <p>
+              {appLocale.quitConfirmationText ||
+                "Are you sure you want to quit the quiz? Your progress will be saved."}
+            </p>
+            <div className="modal-buttons">
+              <button className="confirm-quit-btn btn" onClick={handleQuitQuiz}>
+                {appLocale.confirmQuitText || "Yes, Quit"}
+              </button>
+              <button
+                className="cancel-quit-btn btn"
+                onClick={() => setShowQuitConfirm(false)}
+              >
+                {appLocale.cancelQuitText || "Cancel"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
