@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
+import { QuizProps, Question, AppLocale } from './types';
 
 function Quiz({
   quiz,
@@ -19,23 +20,23 @@ function Quiz({
   timer,
   allowPauseTimer,
   enableProgressBar,
-}) {
+}: QuizProps) {
   const [start, setStart] = useState(false);
-  const [questions, setQuestions] = useState(quiz.questions);
+  const [questions, setQuestions] = useState<Question[]>(quiz.questions);
   const nrOfQuestions = quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
     ? quiz.nrOfQuestions
     : quiz.questions.length;
 
-  // Shuffle answers funtion here
-  const shuffleAnswerSequence = (oldQuestions = []) => {
+  // Shuffle answers function here
+  const shuffleAnswerSequence = (oldQuestions: Question[] = []): Question[] => {
     const newQuestions = oldQuestions.map((question) => {
-      const answerWithIndex = question.answers?.map((ans, i) => [ans, i]);
+      const answerWithIndex = question.answers?.map((ans, i) => [ans, i] as [string, number]);
       const shuffledAnswersWithIndex = answerWithIndex.sort(
         () => Math.random() - 0.5,
       );
       const shuffledAnswers = shuffledAnswersWithIndex.map((ans) => ans[0]);
       if (question.answerSelectionType === 'single') {
-        const oldCorrectAnswer = question.correctAnswer;
+        const oldCorrectAnswer = question.correctAnswer as string;
         const newCorrectAnswer = shuffledAnswersWithIndex.findIndex(
           (ans) => `${ans[1] + 1}` === `${oldCorrectAnswer}`,
         ) + 1;
@@ -46,7 +47,7 @@ function Quiz({
         };
       }
       if (question.answerSelectionType === 'multiple') {
-        const oldCorrectAnswer = question.correctAnswer;
+        const oldCorrectAnswer = question.correctAnswer as number[];
         const newCorrectAnswer = oldCorrectAnswer.map(
           (cans) => shuffledAnswersWithIndex.findIndex(
             (ans) => `${ans[1] + 1}` === `${cans}`,
@@ -62,7 +63,8 @@ function Quiz({
     });
     return newQuestions;
   };
-  const shuffleQuestions = useCallback((q) => {
+
+  const shuffleQuestions = useCallback((q: Question[]): Question[] => {
     for (let i = q.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [q[i], q[j]] = [q[j], q[i]];
@@ -78,14 +80,14 @@ function Quiz({
     let newQuestions = quiz.questions;
 
     if (shuffle) {
-      newQuestions = shuffleQuestions(newQuestions);
+      newQuestions = shuffleQuestions([...newQuestions]);
     }
 
     if (shuffleAnswer) {
-      newQuestions = shuffleAnswerSequence(newQuestions);
+      newQuestions = shuffleAnswerSequence([...newQuestions]);
     }
 
-    newQuestions.length = nrOfQuestions;
+    newQuestions = newQuestions.slice(0, nrOfQuestions);
     newQuestions = newQuestions.map((question, index) => ({
       ...question,
       questionIndex: index + 1,
@@ -93,18 +95,18 @@ function Quiz({
     setQuestions(newQuestions);
   }, [start]);
 
-  const validateProgressBarColor = (inputColor) => {
+  const validateProgressBarColor = (inputColor: string): boolean => {
     const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
     return hexaPattern.test(inputColor);
   };
 
-  const validateQuiz = (q) => {
+  const validateQuiz = (q: QuizProps['quiz']): boolean => {
     if (!q) {
       console.error('Quiz object is required.');
       return false;
     }
 
-    if ((timer && typeof timer !== 'number') || (timer < 1)) {
+    if ((timer && typeof timer !== 'number') || (timer !== undefined && timer < 1)) {
       console.error(timer && typeof timer !== 'number' ? 'timer must be a number' : 'timer must be a number greater than 0');
       return false;
     }
@@ -181,7 +183,7 @@ function Quiz({
 
       if (
         selectType === 'single'
-        && !(typeof selectType === 'string' || selectType instanceof String)
+        && !(typeof correctAnswer === 'string' || correctAnswer instanceof String)
       ) {
         console.error(
           'answerSelectionType is single but expecting String in the field correctAnswer',
@@ -204,7 +206,7 @@ function Quiz({
     return null;
   }
 
-  const appLocale = {
+  const appLocale: AppLocale = {
     ...defaultLocale,
     ...quiz.appLocale,
   };
@@ -217,7 +219,7 @@ function Quiz({
           <div>
             {appLocale.landingHeaderText.replace(
               '<questionLength>',
-              nrOfQuestions,
+              String(nrOfQuestions),
             )}
           </div>
           {quiz.quizSynopsis && (

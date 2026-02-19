@@ -4,11 +4,13 @@
   "description": "React Quiz Component",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
     "docs": "webpack --mode production",
     "build": "rollup -c",
-    "lint": "eslint src --ext .jsx --ext .js --fix"
+    "lint": "eslint src --ext .tsx --ext .ts --ext .jsx --ext .js --fix",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "react",
@@ -24,12 +26,18 @@
     "@babel/plugin-transform-object-rest-spread": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.0",
+    "@babel/preset-typescript": "^7.28.5",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-html": "^2.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/dompurify": "^3.2.0",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "babel-loader": "^10.0.0",
     "css-loader": "^7.1.4",
     "css-minimizer-webpack-plugin": "^7.0.4",
@@ -46,6 +54,8 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "terser-webpack-plugin": "^5.3.11",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
     "webpack": "^5.98.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0"

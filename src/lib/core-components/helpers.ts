@@ -1,31 +1,41 @@
 import snarkdown from 'snarkdown';
 import dompurify from 'dompurify';
+import { CheckAnswerParams, SelectAnswerParams, AnswerSelectionType, ButtonState } from '../types';
 
-export const rawMarkup = (data) => {
+export const rawMarkup = (data: string): { __html: string } => {
   const sanitizer = dompurify.sanitize;
   return { __html: snarkdown(sanitizer(data)) };
 };
 
-export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, {
-  userInput,
-  userAttempt,
-  currentQuestionIndex,
-  continueTillCorrect,
-  showNextQuestionButton,
-  incorrect,
-  correct,
-  setButtons,
-  setIsCorrect,
-  setIncorrectAnswer,
-  setCorrect,
-  setIncorrect,
-  setShowNextQuestionButton,
-  setUserInput,
-  setUserAttempt,
-}) => {
+export const checkAnswer = (
+  index: number,
+  correctAnswer: string | number[],
+  answerSelectionType: AnswerSelectionType,
+  answers: string[],
+  params: CheckAnswerParams
+): void => {
+  const {
+    userInput,
+    userAttempt,
+    currentQuestionIndex,
+    continueTillCorrect,
+    showNextQuestionButton,
+    incorrect,
+    correct,
+    setButtons,
+    setIsCorrect,
+    setIncorrectAnswer,
+    setCorrect,
+    setIncorrect,
+    setShowNextQuestionButton,
+    setUserInput,
+    setUserAttempt,
+  } = params;
+
   const indexStr = `${index}`;
   const disabledAll = Object.keys(answers).map(() => ({ disabled: true }));
   const userInputCopy = [...userInput];
+
   if (answerSelectionType === 'single') {
     if (userInputCopy[currentQuestionIndex] === undefined) {
       userInputCopy[currentQuestionIndex] = index;
@@ -83,21 +93,24 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
       setIncorrect(incorrect);
     }
   } else {
-    const maxNumberOfMultipleSelection = correctAnswer.length;
+    const correctAnswerArray = correctAnswer as number[];
+    const maxNumberOfMultipleSelection = correctAnswerArray.length;
 
     if (userInputCopy[currentQuestionIndex] === undefined) {
       userInputCopy[currentQuestionIndex] = [];
     }
 
-    if (userInputCopy[currentQuestionIndex].length < maxNumberOfMultipleSelection) {
-      userInputCopy[currentQuestionIndex].push(index);
+    const currentInput = userInputCopy[currentQuestionIndex] as number[];
 
-      if (userInputCopy[currentQuestionIndex].length <= maxNumberOfMultipleSelection) {
+    if (currentInput.length < maxNumberOfMultipleSelection) {
+      currentInput.push(index);
+
+      if (currentInput.length <= maxNumberOfMultipleSelection) {
         setButtons((prevState) => ({
           ...prevState,
           [index - 1]: {
             disabled: !prevState[index - 1],
-            className: (correctAnswer.includes(index)) ? 'correct' : 'incorrect',
+            className: (correctAnswerArray.includes(index)) ? 'correct' : 'incorrect',
           },
         }));
       }
@@ -105,8 +118,8 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
 
     if (maxNumberOfMultipleSelection === userAttempt) {
       let cnt = 0;
-      for (let i = 0; i < correctAnswer.length; i += 1) {
-        if (userInputCopy[currentQuestionIndex].includes(correctAnswer[i])) {
+      for (let i = 0; i < correctAnswerArray.length; i += 1) {
+        if (currentInput.includes(correctAnswerArray[i])) {
           cnt += 1;
         }
       }
@@ -135,24 +148,32 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
   setUserInput(userInputCopy);
 };
 
-export const selectAnswer = (index, correctAnswer, answerSelectionType, answers, {
-  userInput,
-  currentQuestionIndex,
-  setButtons,
-  setShowNextQuestionButton,
-  incorrect,
-  correct,
-  setCorrect,
-  setIncorrect,
-  setUserInput,
-}) => {
-  const selectedButtons = Object.keys(answers).map(() => ({ selected: false }));
+export const selectAnswer = (
+  index: number,
+  correctAnswer: string | number[],
+  answerSelectionType: AnswerSelectionType,
+  answers: string[],
+  params: SelectAnswerParams
+): void => {
+  const {
+    userInput,
+    currentQuestionIndex,
+    setButtons,
+    setShowNextQuestionButton,
+    incorrect,
+    correct,
+    setCorrect,
+    setIncorrect,
+    setUserInput,
+  } = params;
+
   const userInputCopy = [...userInput];
+
   if (answerSelectionType === 'single') {
-    correctAnswer = Number(correctAnswer);
+    const correctAnswerNum = Number(correctAnswer);
     userInputCopy[currentQuestionIndex] = index;
 
-    if (index === correctAnswer) {
+    if (index === correctAnswerNum) {
       if (correct.indexOf(currentQuestionIndex) < 0) {
         correct.push(currentQuestionIndex);
       }
@@ -170,30 +191,37 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, answers,
     setCorrect(correct);
     setIncorrect(incorrect);
 
-    setButtons((prevState) => ({
-      ...prevState,
-      ...selectedButtons,
-      [index - 1]: {
-        className: 'selected',
-      },
-    }));
+    setButtons((prevState) => {
+      const newState: ButtonState = {};
+      // Reset all buttons
+      Object.keys(answers).forEach((_, idx) => {
+        newState[idx] = {};
+      });
+      // Set the selected button
+      newState[index - 1] = { className: 'selected' };
+      return newState;
+    });
 
     setShowNextQuestionButton(true);
   } else {
+    const correctAnswerArray = correctAnswer as number[];
+
     if (userInputCopy[currentQuestionIndex] === undefined) {
       userInputCopy[currentQuestionIndex] = [];
     }
-    if (userInputCopy[currentQuestionIndex].includes(index)) {
-      userInputCopy[currentQuestionIndex].splice(userInputCopy[currentQuestionIndex].indexOf(index), 1);
+
+    const currentInput = userInputCopy[currentQuestionIndex] as number[];
+
+    if (currentInput.includes(index)) {
+      currentInput.splice(currentInput.indexOf(index), 1);
     } else {
-      userInputCopy[currentQuestionIndex].push(index);
+      currentInput.push(index);
     }
 
-    if (userInputCopy[currentQuestionIndex].length === correctAnswer.length) {
+    if (currentInput.length === correctAnswerArray.length) {
       let exactMatch = true;
-      // eslint-disable-next-line no-restricted-syntax
-      for (const input of userInput[currentQuestionIndex]) {
-        if (!correctAnswer.includes(input)) {
+      for (const input of currentInput) {
+        if (!correctAnswerArray.includes(input)) {
           exactMatch = false;
           if (incorrect.indexOf(currentQuestionIndex) < 0) {
             incorrect.push(currentQuestionIndex);
@@ -225,11 +253,11 @@ export const selectAnswer = (index, correctAnswer, answerSelectionType, answers,
     setButtons((prevState) => ({
       ...prevState,
       [index - 1]: {
-        className: userInputCopy[currentQuestionIndex].includes(index) ? 'selected' : undefined,
+        className: currentInput.includes(index) ? 'selected' : undefined,
       },
     }));
 
-    if (userInputCopy[currentQuestionIndex].length > 0) {
+    if (currentInput.length > 0) {
       setShowNextQuestionButton(true);
     }
   }
