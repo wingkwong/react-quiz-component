@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
+import { ProgressBarProps } from '../types';
 
 function ProgressBar({
-  progressBarColor = '#9de1f6', progress, height = '25px', quizLength, isEndQuiz,
-}) {
+  progressBarColor = '#9de1f6',
+  progress,
+  height = '25px',
+  quizLength,
+  isEndQuiz,
+}: ProgressBarProps) {
   const fixedProgress = progress - 1;
   const progressUnit = 100 / quizLength;
 
-  const progressBarContainer = {
+  const progressBarContainer: CSSProperties = {
     width: '100%',
     backgroundColor: '#D0D4CA',
     height,
@@ -15,19 +20,19 @@ function ProgressBar({
     overflow: 'hidden',
   };
 
-  const progressBar = {
+  const progressBar: CSSProperties = {
     width: isEndQuiz ? '100%' : `${progressUnit * fixedProgress}%`,
     height: '100%',
     backgroundColor: progressBarColor,
     transition: 'width 0.3s ease',
   };
 
-  const progressBarLabel = {
+  const progressBarLabel: CSSProperties = {
     position: 'absolute',
     left: '50%',
     top: '50%',
     transform: 'translateX(-50%) translateY(-50%)',
-    lineHeigth: '20px',
+    lineHeight: '20px',
     fontSize: '16px',
     color: '#000',
     fontWeight: 'bold',

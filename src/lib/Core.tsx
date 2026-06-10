@@ -7,31 +7,32 @@ import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
+import { CoreProps, Question, ButtonState, QuestionSummary } from './types';
 
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
   showInstantFeedback, continueTillCorrect, revealAnswerOnSubmit, allowNavigation,
   onQuestionSubmit, timer, allowPauseTimer, enableProgressBar, progressBarColor,
-}) {
+}: CoreProps) {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
   const [endQuiz, setEndQuiz] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [buttons, setButtons] = useState({});
-  const [correct, setCorrect] = useState([]);
-  const [incorrect, setIncorrect] = useState([]);
-  const [unanswered, setUnanswered] = useState([]);
-  const [userInput, setUserInput] = useState([]);
+  const [buttons, setButtons] = useState<ButtonState>({});
+  const [correct, setCorrect] = useState<number[]>([]);
+  const [incorrect, setIncorrect] = useState<number[]>([]);
+  const [unanswered, setUnanswered] = useState<number[]>([]);
+  const [userInput, setUserInput] = useState<(number | number[] | undefined)[]>([]);
   const [filteredValue, setFilteredValue] = useState('all');
   const [userAttempt, setUserAttempt] = useState(1);
   const [showDefaultResultState, setShowDefaultResult] = useState(true);
-  const [answerSelectionTypeState, setAnswerSelectionType] = useState(undefined);
+  const [answerSelectionTypeState, setAnswerSelectionType] = useState<'single' | 'multiple' | undefined>(undefined);
 
   const [totalPoints, setTotalPoints] = useState(0);
   const [correctPoints, setCorrectPoints] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState(questions[currentQuestionIndex]);
-  const [questionSummary, setQuestionSummary] = useState(undefined);
+  const [activeQuestion, setActiveQuestion] = useState<Question>(questions[currentQuestionIndex]);
+  const [questionSummary, setQuestionSummary] = useState<QuestionSummary | undefined>(undefined);
   const [timeRemaining, setTimeRemaining] = useState(timer);
   const [isRunning, setIsRunning] = useState(true);
 
@@ -56,14 +57,14 @@ function Core({
       let correctPointsTemp = 0;
       for (let i = 0; i < questions.length; i += 1) {
         let point = questions[i].point || 0;
-        if (typeof point === 'string' || point instanceof String) {
+        if (typeof point === 'string') {
           point = parseInt(point, 10);
         }
 
-        totalPointsTemp += point;
+        totalPointsTemp += Number(point);
 
         if (correct.includes(i)) {
-          correctPointsTemp += point;
+          correctPointsTemp += Number(point);
         }
       }
       setTotalPoints(totalPointsTemp);
@@ -80,7 +81,7 @@ function Core({
       userInput,
       totalPoints,
       correctPoints,
-      timeTaken: timer - timeRemaining,
+      timeTaken: timer ? timer - (timeRemaining || 0) : 0,
     });
   }, [totalPoints, correctPoints]);
 
@@ -90,7 +91,7 @@ function Core({
     }
   }, [questionSummary]);
 
-  const nextQuestion = (currentQuestionIdx) => {
+  const nextQuestion = (currentQuestionIdx: number) => {
     setIncorrectAnswer(false);
     setIsCorrect(false);
     setShowNextQuestionButton(false);
@@ -112,15 +113,15 @@ function Core({
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: { target: { value: string } }) => {
     setFilteredValue(event.target.value);
   };
 
-  const renderAnswerInResult = (question, userInputIndex) => {
+  const renderAnswerInResult = (question: Question, userInputIndex: number | number[] | undefined) => {
     const { answers, correctAnswer, questionType } = question;
     let { answerSelectionType } = question;
-    let answerBtnCorrectClassName;
-    let answerBtnIncorrectClassName;
+    let answerBtnCorrectClassName: string;
+    let answerBtnIncorrectClassName: string;
 
     // Default single to avoid code breaking due to automatic version upgrade
     answerSelectionType = answerSelectionType || 'single';
@@ -137,13 +138,14 @@ function Core({
         }
       } else {
         // correctAnswer - is array of numbers
-        answerBtnCorrectClassName = correctAnswer.includes(index + 1)
+        const correctAnswerArray = correctAnswer as number[];
+        answerBtnCorrectClassName = correctAnswerArray.includes(index + 1)
           ? 'correct'
           : '';
-        answerBtnIncorrectClassName = !correctAnswer.includes(index + 1)
-        && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
+        answerBtnIncorrectClassName = !correctAnswerArray.includes(index + 1)
+        && Array.isArray(userInputIndex) && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
 
-        if (userInputIndex === undefined && !correctAnswer.includes(index + 1)) {
+        if (userInputIndex === undefined && !correctAnswerArray.includes(index + 1)) {
           answerBtnIncorrectClassName = 'unanswered';
         }
       }
@@ -163,7 +165,7 @@ function Core({
     });
   };
 
-  const renderTags = (answerSelectionType, numberOfSelection, segment) => {
+  const renderTags = (answerSelectionType: 'single' | 'multiple', numberOfSelection: number, segment?: string) => {
     const {
       singleSelectionTagText,
       multipleSelectionTagText,
@@ -177,7 +179,7 @@ function Core({
         {answerSelectionType === 'multiple'
           && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
         <span className="number-of-selection">
-          {pickNumberOfSelection.replace('<numberOfSelection>', numberOfSelection)}
+          {pickNumberOfSelection.replace('<numberOfSelection>', String(numberOfSelection))}
         </span>
         {segment && <span className="selection-tag segment">{segment}</span>}
       </div>
@@ -185,8 +187,8 @@ function Core({
   };
 
   const renderQuizResultQuestions = useCallback(() => {
-    let filteredQuestions;
-    let filteredUserInput;
+    let filteredQuestions: Question[];
+    let filteredUserInput: (number | number[] | undefined)[];
 
     if (filteredValue !== 'all') {
       let targetQuestions = unanswered;
@@ -201,12 +203,13 @@ function Core({
       filteredUserInput = userInput.filter(
         (_, index) => targetQuestions.indexOf(index) !== -1,
       );
+    } else {
+      filteredQuestions = questions;
+      filteredUserInput = userInput;
     }
 
-    return (filteredQuestions || questions).map((question, index) => {
-      const userInputIndex = filteredUserInput
-        ? filteredUserInput[index]
-        : userInput[index];
+    return filteredQuestions.map((question, index) => {
+      const userInputIndex = filteredUserInput[index];
 
       // Default single to avoid code breaking due to automatic version upgrade
       const answerSelectionType = question.answerSelectionType || 'single';
@@ -217,7 +220,7 @@ function Core({
             dangerouslySetInnerHTML={rawMarkup(
               `Q${question.questionIndex}: ${
                 question.question
-              } ${appLocale.marksOfQuestion.replace('<marks>', question.point)}`,
+              } ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}`,
             )}
           />
           {question.questionPic && (
@@ -225,7 +228,7 @@ function Core({
           )}
           {renderTags(
             answerSelectionType,
-            question.correctAnswer.length,
+            Array.isArray(question.correctAnswer) ? question.correctAnswer.length : 1,
             question.segment,
           )}
           <div className="result-answer">
@@ -237,12 +240,12 @@ function Core({
     });
   }, [endQuiz, filteredValue]);
 
-  const renderAnswers = (question, answerButtons) => {
+  const renderAnswers = (question: Question, answerButtons: ButtonState) => {
     const {
       answers, correctAnswer, questionType, questionIndex,
     } = question;
     let { answerSelectionType } = question;
-    const onClickAnswer = (index) => checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+    const onClickAnswer = (index: number) => checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
       userInput,
       userAttempt,
       currentQuestionIndex,
@@ -260,7 +263,7 @@ function Core({
       setUserAttempt,
     });
 
-    const onSelectAnswer = (index) => selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+    const onSelectAnswer = (index: number) => selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
       userInput,
       currentQuestionIndex,
       setButtons,
@@ -272,14 +275,14 @@ function Core({
       setUserInput,
     });
 
-    const checkSelectedAnswer = (index) => {
-      if (userInput[questionIndex - 1] === undefined) {
+    const checkSelectedAnswer = (index: number): boolean => {
+      if (questionIndex === undefined || userInput[questionIndex - 1] === undefined) {
         return false;
       }
       if (answerSelectionType === 'single') {
         return userInput[questionIndex - 1] === index;
       }
-      return Array.isArray(userInput[questionIndex - 1]) && userInput[questionIndex - 1].includes(index);
+      return Array.isArray(userInput[questionIndex - 1]) && (userInput[questionIndex - 1] as number[]).includes(index);
     };
 
     // Default single to avoid code breaking due to automatic version upgrade
@@ -325,13 +328,13 @@ function Core({
     <div className="card-body">
       <h2>
         {appLocale.resultPageHeaderText
-          .replace('<correctIndexLength>', correct.length)
-          .replace('<questionLength>', questions.length)}
+          .replace('<correctIndexLength>', String(correct.length))
+          .replace('<questionLength>', String(questions.length))}
       </h2>
       <h2>
         {appLocale.resultPagePoint
-          .replace('<correctPoints>', correctPoints)
-          .replace('<totalPoints>', totalPoints)}
+          .replace('<correctPoints>', String(correctPoints))
+          .replace('<totalPoints>', String(totalPoints))}
       </h2>
       <br />
       <QuizResultFilter
@@ -344,22 +347,26 @@ function Core({
   );
 
   useEffect(() => {
-    let countdown;
+    let countdown: NodeJS.Timeout | undefined;
 
-    if (timer && isRunning && timeRemaining > 0) {
+    if (timer && isRunning && timeRemaining !== undefined && timeRemaining > 0) {
       countdown = setInterval(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
+        setTimeRemaining((prevTime) => prevTime !== undefined ? prevTime - 1 : 0);
       }, 1000);
     }
-    return () => timer && clearInterval(countdown);
+    return () => {
+      if (timer && countdown) {
+        clearInterval(countdown);
+      }
+    };
   }, [isRunning, timeRemaining, timer]);
 
   const toggleTimer = () => {
     setIsRunning(!isRunning);
   };
 
-  const formatTime = (time) => (time < 10 ? '0' : '');
-  const displayTime = (time) => {
+  const formatTime = (time: number): string => (time < 10 ? '0' : '');
+  const displayTime = (time: number): string => {
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
@@ -395,7 +402,7 @@ function Core({
           {appLocale.timerTimeTaken}
           :
           {' '}
-          <b>{displayTime(timer - timeRemaining)}</b>
+          <b>{displayTime(timer - (timeRemaining || 0))}</b>
         </div>
       )}
 
@@ -405,11 +412,11 @@ function Core({
           :
           {' '}
           <b>
-            {displayTime(timeRemaining)}
+            {displayTime(timeRemaining || 0)}
           </b>
         </div>
       )}
-      {timer && timeRemaining === 0 && isRunning && handleTimeUp()}
+      {timer && timeRemaining === 0 && isRunning && (() => { handleTimeUp(); return null; })()}
 
       {!endQuiz && (
         <div className="questionWrapperBody">
@@ -432,7 +439,7 @@ function Core({
                     activeQuestion && activeQuestion.question
                   } ${appLocale.marksOfQuestion.replace(
                     '<marks>',
-                    activeQuestion.point,
+                    String(activeQuestion.point),
                   )}`,
                 )}
               />
@@ -441,8 +448,8 @@ function Core({
               )}
               {activeQuestion
                 && renderTags(
-                  answerSelectionTypeState,
-                  activeQuestion.correctAnswer.length,
+                  answerSelectionTypeState || 'single',
+                  Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
                   activeQuestion.segment,
                 )}
               <div className="questionModal">
@@ -490,7 +497,7 @@ function Core({
       {endQuiz && showDefaultResultState && customResultPage === undefined
           && renderResult()}
       {endQuiz && !showDefaultResultState && customResultPage !== undefined
-          && customResultPage(questionSummary)}
+          && customResultPage(questionSummary!)}
     </div>
   );
 }
