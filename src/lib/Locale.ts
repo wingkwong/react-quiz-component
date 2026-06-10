@@ -1,4 +1,6 @@
-const defaultLocale = {
+import { AppLocale } from './types';
+
+const defaultLocale: AppLocale = {
   landingHeaderText: '<questionLength> Questions',
   question: 'Question',
   startQuizBtn: 'Start Quiz',

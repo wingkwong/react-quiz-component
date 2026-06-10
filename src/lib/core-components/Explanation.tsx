@@ -1,6 +1,7 @@
 import React from 'react';
+import { ExplanationProps } from '../types';
 
-function Explanation({ question, isResultPage }) {
+function Explanation({ question, isResultPage }: ExplanationProps) {
   const { explanation } = question;
 
   if (!explanation) {
