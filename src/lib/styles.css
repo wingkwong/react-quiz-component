@@ -1,274 +1,428 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  --quiz-max-width: 500px;
+  --quiz-spacing: 20px;
+  --quiz-spacing-sm: 10px;
+  --quiz-spacing-xs: 5px;
+
+  --color-primary: #007bff;
+  --color-success: #15803d;
+  --color-error: #ef4444;
+  --color-neutral: #6b7280;
+  --color-indigo: #3f51b5;
+  --color-purple: #673ab7;
+  --color-orange: #ff9800;
+  --color-cyan: #3db4b9;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-bg-tertiary: #fcfcfc;
+  --color-bg-hover: rgb(226 226 226 / 0.852);
+  --color-bg-selected: #d7f1f9;
+
+  --color-text-primary: rgb(0 0 0 / 0.9);
+  --color-text-secondary: rgb(0 0 0 / 0.65);
+  --color-text-tertiary: #333;
+  --color-text-light: #c6c2c2;
+  --color-text-neutral: #a5a5a5;
+  --color-text-on-primary: #ffffff;
+
+  --color-border-primary: #e8e8e8;
+  --color-border-secondary: #d9d9d9;
+  --color-border-focus: #51aae6;
+  --color-border-dropdown: #c2c5c7;
+
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 5px;
+  --border-radius-xl: 7px;
+  --border-radius-2xl: 10px;
+
+  --shadow-sm: 0 0 6px rgb(109 179 250 / 0.5);
+  --shadow-md: 0 0 10px rgb(141 143 145 / 0.5);
+
+  --transition-default: all 0.3s ease;
+}
+
+/* Container */
 .react-quiz-container {
-  margin: 20px;
-  max-width: 500px;
+  margin: var(--quiz-spacing);
+  max-inline-size: var(--quiz-max-width);
 }
 
-.react-quiz-container .startQuizWrapper {
-  margin-top: 10px;
-}
-
+/* Button Base Styles */
 .react-quiz-container .btn {
-  margin-bottom: 0;
+  display: inline-block;
+  padding-block: 11px;
+  padding-inline: 12px;
+  margin-block-end: 0;
   font-weight: 600;
   text-align: center;
-  padding: 11px 12px;
+  white-space: nowrap;
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
+  user-select: none;
   background-image: none;
   border: 1px solid transparent;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: pointer;
 }
 
+/* Question Wrapper Buttons */
 .react-quiz-container .questionWrapper .btn {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  border: 1px solid #e8e8e8;
-  font-size: 15px;
   display: block;
-  white-space: normal;
-  text-align: unset;
-}
-
-.react-quiz-container .questionWrapper .btn.correct {
-  background: green;
-  color: white;
-}
-
-.timerBtn {
-  background: green;
-  border: 0 !important;
-  width: 80px;
-  color: #fff;
-  padding: 5px;
-  top: -35px;
-  border-radius: 10px;
-  position: relative;
-  float: right;
-  cursor: pointer;
-}
-
-.timerPauseScreen {
-  font-size: 30px;
-}
-
-
-.react-quiz-container .questionModal .alert {
-  padding: 20px;
-  margin-bottom: 21px;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  color: #fff;
-}
-
-.react-quiz-container .correct {
-  background: green;
-}
-
-.react-quiz-container .incorrect {
-  background: red;
-  color: white;
-}
-
-.react-quiz-container .unanswered {
-  background: grey;
-  color: white;
-}
-
-.react-quiz-container .questionWrapper img {
-  width: 100%;
-}
-
-.react-quiz-container .answerBtn {
-  width: 100%;
-}
-
-.react-quiz-container .selected {
-  background: #007bff;
-  color: white;
-}
-
-.react-quiz-container .startQuizWrapper .startQuizBtn {
+  margin-block: var(--quiz-spacing-sm);
+  padding: 11px 12px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
   font-size: 15px;
-  border-radius: 2px;
-  line-height: 1.35135;
-  color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
-  border: 1px solid #d9d9d9;
+  white-space: normal;
+  text-align: start;
+  transition: var(--transition-default);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &.correct {
+    background: var(--color-success);
+    color: var(--color-text-on-primary);
+  }
+
+  &.incorrect {
+    background: var(--color-error);
+    color: var(--color-text-on-primary);
+  }
+
+  &.selected {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+  }
+
+  &.unanswered {
+    background: var(--color-neutral);
+    color: var(--color-text-on-primary);
+  }
 }
 
+/* Timer Button */
+.timerBtn {
+  position: relative;
+  float: inline-end;
+  inset-block-start: -35px;
+  inline-size: 80px;
+  padding: 5px;
+  background: var(--color-success);
+  color: var(--color-text-on-primary);
+  border: 0 !important;
+  border-radius: var(--border-radius-2xl);
+  cursor: pointer;
+  transition: var(--transition-default);
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+/* Timer Pause Screen */
+.timerPauseScreen {
+  font-size: clamp(20px, 5vw, 30px);
+}
+
+/* Alert Messages */
+.react-quiz-container .questionModal .alert {
+  padding: var(--quiz-spacing);
+  margin-block-end: 21px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-on-primary);
+
+  &.correct {
+    background: var(--color-success);
+  }
+
+  &.incorrect {
+    background: var(--color-error);
+  }
+}
+
+/* Images */
+.react-quiz-container .questionWrapper img {
+  inline-size: 100%;
+  block-size: auto;
+  object-fit: cover;
+}
+
+/* Answer Button */
+.react-quiz-container .answerBtn {
+  inline-size: 100%;
+}
+
+/* Start Quiz Section */
+.react-quiz-container .startQuizWrapper {
+  margin-block-start: var(--quiz-spacing-sm);
+
+  .startQuizBtn {
+    font-size: 15px;
+    line-height: 1.35135;
+    color: var(--color-text-secondary);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-default);
+
+    &:hover {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+  }
+}
+
+/* Results Section */
 .react-quiz-container .result-answer-wrapper {
-  margin-bottom: 20px;
-  border: 1px solid #e8e8e8;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
+  margin-block-end: var(--quiz-spacing);
+  border: 1px solid var(--color-border-primary);
+  border-end-start-radius: var(--border-radius-lg);
+  border-end-end-radius: var(--border-radius-lg);
 
-.react-quiz-container .result-answer-wrapper h3 {
-  background-color: #fafafa;
-  opacity: 0.8;
-  color: rgba(0, 0, 0, 0.9);
-  margin: 0px;
-  padding: 10px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
+  h3 {
+    margin: 0;
+    padding: var(--quiz-spacing-sm);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    opacity: 0.8;
+    border-start-start-radius: var(--border-radius-lg);
+    border-start-end-radius: var(--border-radius-lg);
+  }
 
-.react-quiz-container .result-answer-wrapper .explanation {
-  padding: 20px;
-  margin: 0px 20px 20px 20px;
-  border: 1px solid #e8e8e8;
-}
+  .explanation {
+    padding: var(--quiz-spacing);
+    margin: 0 var(--quiz-spacing) var(--quiz-spacing);
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--border-radius-md);
+  }
 
-.react-quiz-container .result-answer-wrapper .tag-container {
-  margin: 20px;
+  .tag-container {
+    margin: var(--quiz-spacing);
+  }
 }
 
 .react-quiz-container .result-answer {
-  padding: 0px 20px;
+  padding-inline: var(--quiz-spacing);
 }
 
+/* Quiz Synopsis */
 .react-quiz-container .quiz-synopsis {
-  margin: 15px 0px;
+  margin-block: 15px;
+  line-height: 1.6;
 }
 
+/* Tag Container */
 .react-quiz-container .tag-container {
-  margin-top: 20px;
-  margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--quiz-spacing-xs);
+  margin-block: var(--quiz-spacing);
 }
 
 .react-quiz-container .selection-tag,
 .react-quiz-container .number-of-selection {
   padding: 7px;
-  border-radius: 5px;
-  color: #ffffff;
+  border-radius: var(--border-radius-lg);
+  color: var(--color-text-on-primary);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .react-quiz-container .number-of-selection {
-  background: #673ab7;
-  margin-left: 5px;
+  background: var(--color-purple);
 }
 
-.react-quiz-container .selection-tag.single {
-  background: #3f51b5;
+.react-quiz-container .selection-tag {
+  &.single {
+    background: var(--color-indigo);
+  }
+
+  &.multiple {
+    background: var(--color-orange);
+  }
+
+  &.segment {
+    background: var(--color-cyan);
+  }
 }
 
-.react-quiz-container .selection-tag.multiple {
-  background: #ff9800;
-}
-
-.react-quiz-container .selection-tag.segment {
-  background: #3db4b9;
-  margin-left: 5px;
-}
-
+/* Question Button Container */
 .react-quiz-container .questionBtnContainer {
   display: flex;
   justify-content: space-between;
+  gap: var(--quiz-spacing-sm);
+  margin-block-start: var(--quiz-spacing);
 }
 
+/* Quiz Result Filter Dropdown */
 .react-quiz-container .quiz-result-filter {
   position: relative;
-  width: 120px;
-  bottom: 15px;
+  inline-size: 120px;
+  inset-block-end: 15px;
 
   .filter-dropdown-select {
+    position: relative;
+    display: flex;
+    align-items: center;
     padding: 8px;
-    margin-top: 2px;
+    margin-block-start: 2px;
     text-transform: capitalize;
-    border: 2px solid #c2c5c7;
-    border-radius: 7px;
-    background-color: #fcfcfc;
-    color: #333;
+    border: 2px solid var(--color-border-dropdown);
+    border-radius: var(--border-radius-xl);
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
     font-size: 16px;
     cursor: pointer;
-    bottom: 10px;
-    position: relative; 
-    height: 12px;
+    transition: var(--transition-default);
+
+    &::after {
+      content: "▼";
+      position: absolute;
+      inset-inline-end: 10px;
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-neutral);
+      font-size: 11px;
+      transition: var(--transition-default);
+      pointer-events: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--color-border-focus);
+      box-shadow: var(--shadow-sm);
+      outline: 2px solid transparent;
+    }
+
+    &.open::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
   }
 
-  .filter-dropdown-select:after {
-    transition: all 0.3s ease;
-    content: "▼";
-    position: absolute;
-    top: 57%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #a5a5a5;
-    font-size: 11px;
-  }
+  .selected-option {
+    font-size: 16px;
 
-  .filter-dropdown-select:hover {
-    border: 2px solid #51aae6;
-    box-shadow: 0 0 6px rgba(109, 179, 250, 0.5);
+    &.selected-open {
+      color: var(--color-text-light);
+      font-weight: lighter;
+    }
   }
 
   .dropdown-options {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     position: absolute;
-    top: 85%;
+    inset-block-start: 85%;
+    inset-inline-start: 0;
     z-index: 1;
-    left: 0;
-    width: 100%;
-    background-color: #fcfcfc;
-    box-shadow: 0 0 10px rgba(141, 143, 145, 0.5);
-    border-radius: 10px;
-  } 
-
-  .filter-dropdown-select.open {
-    border: 2px solid #51aae6;
-    box-shadow: 0 0 6px rgba(109, 179, 250, 0.5);
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
   }
 
-  .dropdown-options .dropdown-options-item {
+  .dropdown-options-item {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+    transition: var(--transition-default);
+
+    &:hover {
+      background-color: var(--color-bg-hover);
+    }
+
+    &:focus,
+    &:focus-visible {
+      background-color: var(--color-bg-selected);
+      font-weight: bold;
+      outline: 2px solid var(--color-border-focus);
+      outline-offset: -2px;
+    }
+
+    &.selected {
+      background-color: var(--color-bg-selected);
+      color: var(--color-text-tertiary);
+      font-weight: bold;
+    }
+
+    &:first-child {
+      border-start-start-radius: var(--border-radius-2xl);
+      border-start-end-radius: var(--border-radius-2xl);
+    }
+
+    &:last-child {
+      border-end-start-radius: var(--border-radius-2xl);
+      border-end-end-radius: var(--border-radius-2xl);
+    }
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .react-quiz-container {
+    margin: var(--quiz-spacing-sm);
+    max-inline-size: 100%;
   }
 
-  .dropdown-options .dropdown-options-item:hover {
-    background-color: rgba(226, 226, 226, 0.852);
-    border-radius: 5px;
+  .react-quiz-container .questionBtnContainer {
+    flex-direction: column;
   }
 
-  .dropdown-options .dropdown-options-item:focus {
-    background-color: #d7f1f9;
-    font-weight: bold;
+  .timerBtn {
+    inline-size: 100%;
+    float: none;
+    inset-block-start: 0;
+    margin-block-start: var(--quiz-spacing-sm);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #1f2937;
+    --color-bg-secondary: #111827;
+    --color-bg-tertiary: #1f2937;
+    --color-bg-hover: rgb(55 65 81 / 0.8);
+    --color-bg-selected: #1e3a8a;
+
+    --color-text-primary: rgb(255 255 255 / 0.95);
+    --color-text-secondary: rgb(255 255 255 / 0.75);
+    --color-text-tertiary: #e5e7eb;
+    --color-text-light: #9ca3af;
+
+    --color-border-primary: #374151;
+    --color-border-secondary: #4b5563;
+    --color-border-dropdown: #4b5563;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .react-quiz-container .timerBtn,
+  .react-quiz-container .questionBtnContainer,
+  .react-quiz-container .quiz-result-filter {
+    display: none;
   }
 
-  .filter-dropdown-select .selected-option.selected-open {
-    color: #c6c2c2; 
-    font-weight: lighter; 
-  }
-  
-  .filter-dropdown-select .selected-option {
-    font-size: 16px;
-    position: relative;
-    bottom: 2px; 
-  }
-
-  .filter-dropdown-select:focus + .dropdown-options {
-    max-height: 200px; 
-  }
-
-  .dropdown-options .dropdown-options-item.selected {
-   background-color: #d7f1f9; 
-   color: #333;
-   font-weight: bold;  
-  }
-
-  .dropdown-options.open {
-    max-height: 200px;  
+  .react-quiz-container {
+    max-inline-size: 100%;
   }
 }
