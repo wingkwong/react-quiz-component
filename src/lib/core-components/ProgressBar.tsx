@@ -13,7 +13,7 @@ function ProgressBar({
 
   const progressBarContainer: CSSProperties = {
     width: '100%',
-    backgroundColor: '#D0D4CA',
+    backgroundColor: 'var(--color-progress-track)',
     height,
     borderRadius: 40,
     position: 'relative',
@@ -33,16 +33,16 @@ function ProgressBar({
     top: '50%',
     transform: 'translateX(-50%) translateY(-50%)',
     lineHeight: '20px',
-    fontSize: '16px',
-    color: '#000',
+    fontSize: '14px',
+    color: 'var(--color-text-primary)',
     fontWeight: 'bold',
     backgroundColor: 'transparent',
   };
 
   return (
-    <div style={progressBarContainer}>
-      <div style={progressBar} />
-      <span style={progressBarLabel}>
+    <div className="quiz-progress" style={progressBarContainer}>
+      <div className="quiz-progress__bar" style={progressBar} />
+      <span className="quiz-progress__label" style={progressBarLabel}>
         {isEndQuiz ? '100%' : `${Math.round(progressUnit * fixedProgress)}%`}
       </span>
     </div>
