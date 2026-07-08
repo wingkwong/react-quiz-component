@@ -24,7 +24,7 @@ function InstantFeedback({
     if (onQuestionSubmit && (correctAnswer || incorrectAnswer)) {
       onQuestionSubmit({ question, userAnswer, isCorrect: correctAnswer });
     }
-  }, [correctAnswer, incorrectAnswer]);
+  }, [correctAnswer, incorrectAnswer, onQuestionSubmit, question, userAnswer]);
 
   return (
     <>

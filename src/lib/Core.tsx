@@ -1,13 +1,21 @@
 import React, {
-  useState, useEffect, useCallback, Fragment,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
-import { nanoid } from 'nanoid';
 import ProgressBar from './core-components/ProgressBar';
 import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
 import { CoreProps, Question, ButtonState, QuestionSummary } from './types';
+
+const isAnswered = (answer: number | number[] | undefined): boolean => (
+  answer !== undefined && (!Array.isArray(answer) || answer.length > 0)
+);
+
+const getPoint = (question: Question): number => {
+  const point = question.point || 0;
+  return Number(typeof point === 'string' ? parseInt(point, 10) : point);
+};
 
 function Core({
   questions, appLocale, showDefaultResult, onComplete, customResultPage,
@@ -22,58 +30,43 @@ function Core({
   const [buttons, setButtons] = useState<ButtonState>({});
   const [correct, setCorrect] = useState<number[]>([]);
   const [incorrect, setIncorrect] = useState<number[]>([]);
-  const [unanswered, setUnanswered] = useState<number[]>([]);
   const [userInput, setUserInput] = useState<(number | number[] | undefined)[]>([]);
   const [filteredValue, setFilteredValue] = useState('all');
   const [userAttempt, setUserAttempt] = useState(1);
-  const [showDefaultResultState, setShowDefaultResult] = useState(true);
-  const [answerSelectionTypeState, setAnswerSelectionType] = useState<'single' | 'multiple' | undefined>(undefined);
-
-  const [totalPoints, setTotalPoints] = useState(0);
-  const [correctPoints, setCorrectPoints] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState<Question>(questions[currentQuestionIndex]);
-  const [questionSummary, setQuestionSummary] = useState<QuestionSummary | undefined>(undefined);
   const [timeRemaining, setTimeRemaining] = useState(timer);
   const [isRunning, setIsRunning] = useState(true);
+  const hasCompletedRef = useRef(false);
 
-  useEffect(() => {
-    setShowDefaultResult(showDefaultResult !== undefined ? showDefaultResult : true);
-  }, [showDefaultResult]);
+  const showDefaultResultState = showDefaultResult ?? true;
+  const activeQuestion = questions[currentQuestionIndex];
+  const answerSelectionType = activeQuestion?.answerSelectionType || 'single';
+  const activeUserAnswer = userInput[currentQuestionIndex];
 
-  useEffect(() => {
-    setActiveQuestion(questions[currentQuestionIndex]);
-  }, [currentQuestionIndex, questions]);
+  const unanswered = useMemo(
+    () => questions.reduce<number[]>((acc, _, index) => (
+      isAnswered(userInput[index]) ? acc : [...acc, index]
+    ), []),
+    [questions, userInput],
+  );
 
-  useEffect(() => {
-    const { answerSelectionType } = activeQuestion;
-    // Default single to avoid code breaking due to automatic version upgrade
-    setAnswerSelectionType(answerSelectionType || 'single');
-  }, [activeQuestion, currentQuestionIndex]);
+  const { totalPoints, correctPoints } = useMemo(
+    () => questions.reduce(
+      (points, question, index) => {
+        const point = getPoint(question);
+        return {
+          totalPoints: points.totalPoints + point,
+          correctPoints: correct.includes(index)
+            ? points.correctPoints + point
+            : points.correctPoints,
+        };
+      },
+      { totalPoints: 0, correctPoints: 0 },
+    ),
+    [correct, questions],
+  );
 
-  useEffect(() => {
-    if (endQuiz) {
-      setIsRunning(false);
-      let totalPointsTemp = 0;
-      let correctPointsTemp = 0;
-      for (let i = 0; i < questions.length; i += 1) {
-        let point = questions[i].point || 0;
-        if (typeof point === 'string') {
-          point = parseInt(point, 10);
-        }
-
-        totalPointsTemp += Number(point);
-
-        if (correct.includes(i)) {
-          correctPointsTemp += Number(point);
-        }
-      }
-      setTotalPoints(totalPointsTemp);
-      setCorrectPoints(correctPointsTemp);
-    }
-  }, [endQuiz]);
-
-  useEffect(() => {
-    setQuestionSummary({
+  const questionSummary: QuestionSummary = useMemo(
+    () => ({
       numberOfQuestions: questions.length,
       numberOfCorrectAnswers: correct.length,
       numberOfIncorrectAnswers: incorrect.length,
@@ -82,14 +75,52 @@ function Core({
       totalPoints,
       correctPoints,
       timeTaken: timer ? timer - (timeRemaining || 0) : 0,
-    });
-  }, [totalPoints, correctPoints]);
+    }),
+    [correct.length, correctPoints, incorrect.length, questions, timeRemaining, timer, totalPoints, userInput],
+  );
+
+  const completeQuiz = useCallback(() => {
+    setIsRunning(false);
+    setEndQuiz(true);
+  }, []);
 
   useEffect(() => {
-    if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
+    if (!endQuiz) {
+      hasCompletedRef.current = false;
+      return;
+    }
+
+    if (onComplete !== undefined && !hasCompletedRef.current) {
+      hasCompletedRef.current = true;
       onComplete(questionSummary);
     }
-  }, [questionSummary]);
+  }, [endQuiz, onComplete, questionSummary]);
+
+  useEffect(() => {
+    setTimeRemaining(timer);
+  }, [timer]);
+
+  useEffect(() => {
+    let countdown: NodeJS.Timeout | undefined;
+
+    if (timer && isRunning && !endQuiz && timeRemaining !== undefined && timeRemaining > 0) {
+      countdown = setInterval(() => {
+        setTimeRemaining((prevTime) => prevTime !== undefined ? prevTime - 1 : 0);
+      }, 1000);
+    }
+
+    return () => {
+      if (timer && countdown) {
+        clearInterval(countdown);
+      }
+    };
+  }, [endQuiz, isRunning, timeRemaining, timer]);
+
+  useEffect(() => {
+    if (timer && timeRemaining === 0 && isRunning && !endQuiz) {
+      completeQuiz();
+    }
+  }, [completeQuiz, endQuiz, isRunning, timeRemaining, timer]);
 
   const nextQuestion = (currentQuestionIdx: number) => {
     setIncorrectAnswer(false);
@@ -98,15 +129,15 @@ function Core({
     setButtons({});
 
     if (currentQuestionIdx + 1 === questions.length) {
-      if (userInput.length !== questions.length) {
+      if (!questions.every((_, index) => isAnswered(userInput[index]))) {
         alert('Quiz is incomplete');
       } else if (allowNavigation) {
         const submitQuiz = confirm('You have finished all the questions. Submit Quiz now?');
         if (submitQuiz) {
-          setEndQuiz(true);
+          completeQuiz();
         }
       } else {
-        setEndQuiz(true);
+        completeQuiz();
       }
     } else {
       setCurrentQuestionIndex(currentQuestionIdx + 1);
@@ -119,39 +150,36 @@ function Core({
 
   const renderAnswerInResult = (question: Question, userInputIndex: number | number[] | undefined) => {
     const { answers, correctAnswer, questionType } = question;
-    let { answerSelectionType } = question;
-    let answerBtnCorrectClassName: string;
-    let answerBtnIncorrectClassName: string;
-
-    // Default single to avoid code breaking due to automatic version upgrade
-    answerSelectionType = answerSelectionType || 'single';
+    const questionAnswerSelectionType = question.answerSelectionType || 'single';
+    const didAnswerQuestion = isAnswered(userInputIndex);
 
     return answers.map((answer, index) => {
-      if (answerSelectionType === 'single') {
-        // correctAnswer - is string
+      let answerBtnCorrectClassName = '';
+      let answerBtnIncorrectClassName = '';
+
+      if (questionAnswerSelectionType === 'single') {
         answerBtnCorrectClassName = `${index + 1}` === correctAnswer ? 'correct' : '';
         answerBtnIncorrectClassName = `${userInputIndex}` !== correctAnswer
         && `${index + 1}` === `${userInputIndex}` ? 'incorrect' : '';
 
-        if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
+        if (!didAnswerQuestion && `${index + 1}` !== correctAnswer) {
           answerBtnIncorrectClassName = 'unanswered';
         }
       } else {
-        // correctAnswer - is array of numbers
         const correctAnswerArray = correctAnswer as number[];
         answerBtnCorrectClassName = correctAnswerArray.includes(index + 1)
           ? 'correct'
           : '';
         answerBtnIncorrectClassName = !correctAnswerArray.includes(index + 1)
-        && Array.isArray(userInputIndex) && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
+        && Array.isArray(userInputIndex) && userInputIndex.includes(index + 1) ? 'incorrect' : '';
 
-        if (userInputIndex === undefined && !correctAnswerArray.includes(index + 1)) {
+        if (!didAnswerQuestion && !correctAnswerArray.includes(index + 1)) {
           answerBtnIncorrectClassName = 'unanswered';
         }
       }
 
       return (
-        <div key={nanoid()}>
+        <div key={`result-answer-${question.questionIndex ?? 0}-${index}`}>
           <button
             type="button"
             disabled
@@ -165,7 +193,7 @@ function Core({
     });
   };
 
-  const renderTags = (answerSelectionType: 'single' | 'multiple', numberOfSelection: number, segment?: string) => {
+  const renderTags = (selectionType: 'single' | 'multiple', numberOfSelection: number, segment?: string) => {
     const {
       singleSelectionTagText,
       multipleSelectionTagText,
@@ -174,9 +202,9 @@ function Core({
 
     return (
       <div className="tag-container">
-        {answerSelectionType === 'single'
+        {selectionType === 'single'
           && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
+        {selectionType === 'multiple'
           && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
         <span className="number-of-selection">
           {pickNumberOfSelection.replace('<numberOfSelection>', String(numberOfSelection))}
@@ -186,66 +214,56 @@ function Core({
     );
   };
 
-  const renderQuizResultQuestions = useCallback(() => {
-    let filteredQuestions: Question[];
-    let filteredUserInput: (number | number[] | undefined)[];
+  const renderQuizResultQuestions = () => {
+    let targetQuestions: number[] | undefined;
 
     if (filteredValue !== 'all') {
-      let targetQuestions = unanswered;
+      targetQuestions = unanswered;
       if (filteredValue === 'correct') {
         targetQuestions = correct;
       } else if (filteredValue === 'incorrect') {
         targetQuestions = incorrect;
       }
-      filteredQuestions = questions.filter(
-        (_, index) => targetQuestions.indexOf(index) !== -1,
-      );
-      filteredUserInput = userInput.filter(
-        (_, index) => targetQuestions.indexOf(index) !== -1,
-      );
-    } else {
-      filteredQuestions = questions;
-      filteredUserInput = userInput;
     }
 
-    return filteredQuestions.map((question, index) => {
-      const userInputIndex = filteredUserInput[index];
+    return questions
+      .map((question, index) => ({ question, userInputIndex: userInput[index], index }))
+      .filter(({ index }) => targetQuestions === undefined || targetQuestions.includes(index))
+      .map(({ question, userInputIndex, index }) => {
+        const questionAnswerSelectionType = question.answerSelectionType || 'single';
 
-      // Default single to avoid code breaking due to automatic version upgrade
-      const answerSelectionType = question.answerSelectionType || 'single';
-
-      return (
-        <div className="result-answer-wrapper" key={nanoid()}>
-          <h3
-            dangerouslySetInnerHTML={rawMarkup(
-              `Q${question.questionIndex}: ${
-                question.question
-              } ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}`,
+        return (
+          <div className="result-answer-wrapper" key={`result-question-${question.questionIndex ?? index}`}>
+            <h3
+              dangerouslySetInnerHTML={rawMarkup(
+                `Q${question.questionIndex}: ${
+                  question.question
+                } ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}`,
+              )}
+            />
+            {question.questionPic && (
+              <img src={question.questionPic} alt="question" />
             )}
-          />
-          {question.questionPic && (
-            <img src={question.questionPic} alt="question" />
-          )}
-          {renderTags(
-            answerSelectionType,
-            Array.isArray(question.correctAnswer) ? question.correctAnswer.length : 1,
-            question.segment,
-          )}
-          <div className="result-answer">
-            {renderAnswerInResult(question, userInputIndex)}
+            {renderTags(
+              questionAnswerSelectionType,
+              Array.isArray(question.correctAnswer) ? question.correctAnswer.length : 1,
+              question.segment,
+            )}
+            <div className="result-answer">
+              {renderAnswerInResult(question, userInputIndex)}
+            </div>
+            <Explanation question={question} isResultPage />
           </div>
-          <Explanation question={question} isResultPage />
-        </div>
-      );
-    });
-  }, [endQuiz, filteredValue]);
+        );
+      });
+  };
 
   const renderAnswers = (question: Question, answerButtons: ButtonState) => {
     const {
       answers, correctAnswer, questionType, questionIndex,
     } = question;
-    let { answerSelectionType } = question;
-    const onClickAnswer = (index: number) => checkAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+    const questionAnswerSelectionType = question.answerSelectionType || 'single';
+    const onClickAnswer = (index: number) => checkAnswer(index + 1, correctAnswer, questionAnswerSelectionType, answers, {
       userInput,
       userAttempt,
       currentQuestionIndex,
@@ -263,7 +281,7 @@ function Core({
       setUserAttempt,
     });
 
-    const onSelectAnswer = (index: number) => selectAnswer(index + 1, correctAnswer, answerSelectionType, answers, {
+    const onSelectAnswer = (index: number) => selectAnswer(index + 1, correctAnswer, questionAnswerSelectionType, answers, {
       userInput,
       currentQuestionIndex,
       setButtons,
@@ -279,48 +297,42 @@ function Core({
       if (questionIndex === undefined || userInput[questionIndex - 1] === undefined) {
         return false;
       }
-      if (answerSelectionType === 'single') {
+      if (questionAnswerSelectionType === 'single') {
         return userInput[questionIndex - 1] === index;
       }
-      return Array.isArray(userInput[questionIndex - 1]) && (userInput[questionIndex - 1] as number[]).includes(index);
+      return Array.isArray(userInput[questionIndex - 1])
+        && (userInput[questionIndex - 1] as number[]).includes(index);
     };
 
-    // Default single to avoid code breaking due to automatic version upgrade
-    answerSelectionType = answerSelectionType || 'single';
+    return answers.map((answer, index) => {
+      const answerButton = answerButtons[index];
 
-    return answers.map((answer, index) => (
-      <Fragment key={nanoid()}>
-        {(answerButtons[index] !== undefined)
-          ? (
-            <button
-              type="button"
-              disabled={answerButtons[index].disabled || false}
-              className={`${answerButtons[index].className || ''} answerBtn btn`}
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-            >
-              {questionType === 'text' && <span>{answer}</span>}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )
-          : (
-            <button
-              type="button"
-              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
-              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : ''}`}
-            >
-              {questionType === 'text' && answer}
-              {questionType === 'photo' && <img src={answer} alt="answer" />}
-            </button>
-          )}
-      </Fragment>
-    ));
-  };
-
-  const getUnansweredQuestions = () => {
-    questions.forEach((question, index) => {
-      if (userInput[index] === undefined) {
-        setUnanswered((oldArray) => [...oldArray, index]);
-      }
+      return (
+        <React.Fragment key={`answer-${question.questionIndex ?? currentQuestionIndex}-${index}`}>
+          {answerButton !== undefined
+            ? (
+              <button
+                type="button"
+                disabled={answerButton.disabled || false}
+                className={`${answerButton.className || ''} answerBtn btn`}
+                onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
+              >
+                {questionType === 'text' && <span>{answer}</span>}
+                {questionType === 'photo' && <img src={answer} alt="answer" />}
+              </button>
+            )
+            : (
+              <button
+                type="button"
+                onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
+                className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : ''}`}
+              >
+                {questionType === 'text' && answer}
+                {questionType === 'photo' && <img src={answer} alt="answer" />}
+              </button>
+            )}
+        </React.Fragment>
+      );
     });
   };
 
@@ -346,23 +358,8 @@ function Core({
     </div>
   );
 
-  useEffect(() => {
-    let countdown: NodeJS.Timeout | undefined;
-
-    if (timer && isRunning && timeRemaining !== undefined && timeRemaining > 0) {
-      countdown = setInterval(() => {
-        setTimeRemaining((prevTime) => prevTime !== undefined ? prevTime - 1 : 0);
-      }, 1000);
-    }
-    return () => {
-      if (timer && countdown) {
-        clearInterval(countdown);
-      }
-    };
-  }, [isRunning, timeRemaining, timer]);
-
   const toggleTimer = () => {
-    setIsRunning(!isRunning);
+    setIsRunning((running) => !running);
   };
 
   const formatTime = (time: number): string => (time < 10 ? '0' : '');
@@ -374,12 +371,6 @@ function Core({
     return `${formatTime(hours)}${hours}:${formatTime(minutes)}${minutes}:${
       formatTime(seconds)
     }${seconds}`;
-  };
-
-  const handleTimeUp = () => {
-    setIsRunning(false);
-    setEndQuiz(true);
-    getUnansweredQuestions();
   };
 
   return (
@@ -416,7 +407,6 @@ function Core({
           </b>
         </div>
       )}
-      {timer && timeRemaining === 0 && isRunning && (() => { handleTimeUp(); return null; })()}
 
       {!endQuiz && (
         <div className="questionWrapperBody">
@@ -439,7 +429,7 @@ function Core({
                     activeQuestion && activeQuestion.question
                   } ${appLocale.marksOfQuestion.replace(
                     '<marks>',
-                    String(activeQuestion.point),
+                    String(activeQuestion?.point),
                   )}`,
                 )}
               />
@@ -448,7 +438,7 @@ function Core({
               )}
               {activeQuestion
                 && renderTags(
-                  answerSelectionTypeState || 'single',
+                  answerSelectionType,
                   Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
                   activeQuestion.segment,
                 )}
@@ -459,7 +449,7 @@ function Core({
                   correctAnswer={isCorrect}
                   incorrectAnswer={incorrectAnswer}
                   onQuestionSubmit={onQuestionSubmit}
-                  userAnswer={[...userInput].pop()}
+                  userAnswer={activeUserAnswer}
                 />
               </div>
               {activeQuestion && renderAnswers(activeQuestion, buttons)}
@@ -497,7 +487,7 @@ function Core({
       {endQuiz && showDefaultResultState && customResultPage === undefined
           && renderResult()}
       {endQuiz && !showDefaultResultState && customResultPage !== undefined
-          && customResultPage(questionSummary!)}
+          && customResultPage(questionSummary)}
     </div>
   );
 }
