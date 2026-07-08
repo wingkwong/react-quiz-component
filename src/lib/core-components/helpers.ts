@@ -2,6 +2,53 @@ import snarkdown from 'snarkdown';
 import dompurify from 'dompurify';
 import { CheckAnswerParams, SelectAnswerParams, AnswerSelectionType, ButtonState } from '../types';
 
+const addUnique = (values: number[], value: number): number[] => (
+  values.includes(value) ? values : [...values, value]
+);
+
+const removeValue = (values: number[], value: number): number[] => (
+  values.filter((item) => item !== value)
+);
+
+const markCorrect = (
+  currentQuestionIndex: number,
+  correct: number[],
+  incorrect: number[],
+): { correct: number[]; incorrect: number[] } => ({
+  correct: addUnique(correct, currentQuestionIndex),
+  incorrect: removeValue(incorrect, currentQuestionIndex),
+});
+
+const markIncorrect = (
+  currentQuestionIndex: number,
+  correct: number[],
+  incorrect: number[],
+): { correct: number[]; incorrect: number[] } => ({
+  correct: removeValue(correct, currentQuestionIndex),
+  incorrect: addUnique(incorrect, currentQuestionIndex),
+});
+
+const clearQuestionResult = (
+  currentQuestionIndex: number,
+  correct: number[],
+  incorrect: number[],
+): { correct: number[]; incorrect: number[] } => ({
+  correct: removeValue(correct, currentQuestionIndex),
+  incorrect: removeValue(incorrect, currentQuestionIndex),
+});
+
+const isExactMultipleAnswer = (userAnswer: number[], correctAnswer: number[]): boolean => (
+  userAnswer.length === correctAnswer.length
+  && userAnswer.every((answer) => correctAnswer.includes(answer))
+);
+
+const createDisabledButtons = (answers: string[]): ButtonState => (
+  answers.reduce<ButtonState>((buttonState, _, answerIndex) => ({
+    ...buttonState,
+    [answerIndex]: { disabled: true },
+  }), {})
+);
+
 export const rawMarkup = (data: string): { __html: string } => {
   const sanitizer = dompurify.sanitize;
   return { __html: snarkdown(sanitizer(data)) };
@@ -33,7 +80,7 @@ export const checkAnswer = (
   } = params;
 
   const indexStr = `${index}`;
-  const disabledAll = Object.keys(answers).map(() => ({ disabled: true }));
+  const disabledAll = createDisabledButtons(answers);
   const userInputCopy = [...userInput];
 
   if (answerSelectionType === 'single') {
@@ -42,9 +89,8 @@ export const checkAnswer = (
     }
 
     if (indexStr === correctAnswer) {
-      if (incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
-        correct.push(currentQuestionIndex);
-      }
+      const shouldCountCorrect = !incorrect.includes(currentQuestionIndex)
+        && !correct.includes(currentQuestionIndex);
 
       setButtons((prevState) => ({
         ...prevState,
@@ -56,12 +102,11 @@ export const checkAnswer = (
 
       setIsCorrect(true);
       setIncorrectAnswer(false);
-      setCorrect(correct);
+      setCorrect(shouldCountCorrect ? [...correct, currentQuestionIndex] : [...correct]);
       setShowNextQuestionButton(true);
     } else {
-      if (correct.indexOf(currentQuestionIndex) < 0 && incorrect.indexOf(currentQuestionIndex) < 0) {
-        incorrect.push(currentQuestionIndex);
-      }
+      const shouldCountIncorrect = !correct.includes(currentQuestionIndex)
+        && !incorrect.includes(currentQuestionIndex);
 
       if (continueTillCorrect) {
         setButtons((prevState) => (
@@ -90,7 +135,7 @@ export const checkAnswer = (
 
       setIncorrectAnswer(true);
       setIsCorrect(false);
-      setIncorrect(incorrect);
+      setIncorrect(shouldCountIncorrect ? [...incorrect, currentQuestionIndex] : [...incorrect]);
     }
   } else {
     const correctAnswerArray = correctAnswer as number[];
@@ -100,10 +145,11 @@ export const checkAnswer = (
       userInputCopy[currentQuestionIndex] = [];
     }
 
-    const currentInput = userInputCopy[currentQuestionIndex] as number[];
+    const previousInput = userInputCopy[currentQuestionIndex] as number[];
+    let currentInput = [...previousInput];
 
     if (currentInput.length < maxNumberOfMultipleSelection) {
-      currentInput.push(index);
+      currentInput = [...currentInput, index];
 
       if (currentInput.length <= maxNumberOfMultipleSelection) {
         setButtons((prevState) => ({
@@ -115,29 +161,25 @@ export const checkAnswer = (
         }));
       }
     }
+    userInputCopy[currentQuestionIndex] = currentInput;
 
     if (maxNumberOfMultipleSelection === userAttempt) {
-      let cnt = 0;
-      for (let i = 0; i < correctAnswerArray.length; i += 1) {
-        if (currentInput.includes(correctAnswerArray[i])) {
-          cnt += 1;
-        }
-      }
-
-      if (cnt === maxNumberOfMultipleSelection) {
-        correct.push(currentQuestionIndex);
+      if (isExactMultipleAnswer(currentInput, correctAnswerArray)) {
+        const nextResult = markCorrect(currentQuestionIndex, correct, incorrect);
 
         setIsCorrect(true);
         setIncorrectAnswer(false);
-        setCorrect(correct);
+        setCorrect(nextResult.correct);
+        setIncorrect(nextResult.incorrect);
         setShowNextQuestionButton(true);
         setUserAttempt(1);
       } else {
-        incorrect.push(currentQuestionIndex);
+        const nextResult = markIncorrect(currentQuestionIndex, correct, incorrect);
 
         setIncorrectAnswer(true);
         setIsCorrect(false);
-        setIncorrect(incorrect);
+        setCorrect(nextResult.correct);
+        setIncorrect(nextResult.incorrect);
         setShowNextQuestionButton(true);
         setUserAttempt(1);
       }
@@ -173,35 +215,19 @@ export const selectAnswer = (
     const correctAnswerNum = Number(correctAnswer);
     userInputCopy[currentQuestionIndex] = index;
 
-    if (index === correctAnswerNum) {
-      if (correct.indexOf(currentQuestionIndex) < 0) {
-        correct.push(currentQuestionIndex);
-      }
-      if (incorrect.indexOf(currentQuestionIndex) >= 0) {
-        incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
-      }
-    } else {
-      if (incorrect.indexOf(currentQuestionIndex) < 0) {
-        incorrect.push(currentQuestionIndex);
-      }
-      if (correct.indexOf(currentQuestionIndex) >= 0) {
-        correct.splice(correct.indexOf(currentQuestionIndex), 1);
-      }
-    }
-    setCorrect(correct);
-    setIncorrect(incorrect);
+    const nextResult = index === correctAnswerNum
+      ? markCorrect(currentQuestionIndex, correct, incorrect)
+      : markIncorrect(currentQuestionIndex, correct, incorrect);
+    setCorrect(nextResult.correct);
+    setIncorrect(nextResult.incorrect);
 
-    setButtons((prevState) => {
-      const newState: ButtonState = {};
-      // Reset all buttons
-      Object.keys(answers).forEach((_, idx) => {
-        newState[idx] = {};
-      });
-      // Set the selected button
-      newState[index - 1] = { className: 'selected' };
-      return newState;
-    });
+    const newState = answers.reduce<ButtonState>((buttonState, _, answerIndex) => ({
+      ...buttonState,
+      [answerIndex]: {},
+    }), {});
+    newState[index - 1] = { className: 'selected' };
 
+    setButtons(newState);
     setShowNextQuestionButton(true);
   } else {
     const correctAnswerArray = correctAnswer as number[];
@@ -210,46 +236,20 @@ export const selectAnswer = (
       userInputCopy[currentQuestionIndex] = [];
     }
 
-    const currentInput = userInputCopy[currentQuestionIndex] as number[];
+    const previousInput = userInputCopy[currentQuestionIndex] as number[];
+    const currentInput = previousInput.includes(index)
+      ? previousInput.filter((answer) => answer !== index)
+      : [...previousInput, index];
+    userInputCopy[currentQuestionIndex] = currentInput;
 
-    if (currentInput.includes(index)) {
-      currentInput.splice(currentInput.indexOf(index), 1);
-    } else {
-      currentInput.push(index);
+    let nextResult = clearQuestionResult(currentQuestionIndex, correct, incorrect);
+    if (currentInput.length > 0) {
+      nextResult = isExactMultipleAnswer(currentInput, correctAnswerArray)
+        ? markCorrect(currentQuestionIndex, correct, incorrect)
+        : markIncorrect(currentQuestionIndex, correct, incorrect);
     }
-
-    if (currentInput.length === correctAnswerArray.length) {
-      let exactMatch = true;
-      for (const input of currentInput) {
-        if (!correctAnswerArray.includes(input)) {
-          exactMatch = false;
-          if (incorrect.indexOf(currentQuestionIndex) < 0) {
-            incorrect.push(currentQuestionIndex);
-          }
-          if (correct.indexOf(currentQuestionIndex) >= 0) {
-            correct.splice(correct.indexOf(currentQuestionIndex), 1);
-          }
-          break;
-        }
-      }
-      if (exactMatch) {
-        if (correct.indexOf(currentQuestionIndex) < 0) {
-          correct.push(currentQuestionIndex);
-        }
-        if (incorrect.indexOf(currentQuestionIndex) >= 0) {
-          incorrect.splice(incorrect.indexOf(currentQuestionIndex), 1);
-        }
-      }
-    } else {
-      if (incorrect.indexOf(currentQuestionIndex) < 0) {
-        incorrect.push(currentQuestionIndex);
-      }
-      if (correct.indexOf(currentQuestionIndex) >= 0) {
-        correct.splice(correct.indexOf(currentQuestionIndex), 1);
-      }
-    }
-    setCorrect(correct);
-    setIncorrect(incorrect);
+    setCorrect(nextResult.correct);
+    setIncorrect(nextResult.incorrect);
     setButtons((prevState) => ({
       ...prevState,
       [index - 1]: {
@@ -257,9 +257,7 @@ export const selectAnswer = (
       },
     }));
 
-    if (currentInput.length > 0) {
-      setShowNextQuestionButton(true);
-    }
+    setShowNextQuestionButton(currentInput.length > 0);
   }
   setUserInput(userInputCopy);
 };
