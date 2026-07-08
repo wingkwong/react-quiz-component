@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
-    "docs": "webpack --mode production",
+    "build:docs": "webpack --mode production",
     "build": "rollup -c",
     "lint": "eslint src --ext .tsx --ext .ts --ext .jsx --ext .js --fix",
     "typecheck": "tsc --noEmit"
