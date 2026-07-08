@@ -1,12 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { QuizResultFilterProps } from '../types';
+import React, { useEffect, useRef, useState } from 'react';
+import { AppLocale, QuizResultFilterProps } from '../types';
+
+const FILTER_OPTIONS: { value: string; localeKey: keyof AppLocale }[] = [
+  { value: 'all', localeKey: 'resultFilterAll' },
+  { value: 'correct', localeKey: 'resultFilterCorrect' },
+  { value: 'incorrect', localeKey: 'resultFilterIncorrect' },
+  { value: 'unanswered', localeKey: 'resultFilterUnanswered' },
+];
 
 function QuizResultFilter({ filteredValue, handleChange, appLocale }: QuizResultFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((open) => !open);
   };
 
   const handleOptionClick = (value: string) => {
@@ -15,12 +22,7 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }: QuizResult
   };
 
   const selectedOptionClass = isOpen ? 'selected-open' : '';
-  const selectedValuesLocale: Record<string, string> = {
-    all: appLocale.resultFilterAll,
-    correct: appLocale.resultFilterCorrect,
-    incorrect: appLocale.resultFilterIncorrect,
-    unanswered: appLocale.resultFilterUnanswered,
-  };
+  const selectedOption = FILTER_OPTIONS.find(({ value }) => value === filteredValue) ?? FILTER_OPTIONS[0];
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -41,90 +43,38 @@ function QuizResultFilter({ filteredValue, handleChange, appLocale }: QuizResult
   }, [isOpen]);
 
   return (
-    <div className="quiz-result-filter">
-      <div
-        ref={dropdownRef}
+    <div className="quiz-result-filter" ref={dropdownRef}>
+      <button
+        id="quiz-filter"
+        type="button"
         className={`filter-dropdown-select ${isOpen ? 'open' : ''}`}
         onClick={toggleDropdown}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            toggleDropdown();
-          }
-        }}
-        role="button"
-        tabIndex={0}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
       >
-        <div className={`selected-option ${selectedOptionClass}`}>
-          {selectedValuesLocale[filteredValue]}
-        </div>
-        <span className={`arrow ${isOpen ? 'up' : 'down'}`} />
-      </div>
+        <span className={`selected-option ${selectedOptionClass}`}>
+          {appLocale[selectedOption.localeKey]}
+        </span>
+      </button>
       {isOpen && (
         <div
           className="dropdown-options"
           role="menu"
           aria-labelledby="quiz-filter"
         >
-          <div
-            className={`dropdown-options-item ${
-              filteredValue === 'all' ? 'selected' : ''
-            }`}
-            onClick={() => handleOptionClick('all')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleOptionClick('all');
-              }
-            }}
-            role="menuitem"
-            tabIndex={0}
-          >
-            {appLocale.resultFilterAll}
-          </div>
-          <div
-            className={`dropdown-options-item ${
-              filteredValue === 'correct' ? 'selected' : ''
-            }`}
-            onClick={() => handleOptionClick('correct')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleOptionClick('correct');
-              }
-            }}
-            role="menuitem"
-            tabIndex={0}
-          >
-            {appLocale.resultFilterCorrect}
-          </div>
-          <div
-            className={`dropdown-options-item ${
-              filteredValue === 'incorrect' ? 'selected' : ''
-            }`}
-            onClick={() => handleOptionClick('incorrect')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleOptionClick('incorrect');
-              }
-            }}
-            role="menuitem"
-            tabIndex={0}
-          >
-            {appLocale.resultFilterIncorrect}
-          </div>
-          <div
-            className={`dropdown-options-item ${
-              filteredValue === 'unanswered' ? 'selected' : ''
-            }`}
-            onClick={() => handleOptionClick('unanswered')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleOptionClick('unanswered');
-              }
-            }}
-            role="menuitem"
-            tabIndex={0}
-          >
-            {appLocale.resultFilterUnanswered}
-          </div>
+          {FILTER_OPTIONS.map(({ value, localeKey }) => (
+            <button
+              key={value}
+              type="button"
+              className={`dropdown-options-item ${
+                filteredValue === value ? 'selected' : ''
+              }`}
+              onClick={() => handleOptionClick(value)}
+              role="menuitem"
+            >
+              {appLocale[localeKey]}
+            </button>
+          ))}
         </div>
       )}
     </div>

@@ -271,9 +271,11 @@
     position: relative;
     display: flex;
     align-items: center;
+    inline-size: 100%;
     padding: 8px;
     margin-block-start: 2px;
     text-transform: capitalize;
+    text-align: start;
     border: 2px solid var(--color-border-dropdown);
     border-radius: var(--border-radius-xl);
     background-color: var(--color-bg-tertiary);
@@ -331,8 +333,14 @@
   }
 
   .dropdown-options-item {
+    display: block;
+    inline-size: 100%;
     padding: 10px;
+    border: 0;
+    background: transparent;
+    color: inherit;
     font-size: 16px;
+    text-align: start;
     cursor: pointer;
     transition: var(--transition-default);
 
