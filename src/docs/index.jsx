@@ -7,7 +7,7 @@ const container = document.getElementById('app');
 const root = createRoot(container);
 
 function App() {
-  const [quizResult, setQuizResult] = useState();
+  const [, setQuizResult] = useState();
 
   return (
     <div style={{ margin: 'auto', width: '500px' }}>
