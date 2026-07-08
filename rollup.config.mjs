@@ -61,6 +61,7 @@ export default [
         babelHelpers: 'bundled',
         exclude: 'node_modules/**',
         extensions,
+        inputSourceMap: false,
         presets: [
           '@babel/preset-env',
           ['@babel/preset-react', { runtime: 'automatic' }],

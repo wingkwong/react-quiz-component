@@ -1,8 +1,75 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
 import { QuizProps, Question, AppLocale } from './types';
+
+const shuffleArray = <T,>(items: T[]): T[] => {
+  const shuffledItems = [...items];
+
+  for (let i = shuffledItems.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]];
+  }
+
+  return shuffledItems;
+};
+
+const shuffleAnswerSequence = (oldQuestions: Question[] = []): Question[] => (
+  oldQuestions.map((question) => {
+    const answerWithIndex = question.answers?.map((answer, index) => [answer, index] as [string, number]);
+    const shuffledAnswersWithIndex = shuffleArray(answerWithIndex);
+    const shuffledAnswers = shuffledAnswersWithIndex.map(([answer]) => answer);
+    const answerSelectionType = question.answerSelectionType || 'single';
+
+    if (answerSelectionType === 'single') {
+      const oldCorrectAnswer = question.correctAnswer as string;
+      const newCorrectAnswer = shuffledAnswersWithIndex.findIndex(
+        ([, oldIndex]) => `${oldIndex + 1}` === `${oldCorrectAnswer}`,
+      ) + 1;
+      return {
+        ...question,
+        correctAnswer: `${newCorrectAnswer}`,
+        answers: shuffledAnswers,
+      };
+    }
+
+    const oldCorrectAnswer = question.correctAnswer as number[];
+    const newCorrectAnswer = oldCorrectAnswer.map(
+      (correctAnswer) => shuffledAnswersWithIndex.findIndex(
+        ([, oldIndex]) => `${oldIndex + 1}` === `${correctAnswer}`,
+      ) + 1,
+    );
+    return {
+      ...question,
+      correctAnswer: newCorrectAnswer,
+      answers: shuffledAnswers,
+    };
+  })
+);
+
+const prepareQuestions = (
+  questions: Question[],
+  nrOfQuestions: number,
+  shuffle?: boolean,
+  shuffleAnswer?: boolean,
+): Question[] => {
+  let preparedQuestions = shuffle ? shuffleArray(questions) : [...questions];
+
+  if (shuffleAnswer) {
+    preparedQuestions = shuffleAnswerSequence(preparedQuestions);
+  }
+
+  return preparedQuestions.slice(0, nrOfQuestions).map((question, index) => ({
+    ...question,
+    questionIndex: index + 1,
+  }));
+};
+
+const validateProgressBarColor = (inputColor: string): boolean => {
+  const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
+  return hexaPattern.test(inputColor);
+};
 
 function Quiz({
   quiz,
@@ -22,83 +89,17 @@ function Quiz({
   enableProgressBar,
 }: QuizProps) {
   const [start, setStart] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>(quiz.questions);
   const nrOfQuestions = quiz.nrOfQuestions && quiz.nrOfQuestions < quiz.questions.length
     ? quiz.nrOfQuestions
     : quiz.questions.length;
-
-  // Shuffle answers function here
-  const shuffleAnswerSequence = (oldQuestions: Question[] = []): Question[] => {
-    const newQuestions = oldQuestions.map((question) => {
-      const answerWithIndex = question.answers?.map((ans, i) => [ans, i] as [string, number]);
-      const shuffledAnswersWithIndex = answerWithIndex.sort(
-        () => Math.random() - 0.5,
-      );
-      const shuffledAnswers = shuffledAnswersWithIndex.map((ans) => ans[0]);
-      if (question.answerSelectionType === 'single') {
-        const oldCorrectAnswer = question.correctAnswer as string;
-        const newCorrectAnswer = shuffledAnswersWithIndex.findIndex(
-          (ans) => `${ans[1] + 1}` === `${oldCorrectAnswer}`,
-        ) + 1;
-        return {
-          ...question,
-          correctAnswer: `${newCorrectAnswer}`,
-          answers: shuffledAnswers,
-        };
-      }
-      if (question.answerSelectionType === 'multiple') {
-        const oldCorrectAnswer = question.correctAnswer as number[];
-        const newCorrectAnswer = oldCorrectAnswer.map(
-          (cans) => shuffledAnswersWithIndex.findIndex(
-            (ans) => `${ans[1] + 1}` === `${cans}`,
-          ) + 1,
-        );
-        return {
-          ...question,
-          correctAnswer: newCorrectAnswer,
-          answers: shuffledAnswers,
-        };
-      }
-      return question;
-    });
-    return newQuestions;
-  };
-
-  const shuffleQuestions = useCallback((q: Question[]): Question[] => {
-    for (let i = q.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [q[i], q[j]] = [q[j], q[i]];
-    }
-    return q;
-  }, []);
+  const questions = useMemo(
+    () => prepareQuestions(quiz.questions, nrOfQuestions, shuffle, shuffleAnswer),
+    [nrOfQuestions, quiz.questions, shuffle, shuffleAnswer],
+  );
 
   useEffect(() => {
     if (disableSynopsis) setStart(true);
-  }, []);
-
-  useEffect(() => {
-    let newQuestions = quiz.questions;
-
-    if (shuffle) {
-      newQuestions = shuffleQuestions([...newQuestions]);
-    }
-
-    if (shuffleAnswer) {
-      newQuestions = shuffleAnswerSequence([...newQuestions]);
-    }
-
-    newQuestions = newQuestions.slice(0, nrOfQuestions);
-    newQuestions = newQuestions.map((question, index) => ({
-      ...question,
-      questionIndex: index + 1,
-    }));
-    setQuestions(newQuestions);
-  }, [start]);
-
-  const validateProgressBarColor = (inputColor: string): boolean => {
-    const hexaPattern = /^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
-    return hexaPattern.test(inputColor);
-  };
+  }, [disableSynopsis]);
 
   const validateQuiz = (q: QuizProps['quiz']): boolean => {
     if (!q) {
@@ -121,26 +122,26 @@ function Quiz({
       return false;
     }
 
-    if ('progressBarColor' in quiz) {
-      if (typeof quiz.progressBarColor !== 'string') {
+    if ('progressBarColor' in q) {
+      if (typeof q.progressBarColor !== 'string') {
         console.error('progressBarColor must be a String');
         return false;
       }
 
-      if (!validateProgressBarColor(quiz.progressBarColor)) {
+      if (!validateProgressBarColor(q.progressBarColor)) {
         console.error('progressBarColor must be a valid hex colour');
         return false;
       }
     }
 
-    for (let i = 0; i < questions.length; i += 1) {
+    for (let i = 0; i < q.questions.length; i += 1) {
       const {
         question,
         questionType,
         answerSelectionType,
         answers,
         correctAnswer,
-      } = questions[i];
+      } = q.questions[i];
       if (!question) {
         console.error("Field 'question' is required.");
         return false;
