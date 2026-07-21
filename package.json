@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "dompurify": "^3.4.11",
-    "nanoid": "^5.1.16",
+    "nanoid": "^6.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "snarkdown": "^2.0.0"
