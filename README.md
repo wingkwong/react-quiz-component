@@ -1,313 +1,395 @@
 # react-quiz-component
 
-:orange_book: React Quiz Component 
+:orange_book: React Quiz Component
+
+react-quiz-component is a ReactJS component that renders a quiz from a JSON object. It supports text and photo answers, single and multiple answer selection, scoring, timers, shuffling, progress display, custom locale text, and result callbacks.
+
 [![NPM version](https://img.shields.io/npm/v/react-quiz-component.svg)](https://www.npmjs.com/package/react-quiz-component) [![License](https://img.shields.io/npm/l/react-quiz-component.svg)](https://github.com/wingkwong/react-quiz-component/blob/master/LICENSE) [![Total NPM Download](https://img.shields.io/npm/dt/react-quiz-component.svg)](https://www.npmjs.com/package/react-quiz-component)
 
-react-quiz-component is a ReactJS component allowing users to attempt a quiz. 
 
 ## Features
 
-- JSON-based input
-- Quiz landing page showing title, synopsis and number of questions
-- Quiz Input Validator 
-- Multiple answers with single correct answer
-- Multiple answers with multiple correct answers
-- Support text and photo answers
-- Continue till answered correctly
-- Show explainations when answered correctly or not
-- Quiz result page at the end with the dropdown filtering all questions or only those you answered correctly or incorrectly
-- Support custom result page
-- Return quiz summary at the page
-- Allow Instant feedback
-- Allow retry until the answer is selected correctly
-- Allow markdown in Question
-- Allow Picture in Question
-- Scoring System
-- Shuffling Questions / Answers
-- Timer Support
-- Support Pause/Resume Timer
-- Shows unanswered questions
+- JSON-based quiz source
+- Quiz landing page with title, synopsis, and number of questions
+- Input validation for quiz data
+- Text and photo answer choices
+- Single-answer and multiple-answer questions
+- Question markdown support
+- Optional question images
+- Per-question explanations and answer messages
+- Scoring with total and correct points
+- Question segments and selection tags
+- Question and answer shuffling
+- Instant feedback
+- Retry-until-correct mode
+- Reveal-answer-on-submit mode
+- Previous and next navigation
+- Default result page with all, correct, incorrect, and unanswered filters
+- Custom result page support
+- Quiz completion and per-question callbacks
+- Timer support with optional pause and resume
+- Optional progress bar
 
-## Installing
+## Installation
 
-```
+```sh
 npm i react-quiz-component
 ```
 
-## Importing react-quiz-component
+## Quick Start
 
-```js
+```jsx
 import Quiz from 'react-quiz-component';
+
+const quiz = {
+  quizTitle: 'React Quiz Component Demo',
+  quizSynopsis: 'A short quiz about React basics.',
+  nrOfQuestions: 3,
+  progressBarColor: '#9de1f6',
+  questions: [
+    {
+      question: 'Which hook lets a function component store local state?',
+      questionType: 'text',
+      questionPic: 'https://dummyimage.com/600x240/9de1f6/000000&text=React+Hooks',
+      answerSelectionType: 'single',
+      answers: ['useMemo', 'useState', 'useEffect', 'useRef'],
+      correctAnswer: '2',
+      messageForCorrectAnswer: 'Correct. useState stores local component state.',
+      messageForIncorrectAnswer: 'Not quite. Look for the hook that stores state.',
+      explanation: 'useState returns a state value and a setter function.',
+      point: 10,
+      segment: 'React Hooks',
+    },
+    {
+      question: 'Select the React rendering methods.',
+      questionType: 'text',
+      answerSelectionType: 'multiple',
+      answers: ['createRoot', 'renderToString', 'setTimeout', 'querySelector'],
+      correctAnswer: [1, 2],
+      messageForCorrectAnswer: 'Correct. React supports client and server rendering APIs.',
+      messageForIncorrectAnswer: 'Incorrect. Select only React rendering APIs.',
+      explanation: 'createRoot is used for client rendering. renderToString is used for server rendering.',
+      point: 20,
+      segment: 'Rendering',
+    },
+    {
+      question: 'Which image shows the React logo?',
+      questionType: 'photo',
+      answerSelectionType: 'single',
+      answers: [
+        'https://dummyimage.com/300x180/61dafb/000000&text=React',
+        'https://dummyimage.com/300x180/f7df1e/000000&text=JS',
+        'https://dummyimage.com/300x180/3178c6/ffffff&text=TS',
+      ],
+      correctAnswer: '1',
+      messageForCorrectAnswer: 'Correct.',
+      messageForIncorrectAnswer: 'Incorrect.',
+      explanation: 'The React logo is commonly shown with a light blue atom-like mark.',
+      point: 10,
+      segment: 'Logos',
+    },
+  ],
+};
+
+export default function App() {
+  return <Quiz quiz={quiz} />;
+}
 ```
 
-## Defining Your Quiz Source
-The quiz source is a JSON object. You can use [react-quiz-form](https://github.com/wingkwong/react-quiz-form/) to generate it.
+You can also import the quiz source from another file:
 
-```js
-export const quiz =  {
-  "quizTitle": "React Quiz Component Demo",
-  "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
-  "progressBarColor": "#9de1f6", 
-  "nrOfQuestions": "4",
-  "questions": [
-    {
-      "question": "How can you access the state of a component from inside of a member function?",
-      "questionType": "text",
-      "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
-      "answerSelectionType": "single",
-      "answers": [
-        "this.getState()",
-        "this.prototype.stateValue",
-        "this.state",
-        "this.values"
-      ],
-      "correctAnswer": "3",
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
-    },
-    {
-      "question": "ReactJS is developed by _____?",
-      "questionType": "text",
-      "answerSelectionType": "single",
-      "answers": [
-        "Google Engineers",
-        "Facebook Engineers"
-      ],
-      "correctAnswer": "2",
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
-    },
-    {
-      "question": "ReactJS is an MVC based framework?",
-      "questionType": "text",
-      "answerSelectionType": "single",
-      "answers": [
-        "True",
-        "False"
-      ],
-      "correctAnswer": "2",
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "10"
-    },
-    {
-      "question": "Which of the following concepts is/are key to ReactJS?",
-      "questionType": "text",
-      "answerSelectionType": "single",
-      "answers": [
-        "Component-oriented design",
-        "Event delegation model",
-        "Both of the above",
-      ],
-      "correctAnswer": "3",
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "30"
-    },
-    {
-      "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-      "questionType": "photo",
-      "answerSelectionType": "single",
-      "answers": [
-        "https://dummyimage.com/600x400/000/fff&text=A",
-        "https://dummyimage.com/600x400/000/fff&text=B",
-        "https://dummyimage.com/600x400/000/fff&text=C",
-        "https://dummyimage.com/600x400/000/fff&text=D"
-      ],
-      "correctAnswer": "1",
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
-    },
-    {
-      "question": "What are the advantages of React JS?",
-      "questionType": "text",
-      "answerSelectionType": "multiple",
-      "answers": [
-        "React can be used on client and as well as server side too",
-        "Using React increases readability and makes maintainability easier. Component, Data patterns improves readability and thus makes it easier for manitaining larger apps",
-        "React components have lifecycle events that fall into State/Property Updates",
-        "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer"
-      ],
-      "correctAnswer": [1, 2, 4],
-      "messageForCorrectAnswer": "Correct answer. Good job.",
-      "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-      "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "point": "20"
-    },
-  ]
-} 
-```
-
-### Locale Customization
-
-If you want to use your customized text, you can add appLocale into your quiz source. Below is the default one. <questionLength> and <correctIndexLength> will be replaced dynamically.
-
-```json
-"appLocale": {
-  "landingHeaderText": "<questionLength> Questions",
-  "question": "Question",
-  "startQuizBtn": "Start Quiz",
-  "resultFilterAll": "All",
-  "resultFilterCorrect": "Correct",
-  "resultFilterIncorrect": "Incorrect",
-  "prevQuestionBtn": "Prev",
-  "nextQuestionBtn": "Next",
-  "resultPageHeaderText": "You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions."
-} 
-```
-
-## Passing to Quiz container
-
-```js
+```jsx
+import Quiz from 'react-quiz-component';
 import { quiz } from './quiz';
-...
-<Quiz quiz={quiz}/>
+
+export default function App() {
+  return <Quiz quiz={quiz} />;
+}
 ```
 
-## Shuffling Question Set
+### Quiz Fields
+
+| Name | Type | Required | Description |
+| :-- | :-- | :--: | :-- |
+| `quizTitle` | `string` | Y | Title shown on the landing page. |
+| `quizSynopsis` | `string` | N | Introductory text shown before the quiz starts. |
+| `nrOfQuestions` | `number` | N | Number of questions to use from `questions`. If omitted, all questions are used. |
+| `questions` | `Question[]` | Y | Question definitions. |
+| `appLocale` | `Partial<AppLocale>` | N | Locale text overrides. |
+| `progressBarColor` | `string` | N | Hex color used by the progress bar. Defaults to `#9de1f6`. |
+
+### Question Fields
+
+| Name | Type | Required | Description |
+| :-- | :-- | :--: | :-- |
+| `question` | `string` | Y | Question text. Markdown is supported. |
+| `questionType` | `'text' \| 'photo'` | Y | Use `text` for text answers or `photo` for image answer URLs. |
+| `questionPic` | `string` | N | Image URL displayed with the question. |
+| `answerSelectionType` | `'single' \| 'multiple'` | Y | Whether the user selects one answer or multiple answers. |
+| `answers` | `string[]` | Y | Text answers or image URLs, depending on `questionType`. |
+| `correctAnswer` | `string \| number[]` | Y | Correct answer index or indexes. See answer indexing below. |
+| `messageForCorrectAnswer` | `string` | N | Message shown for a correct answer when instant feedback is enabled. |
+| `messageForIncorrectAnswer` | `string` | N | Message shown for an incorrect answer when instant feedback is enabled. |
+| `explanation` | `string` | N | Explanation shown after answering and on the result page. |
+| `point` | `string \| number` | N | Points assigned to the question. |
+| `segment` | `string` | N | Label shown with the question tags. |
+
+### Answer Indexing
+
+Answer indexes are 1-based.
+
+For a single-answer question, `correctAnswer` is a string:
 
 ```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} shuffle={true}/>
+{
+  answerSelectionType: 'single',
+  answers: ['First', 'Second', 'Third'],
+  correctAnswer: '2',
+}
 ```
 
-## Shuffling Answer Set
+For a multiple-answer question, `correctAnswer` is an array of numbers:
 
 ```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} shuffleAnswer={true}/>
+{
+  answerSelectionType: 'multiple',
+  answers: ['First', 'Second', 'Third'],
+  correctAnswer: [1, 3],
+}
 ```
 
-## Disabling Default Result Page
+## Examples
 
-```js
+### Shuffle Questions
+
+```jsx
+import Quiz from 'react-quiz-component';
 import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} showDefaultResult={false}/>
+
+<Quiz quiz={quiz} shuffle />;
 ```
 
-## Enabling Custom Result Page
+### Shuffle Answers
 
-* In order to enable custom result page, showDefaultResult has to be false.
-```js
+```jsx
+import Quiz from 'react-quiz-component';
 import { quiz } from './quiz';
-...
-const renderCustomResultPage = (obj) => {
-  console.log(obj);
+
+<Quiz quiz={quiz} shuffleAnswer />;
+```
+
+### Instant Feedback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} showInstantFeedback />;
+```
+
+### Retry Until Correct
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} continueTillCorrect />;
+```
+
+### Reveal Answer On Submit
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} revealAnswerOnSubmit />;
+```
+
+### Previous And Next Navigation
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} allowNavigation />;
+```
+
+### Timer
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} timer={60} />;
+```
+
+### Pause And Resume Timer
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} timer={60} allowPauseTimer />;
+```
+
+### Progress Bar
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const quizWithProgressColor = {
+  ...quiz,
+  progressBarColor: '#34d399',
+};
+
+<Quiz quiz={quizWithProgressColor} enableProgressBar />;
+```
+
+### Disable Landing Synopsis
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} disableSynopsis />;
+```
+
+### Completion Callback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const handleComplete = (summary) => {
+  console.log(summary);
+};
+
+<Quiz quiz={quiz} onComplete={handleComplete} />;
+```
+
+### Question Submit Callback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const handleQuestionSubmit = ({ question, userAnswer, isCorrect }) => {
+  console.log(question, userAnswer, isCorrect);
+};
+
+<Quiz quiz={quiz} onQuestionSubmit={handleQuestionSubmit} />;
+```
+
+### Custom Result Page
+
+Set `showDefaultResult` to `false` when using `customResultPage`.
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const renderCustomResultPage = (summary) => {
   return (
     <div>
-      This is a custom result page. You can use obj to render your custom result page
+      <h2>Custom result page</h2>
+      <p>
+        You scored {summary.correctPoints} out of {summary.totalPoints}.
+      </p>
     </div>
-  )
-}
+  );
+};
 
-```
-<Quiz quiz={quiz} showDefaultResult={false} customResultPage={renderCustomResultPage}/>
-```
-
-## Enabling onComplete Action
-
-```js
-import { quiz } from './quiz';
-...
-const setQuizResult = (obj) => {
-  console.log(obj);
-  // YOUR LOGIC GOES HERE
-}
-...
-<Quiz quiz={quiz} showDefaultResult={false} onComplete={setQuizResult}/>
-```
-
-## Example of Quiz Summary returned to customResultPage and onComplete
-
-````
-Object
-  numberOfCorrectAnswers: 4
-  numberOfIncorrectAnswers: 1
-  numberOfQuestions: 5
-  questions: Array(5)
-    0: {question: "Which of the following concepts is/are key to ReactJS?", questionType: "text", answers: Array(3), correctAnswer: "3", messageForCorrectAnswer: "Correct answer. Good job.", …}
-    1: {question: "ReactJS is developed by _____?", questionType: "text", answers: Array(2), correctAnswer: "2", messageForCorrectAnswer: "Correct answer. Good job.", …}
-    2: {question: "How can you access the state of a component from inside of a member function?", questionType: "text", answers: Array(4), correctAnswer: "3", messageForCorrectAnswer: "Correct answer. Good job.", …}
-    3: {question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit,", questionType: "photo", answers: Array(4), correctAnswer: "1", messageForCorrectAnswer: "Correct answer. Good job.", …}
-    4: {question: "ReactJS is an MVC based framework?", questionType: "text", answers: Array(2), correctAnswer: "2", messageForCorrectAnswer: "Correct answer. Good job.", …}
-  userInput: (5) [1, 2, 1, 2, 3]
-  totalPoints: 100
-  correctPoints: 40
-````
-
-## Showing Instant Feedback
-
-```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} showInstantFeedback={true}/>
-```
-
-## Answering the same question till it is correct
-
-```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} continueTillCorrect={true}/>
-```
-
-
-## Timer Feature
-
-```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} timer={60}/>
-```
-
-
-## Pause / Resume Timer Feature
-
-```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} timer={60} allowPauseTimer={true}/>
-```
-
-
-## Enable / Disable Progress Bar 
-
-```js
-import { quiz } from './quiz';
-...
-<Quiz quiz={quiz} enableProgressBar={true} />
+<Quiz
+  quiz={quiz}
+  showDefaultResult={false}
+  customResultPage={renderCustomResultPage}
+/>;
 ```
 
 ## Props
 
-|Name|Type|Default|Required|Description|
-|:--|:--:|:-----:|:--|:----------|
-|quiz|`object`|`null`|Y|Quiz Json Object|
-|shuffle|`boolean`|`false`|N|Shuffle the questions|
-|shuffleAnswer|`boolean`|`false`|N|Shuffle the answers|
-|showDefaultResult|`boolean`|`true`|N|Show the default result page|
-|customResultPage|`function`|`null`|N|A quiz summary object will be returned to the function and users can use it to render its custom result page|
-|onComplete|`function`|`null`|N|A quiz summary object will be returned to the function|
-|showInstantFeedback|`boolean`|`false`|N|Show instant feedback when it is true|
-|continueTillCorrect|`boolean`|`false`|N|Continue to select an answer until it is correct|
-|onQuestionSubmit|`function`|`null`|N|A user response for a question will be returned|
-|disableSynopsis|`boolean`|`false`|N|Disable synopsis before quiz|
-|timer|`number`|`false`|N|Sets timer in seconds|
-|allowPauseTimer|`boolean`|`false`|N|Pause / Resume timer|
-|enableProgressBar|`boolean`|`false`|N|Enable a progress bar|
+| Name | Type | Default | Required | Description |
+| :-- | :-- | :-- | :--: | :-- |
+| `quiz` | `Quiz` | `null` | Y | Quiz source object. |
+| `shuffle` | `boolean` | `false` | N | Shuffle questions before rendering. |
+| `shuffleAnswer` | `boolean` | `false` | N | Shuffle answer choices before rendering. |
+| `showDefaultResult` | `boolean` | `true` | N | Show the built-in result page when the quiz ends. |
+| `onComplete` | `(summary: QuestionSummary) => void` | `undefined` | N | Called once when the quiz completes. |
+| `customResultPage` | `(summary: QuestionSummary) => React.ReactElement` | `undefined` | N | Render a custom result page. Use with `showDefaultResult={false}`. |
+| `showInstantFeedback` | `boolean` | `false` | N | Show correct or incorrect messages after answers are submitted. |
+| `continueTillCorrect` | `boolean` | `false` | N | For single-answer questions, let the user keep trying until the correct answer is selected. |
+| `revealAnswerOnSubmit` | `boolean` | `false` | N | Let the user select an answer before submitting and revealing correctness. |
+| `allowNavigation` | `boolean` | `false` | N | Show previous and next controls so users can move between questions. |
+| `onQuestionSubmit` | `(data: QuestionSubmitData) => void` | `undefined` | N | Called when a question answer is submitted with the question, user answer, and correctness. |
+| `disableSynopsis` | `boolean` | `false` | N | Skip the landing page and start the quiz immediately. |
+| `timer` | `number` | `undefined` | N | Quiz duration in seconds. Must be greater than `0`. |
+| `allowPauseTimer` | `boolean` | `false` | N | Allow pausing and resuming when `timer` is set. |
+| `enableProgressBar` | `boolean` | `false` | N | Show a progress bar above the quiz. |
 
-## Contribution 
+## Locale Customization
+
+Add `appLocale` to the quiz source to override any default text. Placeholders such as `<questionLength>`, `<correctIndexLength>`, `<correctPoints>`, `<totalPoints>`, `<numberOfSelection>`, and `<marks>` are replaced dynamically.
+
+```js
+const quiz = {
+  quizTitle: 'React Quiz Component Demo',
+  questions: [],
+  appLocale: {
+    landingHeaderText: '<questionLength> Questions',
+    question: 'Question',
+    startQuizBtn: 'Start Quiz',
+    resultFilterAll: 'All',
+    resultFilterCorrect: 'Correct',
+    resultFilterIncorrect: 'Incorrect',
+    resultFilterUnanswered: 'Unanswered',
+    nextQuestionBtn: 'Next',
+    prevQuestionBtn: 'Prev',
+    resultPageHeaderText: 'You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.',
+    resultPagePoint: 'You scored <correctPoints> out of <totalPoints>.',
+    pauseScreenDisplay: 'Test is paused. Clicked the Resume button to continue',
+    timerTimeRemaining: 'Time Remaining',
+    timerTimeTaken: 'Time Taken',
+    pauseScreenPause: 'Pause',
+    pauseScreenResume: 'Resume',
+    singleSelectionTagText: 'Single Selection',
+    multipleSelectionTagText: 'Multiple Selection',
+    pickNumberOfSelection: 'Pick <numberOfSelection>',
+    marksOfQuestion: '(<marks> marks)',
+  },
+};
+```
+
+## Callback Payloads
+
+`onComplete(summary)` and `customResultPage(summary)` receive a `QuestionSummary` object:
+
+```ts
+type QuestionSummary = {
+  numberOfQuestions: number;
+  numberOfCorrectAnswers: number;
+  numberOfIncorrectAnswers: number;
+  questions: Question[];
+  userInput: (number | number[] | undefined)[];
+  totalPoints: number;
+  correctPoints: number;
+  timeTaken: number;
+};
+```
+
+`onQuestionSubmit(data)` receives the submitted question result:
+
+```ts
+type QuestionSubmitData = {
+  question: Question;
+  userAnswer: number | number[] | undefined;
+  isCorrect: boolean;
+};
+```
+
+For `userInput` and `userAnswer`, single-answer questions use a 1-based number such as `2`, multiple-answer questions use a 1-based number array such as `[1, 3]`, and unanswered questions can be `undefined`.
+
+## Development And Contribution
 
 - Clone the repository
 - Run `npm install`

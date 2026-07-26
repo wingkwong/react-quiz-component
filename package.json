@@ -1,7 +1,7 @@
 {
   "name": "react-quiz-component",
-  "version": "1.1.0",
-  "description": "React Quiz Component",
+  "version": "1.1.1",
+  "description": "Customizable React quiz component for JSON-powered quizzes with scoring, timers, single or multiple choice answers, images, markdown, and callbacks.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
@@ -15,9 +15,28 @@
   "keywords": [
     "react",
     "reactjs",
+    "react-component",
     "react-quiz-component",
     "react-quiz",
-    "quiz"
+    "quiz",
+    "quiz-component",
+    "quiz-app",
+    "json-quiz",
+    "online-quiz",
+    "interactive-quiz",
+    "multiple-choice",
+    "single-choice",
+    "questionnaire",
+    "scoring",
+    "timer",
+    "markdown",
+    "image-quiz",
+    "education",
+    "e-learning",
+    "assessment",
+    "typescript",
+    "react-typescript",
+    "react-library"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -36,15 +55,15 @@
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/dompurify": "^3.2.0",
-    "@types/node": "^26.1.0",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "css-minimizer-webpack-plugin": "^8.0.0",
-    "html-webpack-plugin": "^5.6.7",
+    "html-webpack-plugin": "^5.6.8",
     "mini-css-extract-plugin": "^2.10.2",
-    "oxlint": "^1.73.0",
+    "oxlint": "^1.75.0",
     "prop-types": "^15.8.1",
     "rollup": "^4.62.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -52,9 +71,9 @@
     "terser-webpack-plugin": "^5.6.1",
     "tslib": "^2.8.1",
     "typescript": "^6.0.3",
-    "webpack": "^5.108.4",
+    "webpack": "^5.109.0",
     "webpack-cli": "^7.2.1",
-    "webpack-dev-server": "^5.2.6"
+    "webpack-dev-server": "^6.0.0"
   },
   "author": "WK Wong <wingkwong.code@gmail.com>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
@@ -63,10 +82,10 @@
     "url": "https://github.com/wingkwong/react-quiz-component.git"
   },
   "dependencies": {
-    "dompurify": "^3.4.11",
-    "nanoid": "^5.1.16",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "dompurify": "^3.4.12",
+    "nanoid": "^6.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "snarkdown": "^2.0.0"
   }
 }
