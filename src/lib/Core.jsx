@@ -198,25 +198,14 @@ function Core({
     const {
       singleSelectionTagText,
       multipleSelectionTagText,
-      pickNumberOfSelection,
     } = appLocale;
 
     return (
       <div className="tag-container">
-        {answerSelectionType === "single" && (
-          <span className="single selection-tag">{singleSelectionTagText}</span>
-        )}
-        {answerSelectionType === "multiple" && (
-          <span className="multiple selection-tag">
-            {multipleSelectionTagText}
-          </span>
-        )}
-        <span className="number-of-selection">
-          {pickNumberOfSelection.replace(
-            "<numberOfSelection>",
-            numberOfSelection
-          )}
-        </span>
+        {answerSelectionType === 'single'
+          && <span className="single selection-tag">{singleSelectionTagText}</span>}
+        {answerSelectionType === 'multiple'
+          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
         {segment && <span className="selection-tag segment">{segment}</span>}
       </div>
     );
@@ -481,10 +470,7 @@ function Core({
                 dangerouslySetInnerHTML={rawMarkup(
                   `${
                     activeQuestion && activeQuestion.question
-                  } ${appLocale.marksOfQuestion.replace(
-                    "<marks>",
-                    activeQuestion.point
-                  )}`
+                  }`,
                 )}
               />
               {activeQuestion && activeQuestion.questionPic && (
