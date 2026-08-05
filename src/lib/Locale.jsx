@@ -15,9 +15,9 @@ const defaultLocale = {
   timerTimeTaken: 'Time Taken',
   pauseScreenPause: 'Pause',
   pauseScreenResume: 'Resume',
-  singleSelectionTagText: 'Single Selection',
-  multipleSelectionTagText: 'Multiple Selection',
-  pickNumberOfSelection: 'Pick <numberOfSelection>',
+  singleSelectionTagText: 'Select One Option',
+  multipleSelectionTagText: 'Select Multiple Option',
+  pickNumberOfSelection: 'Pick <numberOfSelection> Options',
   marksOfQuestion: '(<marks> marks)',
 };
 
