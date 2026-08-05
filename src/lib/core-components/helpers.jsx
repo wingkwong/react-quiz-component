@@ -31,7 +31,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
       userInputCopy[currentQuestionIndex] = index;
     }
 
-    if (indexStr === correctAnswer) {
+    if (String(index) === String(correctAnswer)) {
       if (incorrect.indexOf(currentQuestionIndex) < 0 && correct.indexOf(currentQuestionIndex) < 0) {
         correct.push(currentQuestionIndex);
       }
@@ -40,7 +40,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
         ...prevState,
         ...disabledAll,
         [index - 1]: {
-          className: (indexStr === correctAnswer) ? 'correct' : 'incorrect',
+          className: (String(index) === String(correctAnswer)) ? 'correct' : 'incorrect',
         },
       }));
 
@@ -70,7 +70,7 @@ export const checkAnswer = (index, correctAnswer, answerSelectionType, answers, 
             ...prevState,
             ...disabledAll,
             [index - 1]: {
-              className: (indexStr === correctAnswer) ? 'correct' : 'incorrect',
+              className: (String(index) === String(correctAnswer)) ? 'correct' : 'incorrect',
             },
           }
         ));

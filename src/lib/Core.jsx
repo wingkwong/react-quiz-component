@@ -149,27 +149,20 @@ function Core({
     return answers.map((answer, index) => {
       if (answerSelectionType === "single") {
         // correctAnswer - is string
-        answerBtnCorrectClassName =
-          `${index + 1}` === correctAnswer ? "correct" : "";
-        answerBtnIncorrectClassName =
-          `${userInputIndex}` !== correctAnswer &&
-          `${index + 1}` === `${userInputIndex}`
-            ? "incorrect"
-            : "";
+        answerBtnCorrectClassName = String(index + 1) === String(correctAnswer) ? 'correct' : '';
+        answerBtnIncorrectClassName = String(userInputIndex) !== String(correctAnswer)
+          && String(index + 1) === String(userInputIndex) ? 'incorrect' : '';
 
-        if (userInputIndex === undefined && `${index + 1}` !== correctAnswer) {
+        if (userInputIndex === undefined && String(index + 1) !== String(correctAnswer)) {
           answerBtnIncorrectClassName = "unanswered";
         }
       } else {
         // correctAnswer - is array of numbers
         answerBtnCorrectClassName = correctAnswer.includes(index + 1)
-          ? "correct"
-          : "";
-        answerBtnIncorrectClassName =
-          !correctAnswer.includes(index + 1) &&
-          userInputIndex?.includes(index + 1)
-            ? "incorrect"
-            : "";
+          ? 'correct'
+          : '';
+        answerBtnIncorrectClassName = !correctAnswer.includes(index + 1)
+          && userInputIndex?.includes(index + 1) ? 'incorrect' : '';
 
         if (
           userInputIndex === undefined &&
@@ -195,17 +188,9 @@ function Core({
   };
 
   const renderTags = (answerSelectionType, numberOfSelection, segment) => {
-    const {
-      singleSelectionTagText,
-      multipleSelectionTagText,
-    } = appLocale;
-
     return (
       <div className="tag-container">
-        {answerSelectionType === 'single'
-          && <span className="single selection-tag">{singleSelectionTagText}</span>}
-        {answerSelectionType === 'multiple'
-          && <span className="multiple selection-tag">{multipleSelectionTagText}</span>}
+        <span className="single selection-tag">Select an option</span>
         {segment && <span className="selection-tag segment">{segment}</span>}
       </div>
     );
@@ -242,9 +227,7 @@ function Core({
         <div className="result-answer-wrapper" key={nanoid()}>
           <h3
             dangerouslySetInnerHTML={rawMarkup(
-              `Q${question.questionIndex}: ${
-                question.question
-              } ${appLocale.marksOfQuestion.replace("<marks>", question.point)}`
+              `Q${question.questionIndex}: ${question.question}`
             )}
           />
           {question.questionPic && (
@@ -317,38 +300,28 @@ function Core({
 
     return answers.map((answer, index) => (
       <Fragment key={nanoid()}>
-        {answerButtons[index] !== undefined ? (
-          <button
-            type="button"
-            disabled={answerButtons[index].disabled || false}
-            className={`${answerButtons[index].className || ""} answerBtn btn`}
-            onClick={() =>
-              revealAnswerOnSubmit
-                ? onSelectAnswer(index)
-                : onClickAnswer(index)
-            }
-          >
-            {questionType === "text" && <span>{answer}</span>}
-            {questionType === "photo" && <img src={answer} alt="answer" />}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() =>
-              revealAnswerOnSubmit
-                ? onSelectAnswer(index)
-                : onClickAnswer(index)
-            }
-            className={`answerBtn btn ${
-              allowNavigation && checkSelectedAnswer(index + 1)
-                ? "selected"
-                : ""
-            }`}
-          >
-            {questionType === "text" && answer}
-            {questionType === "photo" && <img src={answer} alt="answer" />}
-          </button>
-        )}
+        {(answerButtons[index] !== undefined)
+          ? (
+            <button
+              type="button"
+              disabled={answerButtons[index].disabled || false}
+              className={`${answerButtons[index].className || ''} answerBtn btn`}
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
+            >
+              {questionType === 'text' && <span>{answer}</span>}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
+            </button>
+          )
+          : (
+            <button
+              type="button"
+              onClick={() => (revealAnswerOnSubmit ? onSelectAnswer(index) : onClickAnswer(index))}
+              className={`answerBtn btn ${(allowNavigation && checkSelectedAnswer(index + 1)) ? 'selected' : ''}`}
+            >
+              {questionType === 'text' && answer}
+              {questionType === 'photo' && <img src={answer} alt="answer" />}
+            </button>
+          )}
       </Fragment>
     ));
   };
@@ -452,9 +425,8 @@ function Core({
       {!endQuiz && (
         <div className="questionWrapperBody">
           <div>
-            {`${appLocale.question} ${currentQuestionIndex + 1} / ${
-              questions.length
-            }:`}
+            {`${appLocale.question} ${currentQuestionIndex + 1} / ${questions.length
+              }:`}
             <br />
             {timer && allowPauseTimer && (
               <button type="button" className="timerBtn" onClick={toggleTimer}>
@@ -468,8 +440,7 @@ function Core({
             <>
               <h3
                 dangerouslySetInnerHTML={rawMarkup(
-                  `${
-                    activeQuestion && activeQuestion.question
+                  `${activeQuestion && activeQuestion.question
                   }`,
                 )}
               />
