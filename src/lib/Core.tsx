@@ -6,7 +6,7 @@ import QuizResultFilter from './core-components/QuizResultFilter';
 import { checkAnswer, selectAnswer, rawMarkup } from './core-components/helpers';
 import InstantFeedback from './core-components/InstantFeedback';
 import Explanation from './core-components/Explanation';
-import { CoreProps, Question, ButtonState, QuestionSummary } from './types';
+import type { CoreProps, Question, ButtonState, QuestionSummary } from './types';
 
 const isAnswered = (answer: number | number[] | undefined): boolean => (
   answer !== undefined && (!Array.isArray(answer) || answer.length > 0)

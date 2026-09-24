@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { ProgressBarProps } from '../types';
+import type { ProgressBarProps } from '../types';
 
 function ProgressBar({
   progressBarColor = '#9de1f6',

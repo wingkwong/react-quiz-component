@@ -1,6 +1,6 @@
 import snarkdown from 'snarkdown';
 import dompurify from 'dompurify';
-import { CheckAnswerParams, SelectAnswerParams, AnswerSelectionType, ButtonState } from '../types';
+import type { CheckAnswerParams, SelectAnswerParams, AnswerSelectionType, ButtonState } from '../types';
 
 const addUnique = (values: number[], value: number): number[] => (
   values.includes(value) ? values : [...values, value]

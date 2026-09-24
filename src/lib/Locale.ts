@@ -1,4 +1,4 @@
-import { AppLocale } from './types';
+import type { AppLocale } from './types';
 
 const defaultLocale: AppLocale = {
   landingHeaderText: '<questionLength> Questions',

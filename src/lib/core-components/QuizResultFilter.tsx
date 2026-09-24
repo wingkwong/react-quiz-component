@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AppLocale, QuizResultFilterProps } from '../types';
+import type { AppLocale, QuizResultFilterProps } from '../types';
 
 const FILTER_OPTIONS: { value: string; localeKey: keyof AppLocale }[] = [
   { value: 'all', localeKey: 'resultFilterAll' },
