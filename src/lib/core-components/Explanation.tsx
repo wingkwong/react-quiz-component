@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExplanationProps } from '../types';
+import type { ExplanationProps } from '../types';
 
 function Explanation({ question, isResultPage }: ExplanationProps) {
   const { explanation } = question;

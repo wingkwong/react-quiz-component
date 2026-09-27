@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Explanation from './Explanation';
-import { InstantFeedbackProps } from '../types';
+import type { InstantFeedbackProps } from '../types';
 
 const renderMessageForCorrectAnswer = (question: InstantFeedbackProps['question']): string => {
   const defaultMessage = 'You are correct. Please click Next to continue.';

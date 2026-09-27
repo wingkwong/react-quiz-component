@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Core from './Core';
 import defaultLocale from './Locale';
 import './styles.css';
-import { QuizProps, Question, AppLocale } from './types';
+import type { QuizProps, Question, AppLocale } from './types';
 
 const shuffleArray = <T,>(items: T[]): T[] => {
   const shuffledItems = [...items];
