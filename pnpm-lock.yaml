@@ -13,7 +13,7 @@ importers:
         version: 3.4.16
       nanoid:
         specifier: ^6.0.1
-        version: 6.0.1
+        version: 6.0.2
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -2555,8 +2555,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@6.0.1:
-    resolution: {integrity: sha512-3wVS3i51pE2pi1k5FFL/95BGfVS0kSsvDVuGXHOtxox/TywUmtgq+3qiTOTbs9J7KfHaXPiN171k/A6dBnaXFw==}
+  nanoid@6.0.2:
+    resolution: {integrity: sha512-hIvVOb9Qr1p/9CNNLOe0OlWvgx/ziTsVwKN/GDSsuArN2K0wDiafP3s0SWmsm7o2BdnyS8Z9Z64NFBUbn6ziBg==}
     engines: {node: ^22 || ^24 || >=26}
     hasBin: true
 
@@ -5762,7 +5762,7 @@ snapshots:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.48.0
+      terser: 5.51.2
 
   html-webpack-plugin@5.6.8(webpack@5.111.1):
     dependencies:
@@ -6054,7 +6054,7 @@ snapshots:
 
   nanoid@3.3.15: {}
 
-  nanoid@6.0.1: {}
+  nanoid@6.0.2: {}
 
   negotiator@0.6.3: {}
 
