@@ -8,6 +8,35 @@ import demoQuiz from '../src/docs/quiz';
 afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('default UI compatibility', () => {
+  it('exposes selection without changing answer names', () => {
+    render(<Quiz quiz={quiz} disableSynopsis allowNavigation revealAnswerOnSubmit />);
+    const answer = screen.getByRole('button', { name: 'B' });
+    expect(answer.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(answer);
+    expect(screen.getByRole('button', { name: 'B' }).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'X' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Z' }));
+    expect(screen.getByRole('button', { name: 'X' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Z' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Y' }).getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('exposes progress from start through completion and preserves a custom color', () => {
+    render(<Quiz quiz={{ ...quiz, progressBarColor: '#123456' }} disableSynopsis enableProgressBar />);
+    const progress = screen.getByRole('progressbar');
+    expect(progress.getAttribute('max')).toBe('100');
+    expect(progress.getAttribute('value')).toBe('0');
+    expect((progress as HTMLElement).style.getPropertyValue('--quiz-progress-color')).toBe('#123456');
+    fireEvent.click(screen.getByRole('button', { name: 'B' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(progress.getAttribute('value')).toBe('50');
+    fireEvent.click(screen.getByRole('button', { name: 'X' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Z' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(progress.getAttribute('value')).toBe('100');
+  });
+
   it('renders and answers the actual development demo quiz', () => {
     const onQuestionSubmit = vi.fn();
     render(<Quiz quiz={demoQuiz} disableSynopsis shuffleAnswer showInstantFeedback
