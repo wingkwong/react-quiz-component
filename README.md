@@ -490,7 +490,10 @@ For `userInput` and `userAnswer`, single-answer questions use a 1-based number s
 - Clone the repository
 - Run `npm install`
 - Run `npm run dev`
-- Run `npm run lint`
+- Run `npm run typecheck`, `npm test`, and `npm run build`
+- Run `npm run test:package` after building to verify package exports and types
+- Run `npm exec -- oxlint src test --react-plugin --jsx-a11y-plugin --import-plugin` for a non-mutating lint check
+- Run `npm run lint` to apply lint fixes
 - Make a PR to `develop` and describe the changes
 
 ## Demo
