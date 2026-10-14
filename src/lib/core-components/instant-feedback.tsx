@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import Explanation from './Explanation';
+import React from 'react';
+import Explanation from './explanation';
 import type { InstantFeedbackProps } from '../types';
 
 const renderMessageForCorrectAnswer = (question: InstantFeedbackProps['question']): string => {
@@ -17,15 +17,7 @@ function InstantFeedback({
   incorrectAnswer,
   correctAnswer,
   question,
-  onQuestionSubmit,
-  userAnswer,
 }: InstantFeedbackProps) {
-  useEffect(() => {
-    if (onQuestionSubmit && (correctAnswer || incorrectAnswer)) {
-      onQuestionSubmit({ question, userAnswer, isCorrect: correctAnswer });
-    }
-  }, [correctAnswer, incorrectAnswer, onQuestionSubmit, question, userAnswer]);
-
   return (
     <>
       {incorrectAnswer && showInstantFeedback

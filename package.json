@@ -3,14 +3,15 @@
   "version": "1.1.2",
   "description": "Customizable React quiz component for JSON-powered quizzes with scoring, timers, single or multiple choice answers, images, markdown, and callbacks.",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "webpack-dev-server --mode development",
     "build:docs": "webpack --mode production",
     "build": "rollup -c",
     "lint": "oxlint src --fix --react-plugin --jsx-a11y-plugin --import-plugin",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "keywords": [
     "react",
@@ -90,5 +91,21 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "snarkdown": "^2.0.0"
-  }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ]
 }

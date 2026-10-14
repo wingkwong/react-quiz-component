@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import Quiz from '../lib/Quiz';
+import Quiz from '../lib';
 import quiz from './quiz';
 
 const container = document.getElementById('app');

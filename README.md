@@ -158,6 +158,102 @@ For a multiple-answer question, `correctAnswer` is an array of numbers:
 }
 ```
 
+## Headless quizzes and custom UI
+
+Use `react-quiz-component` when you want to supply every component yourself, including MUI, Chakra, or your own design system. The hooks and provider render no wrapper elements or browser dialogs. Default UI styles load only when you render the default `Quiz` component. The existing default `Quiz` component uses the same engine and retains its props and styles.
+
+```jsx
+import { useQuiz } from 'react-quiz-component';
+
+function CustomQuiz({ quiz }) {
+  const { state, actions } = useQuiz({ quiz });
+  if (state.status === 'invalid') return <p>{state.errors.join(' ')}</p>;
+  if (state.status === 'idle') return <button onClick={actions.start}>Start</button>;
+  if (state.status === 'completed') return (
+    <div>
+      <p>Score: {state.summary.correctPoints} / {state.summary.totalPoints}</p>
+      <button onClick={actions.reset}>Try again</button>
+    </div>
+  );
+  return (
+    <section>
+      <h2>{state.currentQuestion.question}</h2>
+      {state.answers.map((answer) => (
+        <button key={answer.answerNumber} disabled={answer.disabled}
+          aria-pressed={answer.selected}
+          onClick={() => actions.selectAnswer(answer.answerNumber)}>
+          {answer.value}
+        </button>
+      ))}
+      <p aria-live="polite">{state.feedback}</p>
+      {state.canGoNext && <button onClick={actions.nextQuestion}>Next</button>}
+      {state.canSubmit && <button onClick={actions.submitQuiz}>Finish</button>}
+    </section>
+  );
+}
+```
+
+For separate question, timer, navigation, and result components, share a session through context:
+
+```jsx
+import { QuizProvider, useQuizContext } from 'react-quiz-component';
+
+function StartButton() {
+  const { state, actions } = useQuizContext();
+  return state.canStart ? <button onClick={actions.start}>Start</button> : null;
+}
+
+function App({ quiz }) {
+  return <QuizProvider quiz={quiz}><StartButton /></QuizProvider>;
+}
+```
+
+`QuizProvider` accepts the same options as `useQuiz` and adds no DOM element. Each provider or standalone hook owns an independent session. `useQuizContext()` requires an ancestor provider. Calling `useQuiz()` inside a provider creates a **new** session; use `useQuizContext()` to access the shared one. Import the hooks, provider, and their TypeScript types directly from `react-quiz-component`; no subpath is required.
+
+### Headless options
+
+`UseQuizOptions` accepts `quiz`, `shuffle`, `shuffleAnswer`, `continueTillCorrect`, `revealAnswerOnSubmit`, `allowNavigation`, `timer`, `allowPauseTimer`, `onQuestionSubmit`, `onComplete`, and `autoStart`. Boolean options default to `false`; the timer is off unless supplied. `autoStart` replaces the default UI's `disableSynopsis` prop. Presentation props such as `showInstantFeedback`, `showDefaultResult`, `customResultPage`, and `enableProgressBar` belong to your renderer.
+
+Quiz data and behavior options are captured at session creation. Rerendering with a new object does not restart or reshuffle the quiz. `reset()` creates a session from the latest options, reshuffles if enabled, clears answers and results, resets the timer, and honors `autoStart`. Callback references update without resetting. To switch datasets immediately, remount your component/provider using a new React `key`.
+
+### State and actions
+
+Treat state as read-only; use actions to change it. Question indexes are **zero-based** and answer numbers are **one-based**, matching the existing callback format.
+
+| State | Meaning |
+| --- | --- |
+| `status`, `errors` | `idle`, `active`, `paused`, `completed`, or `invalid`; invalid data produces errors rather than crashing. |
+| `quiz`, `questions`, `appLocale` | Session metadata, prepared questions, and merged locale strings. |
+| `currentQuestionIndex`, `currentQuestion`, `currentQuestionState` | Current question and its state; undefined question values are possible for invalid quizzes. |
+| `questionStates`, `userInput` | Recorded answers, per-question evaluated attempts, scoring outcomes, and feedback. |
+| `answers` | Current answer options with `answerNumber`, `value`, `selected`, `disabled`, and `feedback` (`correct`, `incorrect`, or `null`). |
+| `feedback` | Most recent immediate evaluation for the current question. Deferred mode hides correctness feedback until results. |
+| `correct`, `incorrect`, `unanswered` | Question index lists. Single-answer retries retain first-attempt scoring and recorded input even after correct feedback. |
+| `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |
+| `timer`, `timeRemaining`, `timeTaken` | Seconds; timing starts with the quiz, stops while paused, and expiry completes even with unanswered questions. Untimed quizzes have `timeTaken: 0`. |
+| `progress` | Existing position-based percentage: zero on the first question and 100 on completion. |
+| `summary` | Existing `QuestionSummary` payload, available throughout the session. |
+| `resultFilter`, `filteredResults` | `all`, `correct`, `incorrect`, or `unanswered`, and the matching question states. |
+
+Actions return `{ ok: true }` or `{ ok: false, reason }`; invalid actions do not change state. `reason` is a typed `BlockedReason` such as `invalid-state`, `disabled-answer`, or `incomplete-quiz`.
+
+| Action | Behavior |
+| --- | --- |
+| `start()` | Starts an idle session. |
+| `selectAnswer(answerNumber)` | Evaluates immediate answers, or edits deferred answers; multiple deferred selections toggle. |
+| `nextQuestion()` | Advances when allowed; never submits on the final question. |
+| `previousQuestion()`, `goToQuestion(index)` | Navigate when `allowNavigation` is enabled. |
+| `submitQuiz()` | Completes an active quiz when `canSubmit` is true. No browser dialog is opened. |
+| `pauseTimer()`, `resumeTimer()` | Pause/resume a timed session when enabled. Selection and navigation are blocked while paused. |
+| `setResultFilter(filter)` | Sets the result filter without changing quiz answers. |
+| `reset()` | Rebuilds the session from the latest options. Invalid latest options return `invalid-quiz` and expose validation errors. |
+
+Immediate multiple-answer questions are evaluated when the required selection count is reached. `continueTillCorrect` applies to immediate single-answer questions. In deferred mode, correctness is tracked for scoring but no correctness feedback is shown during selection.
+
+### Callback behavior
+
+Callbacks now belong to the engine and work without rendering feedback components. `onComplete` runs once per completed session, including timeout. `onQuestionSubmit` runs once per evaluated immediate attempt, with that attempt's actual answer. In deferred mode it runs when leaving an answered question or completing the quiz (including timeout), once per changed answer revision. Revisiting an unchanged question, rerendering, or changing callback identity does not deliver duplicate events. Payload shapes remain unchanged. Callbacks run synchronously after the engine accepts the action; use their payloads rather than a render's captured state.
+
 ## Examples
 
 ### Shuffle Questions
