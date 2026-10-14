@@ -14,8 +14,26 @@
     header a { color: #2563eb; }
     header h1 { font-size: 28px; margin: 20px 0 8px; }
     header p { line-height: 1.6; color: #526078; }
-    .example-completion { text-align: center; }
-    .example-completion button { padding: 10px 20px; cursor: pointer; }
+    .default-ui-example .example-completion {
+      box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 12px; max-width: 560px;
+      margin: 16px 24px 24px; padding: 0 4px;
+    }
+    .default-ui-example .example-completion output {
+      color: #52525b; font: 400 13px/1.5 system-ui, sans-serif;
+    }
+    .default-ui-example .example-completion button {
+      min-height: 36px; margin-left: auto; padding: 6px 12px;
+      border: 1px solid #d4d4d8; border-radius: 8px; background: #fff;
+      color: #18181b; font: 500 14px/1.5 system-ui, sans-serif; cursor: pointer;
+    }
+    .default-ui-example .example-completion button:hover { background: #f4f4f5; }
+    .default-ui-example .example-completion button:focus-visible {
+      outline: 2px solid #2563eb; outline-offset: 3px;
+    }
+    @media (max-width: 600px) {
+      .default-ui-example .example-completion { margin-inline: 8px; }
+    }
   </style>
 </head>
 <body>

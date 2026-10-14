@@ -7,7 +7,7 @@ export default function DefaultUiExample() {
   const [summary, setSummary] = useState(null);
 
   return (
-    <>
+    <div className="default-ui-example">
       <Quiz key={attempt} quiz={quiz} showInstantFeedback enableProgressBar
         timer={120} allowPauseTimer onComplete={setSummary} />
       {summary && (
@@ -19,6 +19,6 @@ export default function DefaultUiExample() {
           }}>Try again</button>
         </div>
       )}
-    </>
+    </div>
   );
 }
