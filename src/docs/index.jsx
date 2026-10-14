@@ -1,31 +1,14 @@
-import React, { useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import Quiz from '../lib';
-import quiz from './quiz';
-
 const container = document.getElementById('app');
-const root = createRoot(container);
 
-function App() {
-  const [, setQuizResult] = useState();
+// These imports share bundle.js but only execute on their respective pages.
+// The gallery and default UI never request MUI's CDN dependencies.
+const example = container?.dataset.example;
+const load = example === 'mui'
+  ? import('./examples/mui/main')
+  : example === 'default-ui'
+    ? import('./examples/default-ui/main')
+    : null;
 
-  return (
-    <div style={{ margin: 'auto', width: '500px' }}>
-      <Quiz
-        quiz={quiz}
-        shuffle
-        shuffleAnswer
-        showInstantFeedback
-      // continueTillCorrect
-        onComplete={setQuizResult}
-        onQuestionSubmit={(obj) => console.log('user question results:', obj)}
-        disableSynopsis
-        timer={60}
-        allowPauseTimer
-        enableProgressBar
-      />
-    </div>
-  );
-}
-
-root.render(<App />);
+load?.catch(() => {
+  container.textContent = 'Unable to load this example. Check your connection and refresh the page.';
+});

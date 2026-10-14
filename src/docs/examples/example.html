@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= htmlWebpackPlugin.options.title %> — React Quiz Component</title>
+  <% if (htmlWebpackPlugin.options.importMap) { %>
+  <script type="importmap"><%= JSON.stringify(htmlWebpackPlugin.options.importMap) %></script>
+  <% } %>
+  <style>
+    body { margin: 0; background: #f6f7fb; color: #172033; font-family: system-ui, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+    header { margin-bottom: 28px; }
+    header a { color: #2563eb; }
+    header h1 { font-size: 28px; margin: 20px 0 8px; }
+    header p { line-height: 1.6; color: #526078; }
+    .example-completion { text-align: center; }
+    .example-completion button { padding: 10px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <a href="./index.html">← All examples</a>
+      <h1><%= htmlWebpackPlugin.options.title %></h1>
+      <p><%= htmlWebpackPlugin.options.description %></p>
+    </header>
+    <div id="app" data-example="<%= htmlWebpackPlugin.options.example %>"></div>
+  </main>
+</body>
+</html>

@@ -254,6 +254,28 @@ Immediate multiple-answer questions are evaluated when the required selection co
 
 Callbacks now belong to the engine and work without rendering feedback components. `onComplete` runs once per completed session, including timeout. `onQuestionSubmit` runs once per evaluated immediate attempt, with that attempt's actual answer. In deferred mode it runs when leaving an answered question or completing the quiz (including timeout), once per changed answer revision. Revisiting an unchanged question, rerendering, or changing callback identity does not deliver duplicate events. Payload shapes remain unchanged. Callbacks run synchronously after the engine accepts the action; use their payloads rather than a render's captured state.
 
+### Runnable examples
+
+The [docs showcase](src/docs/README.md) contains two runnable applications:
+
+- [Default UI](src/docs/examples/default-ui/app.jsx): the bundled `Quiz` component with no custom hooks or provider.
+- [MUI](src/docs/examples/mui/app.jsx): a custom Material UI interface using `QuizProvider` and `useQuizContext`, including feedback, timer/pause, submission dialog, filtered results, and restart.
+
+From the repository root:
+
+```sh
+pnpm install
+pnpm dev
+```
+
+Open [localhost:8080](http://localhost:8080) to choose an example. Both applications import from `react-quiz-component` and reload against the local library source.
+
+The docs build emits one shared `docs/bundle.js` and `docs/main.css` for all example pages. The MUI example loads its UI dependencies and shared React runtime from [esm.sh](https://esm.sh/) with pinned versions. It requires internet access. The default UI example uses bundled dependencies without requesting MUI's CDN modules.
+
+`pnpm build` builds only the library into `dist/`. Example code, MUI, and Emotion never enter those bundles; the build rejects accidental imports. Examples are also excluded from the published npm package. Use `pnpm build:docs` to build the showcase into `docs/` for GitHub Pages.
+
+To copy the MUI example into your app, copy [its component](src/docs/examples/mui/app.jsx) and [sample data](src/docs/examples/quiz.js), adjust the data import, and install `@mui/material`, `@emotion/react`, and `@emotion/styled` in your app. These packages are development dependencies here, not runtime dependencies of `react-quiz-component`.
+
 ## Examples
 
 ### Shuffle Questions
