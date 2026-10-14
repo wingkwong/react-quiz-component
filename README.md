@@ -116,7 +116,7 @@ export default function App() {
 | `nrOfQuestions` | `number` | N | Number of questions to use from `questions`. If omitted, all questions are used. |
 | `questions` | `Question[]` | Y | Question definitions. |
 | `appLocale` | `Partial<AppLocale>` | N | Locale text overrides. |
-| `progressBarColor` | `string` | N | Hex color used by the progress bar. Defaults to `#9de1f6`. |
+| `progressBarColor` | `string` | N | Hex color used by the progress bar. Defaults to the theme’s blue accent (`#2563eb` in light mode). |
 
 ### Question Fields
 

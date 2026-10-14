@@ -75,9 +75,10 @@ function Core({
           <button
             type="button"
             disabled
-            className={`answerBtn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
+            className={`answer-btn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
-            {questionType === 'text' && <span>{answer}</span>}
+            <span className="answer-indicator" aria-hidden="true">{answerBtnCorrectClassName ? '✓' : answerBtnIncorrectClassName === 'incorrect' ? '×' : ''}</span>
+            {questionType === 'text' && <span className="answer-content">{answer}</span>}
             {questionType === 'photo' && <img src={answer} alt="answer" />}
           </button>
         </div>
@@ -113,13 +114,11 @@ function Core({
 
         return (
           <div className="result-answer-wrapper" key={`result-question-${question.questionIndex ?? index}`}>
-            <h3
-              dangerouslySetInnerHTML={rawMarkup(
-                `Q${question.questionIndex}: ${
-                  question.question
-                } ${appLocale.marksOfQuestion.replace('<marks>', String(question.point))}`,
-              )}
-            />
+            <h3>
+              <span dangerouslySetInnerHTML={rawMarkup(`Q${question.questionIndex}: ${question.question}`)} />
+              {' '}
+              <span className="question-marks">{appLocale.marksOfQuestion.replace('<marks>', String(question.point))}</span>
+            </h3>
             {question.questionPic && (
               <img src={question.questionPic} alt="question" />
             )}
@@ -142,27 +141,33 @@ function Core({
       key={answer.answerNumber}
       type="button"
       disabled={answer.disabled}
-      className={`answerBtn btn ${answer.feedback ?? (answer.selected ? 'selected' : '')}`}
+      aria-pressed={answer.selected}
+      className={`answer-btn btn ${answer.feedback ?? (answer.selected ? 'selected' : '')}`}
       onClick={() => actions.selectAnswer(answer.answerNumber)}
     >
+      <span className="answer-indicator" aria-hidden="true">{answer.feedback === 'correct' ? '✓' : answer.feedback === 'incorrect' ? '×' : answer.selected ? '✓' : ''}</span>
       {activeQuestion?.questionType === 'photo'
-        ? <img src={answer.value} alt="answer" /> : <span>{answer.value}</span>}
+        ? <img src={answer.value} alt="answer" /> : <span className="answer-content">{answer.value}</span>}
     </button>
   ));
 
   const renderResult = () => (
     <div className="card-body">
-      <h2>
-        {appLocale.resultPageHeaderText
-          .replace('<correctIndexLength>', String(correct.length))
-          .replace('<questionLength>', String(questions.length))}
-      </h2>
-      <h2>
-        {appLocale.resultPagePoint
-          .replace('<correctPoints>', String(correctPoints))
-          .replace('<totalPoints>', String(totalPoints))}
-      </h2>
-      <br />
+      <div className="result-overview">
+        <div className="result-score-value" aria-hidden="true">
+          {correctPoints}<span> / {totalPoints}</span>
+        </div>
+        <h2 className="result-score">
+          {appLocale.resultPagePoint
+            .replace('<correctPoints>', String(correctPoints))
+            .replace('<totalPoints>', String(totalPoints))}
+        </h2>
+        <p className="result-summary">
+          {appLocale.resultPageHeaderText
+            .replace('<correctIndexLength>', String(correct.length))
+            .replace('<questionLength>', String(questions.length))}
+        </p>
+      </div>
       <QuizResultFilter
         filteredValue={filteredValue}
         handleChange={handleChange}
@@ -184,65 +189,37 @@ function Core({
   };
 
   return (
-    <div className="questionWrapper">
+    <div className="question-wrapper">
       {enableProgressBar && (
-        <>
-          <div style={{ display: 'flex', width: '100%' }}>
-            <ProgressBar
-              progress={currentQuestionIndex + 1}
-              quizLength={questions.length}
-              isEndQuiz={endQuiz}
-              progressBarColor={progressBarColor}
-            />
-          </div>
-          <br />
-        </>
+        <ProgressBar
+          progress={currentQuestionIndex + 1}
+          quizLength={questions.length}
+          isEndQuiz={endQuiz}
+          progressBarColor={progressBarColor}
+        />
       )}
-      {timer && !isRunning && (
-        <div>
-          {appLocale.timerTimeTaken}
-          :
-          {' '}
-          <b>{displayTime(timer - (timeRemaining || 0))}</b>
-        </div>
-      )}
-
-      {timer && isRunning && (
-        <div>
-          {appLocale.timerTimeRemaining}
-          :
-          {' '}
-          <b>
-            {displayTime(timeRemaining || 0)}
-          </b>
-        </div>
-      )}
-
+      <div className="quiz-header">
+        {!endQuiz && <span className="question-count">{`${appLocale.question} ${currentQuestionIndex + 1} / ${questions.length}`}</span>}
+        {timer && (
+          <span className="quiz-timer">
+            {isRunning ? appLocale.timerTimeRemaining : appLocale.timerTimeTaken}: <b>{displayTime(isRunning ? timeRemaining || 0 : timer - (timeRemaining || 0))}</b>
+          </span>
+        )}
+        {!endQuiz && timer && allowPauseTimer && (
+          <button type="button" className="timer-btn" onClick={isRunning ? actions.pauseTimer : actions.resumeTimer}>
+            {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
+          </button>
+        )}
+      </div>
       {!endQuiz && (
-        <div className="questionWrapperBody">
-          <div>
-            {`${appLocale.question} ${currentQuestionIndex + 1} / ${
-              questions.length
-            }:`}
-            <br />
-            {timer && allowPauseTimer && (
-              <button type="button" className="timerBtn" onClick={isRunning ? actions.pauseTimer : actions.resumeTimer}>
-                {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
-              </button>
-            )}
-          </div>
+        <div className="question-wrapper-body">
           {isRunning ? (
             <>
-              <h3
-                dangerouslySetInnerHTML={rawMarkup(
-                  `${
-                    activeQuestion && activeQuestion.question
-                  } ${appLocale.marksOfQuestion.replace(
-                    '<marks>',
-                    String(activeQuestion?.point),
-                  )}`,
-                )}
-              />
+              <h3>
+                <span dangerouslySetInnerHTML={rawMarkup(activeQuestion?.question ?? '')} />
+                {' '}
+                <span className="question-marks">{appLocale.marksOfQuestion.replace('<marks>', String(activeQuestion?.point))}</span>
+              </h3>
               {activeQuestion && activeQuestion.questionPic && (
                 <img src={activeQuestion.questionPic} alt="question" />
               )}
@@ -252,7 +229,7 @@ function Core({
                   Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
                   activeQuestion.segment,
                 )}
-              <div className="questionModal">
+              <div className="question-modal">
                 <InstantFeedback
                   question={activeQuestion!}
                   showInstantFeedback={showInstantFeedback}
@@ -262,11 +239,11 @@ function Core({
               </div>
               {activeQuestion && renderAnswers()}
               {(state.canGoNext || state.canSubmit || allowNavigation) && (
-                <div className="questionBtnContainer">
+                <div className="question-btn-container">
                   {allowNavigation && currentQuestionIndex > 0 && (
                     <button
                       onClick={actions.previousQuestion}
-                      className="prevQuestionBtn btn"
+                      className="prev-question-btn btn"
                       type="button"
                     >
                       {appLocale.prevQuestionBtn}
@@ -275,7 +252,7 @@ function Core({
 
                   <button
                     onClick={handleNext}
-                    className="nextQuestionBtn btn"
+                    className="next-question-btn btn"
                     type="button"
                   >
                     {appLocale.nextQuestionBtn}
@@ -284,9 +261,7 @@ function Core({
               )}
             </>
           ) : (
-            <span className="timerPauseScreen dark:text-white text-black">
-              <br />
-              <br />
+            <span className="timer-pause-screen">
               {appLocale.pauseScreenDisplay}
             </span>
           )}

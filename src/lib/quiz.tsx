@@ -28,12 +28,12 @@ function Quiz(props: QuizProps) {
   return (
     <div className="react-quiz-container">
       {state.status === 'idle' ? (
-        <div>
+        <div className="quiz-introduction">
           <h2>{quiz.quizTitle}</h2>
-          <div>{appLocale.landingHeaderText.replace('<questionLength>', String(questions.length))}</div>
+          <div className="quiz-question-count">{appLocale.landingHeaderText.replace('<questionLength>', String(questions.length))}</div>
           {quiz.quizSynopsis && <div className="quiz-synopsis">{quiz.quizSynopsis}</div>}
-          <div className="startQuizWrapper">
-            <button type="button" onClick={actions.start} className="startQuizBtn btn">
+          <div className="start-quiz-wrapper">
+            <button type="button" onClick={actions.start} className="start-quiz-btn btn">
               {appLocale.startQuizBtn}
             </button>
           </div>

@@ -35,7 +35,7 @@ describe('default UI compatibility', () => {
     expect(screen.getByText('100%')).toBeTruthy();
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onQuestionSubmit).toHaveBeenCalledTimes(1);
-    expect(container.querySelector('.react-quiz-container .questionWrapper .card-body')).toBeTruthy();
+    expect(container.querySelector('.react-quiz-container .question-wrapper .card-body')).toBeTruthy();
   });
 
   it('keeps incomplete alerts and cancellable submission confirmation in the default UI', () => {
