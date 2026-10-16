@@ -28,6 +28,24 @@ for (const name of ['default', 'hook', 'provider']) {
     }
     await demo.getByRole('button', { name: name === 'default' ? 'Next' : 'Finish quiz', exact: true }).click();
     await expect(demo.getByText(name === 'default' ? 'You scored 30 out of 30.' : 'Score: 30 / 30', { exact: true })).toBeVisible();
+    if (name === 'default') {
+      const filter = demo.locator('.filter-dropdown-select');
+      await filter.focus();
+      await page.keyboard.press('Enter');
+      await expect(demo.getByRole('menuitemradio', { name: 'All', exact: true })).toBeFocused();
+      await page.keyboard.press('ArrowDown');
+      await expect(demo.getByRole('menuitemradio', { name: 'Correct', exact: true })).toBeFocused();
+      await page.keyboard.press('Space');
+      await expect(filter).toHaveText('Correct');
+      await expect(filter).toBeFocused();
+      await page.keyboard.press('ArrowUp');
+      await expect(demo.getByRole('menuitemradio', { name: 'Unanswered', exact: true })).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(filter).toBeFocused();
+      await page.keyboard.press('Enter');
+      await page.keyboard.press('Tab');
+      await expect(demo.getByRole('menu')).toHaveCount(0);
+    }
     if (name === 'provider') {
       await demo.getByLabel('Filter results').selectOption('incorrect');
       await expect(demo.locator('li')).toHaveCount(0);

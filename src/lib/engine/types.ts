@@ -27,6 +27,7 @@ export interface QuizProviderProps extends UseQuizOptions { children: ReactNode 
 export interface AnswerState {
   readonly answerNumber: number;
   readonly value: string;
+  readonly altText: string;
   readonly selected: boolean;
   readonly disabled: boolean;
   readonly feedback: AnswerFeedback;

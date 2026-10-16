@@ -115,14 +115,14 @@ describe('default UI compatibility', () => {
     fireEvent.click(screen.getByRole('button', { name: 'B' }));
     act(() => vi.advanceTimersByTime(2000));
     fireEvent.click(screen.getByRole('button', { name: 'All' }));
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Unanswered' }));
+    fireEvent.click(screen.getByRole('menuitemradio', { name: 'Unanswered' }));
     expect(screen.queryByText(/Q1: Pick B/)).toBeNull();
     expect(screen.getByText(/Q2: Pick X and Z/)).toBeTruthy();
   });
 
   it('renders photo answers and returns nothing for invalid quizzes', () => {
     const { rerender, container } = render(<Quiz quiz={{ ...singleQuiz, questions: [{ ...singleQuiz.questions[0], questionType: 'photo' }] }} disableSynopsis />);
-    expect(screen.getAllByAltText('answer')).toHaveLength(3);
+    expect(screen.getAllByAltText(/^Answer [1-3]$/)).toHaveLength(3);
     rerender(<Quiz key="invalid" quiz={{ quizTitle: 'Empty', questions: [] }} />);
     expect(container.innerHTML).toBe('');
   });

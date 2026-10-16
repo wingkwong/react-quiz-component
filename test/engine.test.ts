@@ -132,4 +132,21 @@ describe('completion invariants', () => {
     expect(transition.submissions[0]).toMatchObject({ userAnswer: [1], isCorrect: false });
     expect(getQuizState(run(transition.state, { type: 'filter', filter: 'incorrect' })).filteredResults).toHaveLength(1);
   });
+
+  it('keeps image descriptions aligned with shuffled answers and isolated from input', () => {
+    const source = { ...singleQuiz, questions: [{ ...singleQuiz.questions[0],
+      questionType: 'photo' as const, answerAltTexts: ['Circle', 'Square', 'Triangle'] }] };
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0);
+    try {
+      const view = getQuizState(createSession({ quiz: source, shuffleAnswer: true }));
+      expect(view.answers.map(({ value, altText }) => [value, altText]))
+        .toEqual([['B', 'Square'], ['C', 'Triangle'], ['A', 'Circle']]);
+      source.questions[0].answerAltTexts[0] = 'Changed';
+      expect(view.answers[2].altText).toBe('Circle');
+    } finally { random.mockRestore(); }
+  });
+
+  it.each([['only one'], ['Circle', '', 'Triangle']])('rejects incomplete image descriptions: %j', (...answerAltTexts) => {
+    expect(createSession({ quiz: { ...singleQuiz, questions: [{ ...singleQuiz.questions[0], answerAltTexts }] } }).status).toBe('invalid');
+  });
 });

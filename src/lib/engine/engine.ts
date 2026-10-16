@@ -89,6 +89,7 @@ export function getQuizState(session: EngineState): QuizState {
           : Number(question.correctAnswer) === answerNumber;
         return {
           answerNumber, value, selected,
+          altText: question.answerAltTexts?.[answerIndex] ?? `Answer ${answerNumber}`,
           disabled: !active || (!deferred && (record.finished || selected)),
           feedback: completed ? (correct ? 'correct' : selected ? 'incorrect' : null)
             : !deferred && selected ? (correct ? 'correct' : 'incorrect') : null,

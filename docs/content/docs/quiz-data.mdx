@@ -20,8 +20,10 @@ description: "Define quiz content with the required quiz and question fields, si
 | :-- | :-- | :--: | :-- |
 | `question` | `string` | Y | Question text. Markdown is supported. |
 | `questionType` | `'text' \| 'photo'` | Y | Use `text` for text answers or `photo` for image answer URLs. |
+| `questionPicAlt` | `string` | N | Description of the question image; an empty string marks it decorative. |
 | `questionPic` | `string` | N | Image URL displayed with the question. |
 | `answerSelectionType` | `'single' \| 'multiple'` | Y | Whether the user selects one answer or multiple answers. |
+| `answerAltTexts` | `string[]` | N | Nonempty descriptions aligned with every answer; shuffled together with the answer URLs. |
 | `answers` | `string[]` | Y | Text answers or image URLs, depending on `questionType`. |
 | `correctAnswer` | `string \| number[]` | Y | Correct answer index or indexes. See answer indexing below. |
 | `messageForCorrectAnswer` | `string` | N | Message shown for a correct answer when instant feedback is enabled. |

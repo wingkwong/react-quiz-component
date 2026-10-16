@@ -11,7 +11,7 @@ Treat state as read-only; use actions to change it. Question indexes are **zero-
 | `quiz`, `questions`, `appLocale` | Session metadata, prepared questions, and merged locale strings. |
 | `currentQuestionIndex`, `currentQuestion`, `currentQuestionState` | Current question and its state; undefined question values are possible for invalid quizzes. |
 | `questionStates`, `userInput` | Recorded answers, per-question evaluated attempts, scoring outcomes, and feedback. |
-| `answers` | Current answer options with `answerNumber`, `value`, `selected`, `disabled`, and `feedback` (`correct`, `incorrect`, or `null`). |
+| `answers` | Current answer options with `answerNumber`, `value`, `altText`, `selected`, `disabled`, and `feedback` (`correct`, `incorrect`, or `null`). |
 | `feedback` | Most recent immediate evaluation for the current question. `state.feedback` and question-level `feedback` remain `null` in deferred mode, including after completion. Use answer-level feedback or question `outcome` to render results. |
 | `correct`, `incorrect`, `unanswered` | Question index lists. Single-answer retries retain first-attempt scoring and recorded input even after correct feedback. |
 | `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |

@@ -28,8 +28,10 @@ export interface Question {
   question: string;
   questionType: QuestionType;
   questionPic?: string;
+  questionPicAlt?: string;
   answerSelectionType: AnswerSelectionType;
   answers: string[];
+  answerAltTexts?: string[];
   correctAnswer: string | number[];
   messageForCorrectAnswer?: string;
   messageForIncorrectAnswer?: string;

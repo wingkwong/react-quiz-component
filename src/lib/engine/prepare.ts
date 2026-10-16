@@ -28,6 +28,11 @@ export function validateOptions({ quiz, timer }: UseQuizOptions): string[] {
       return;
     }
     const selection = question.answerSelectionType ?? 'single';
+    if (question.answerAltTexts !== undefined && (!Array.isArray(question.answerAltTexts)
+      || question.answerAltTexts.length !== question.answers.length
+      || question.answerAltTexts.some((alt) => typeof alt !== 'string' || !alt.trim()))) {
+      errors.push(`${prefix}answerAltTexts must contain a nonempty description for every answer.`);
+    }
     const validNumber = (answer: number) => Number.isInteger(answer)
       && answer >= 1 && answer <= question.answers.length;
     if (selection === 'single') {
@@ -71,6 +76,8 @@ export function prepareQuestions(options: UseQuizOptions): Question[] {
       answerSelectionType: source.answerSelectionType ?? 'single',
       questionIndex: index + 1,
       answers: answerOrder.map((answerNumber) => source.answers[answerNumber - 1]),
+      answerAltTexts: source.answerAltTexts
+        ? answerOrder.map((answerNumber) => source.answerAltTexts![answerNumber - 1]) : undefined,
       correctAnswer: Array.isArray(source.correctAnswer)
         ? source.correctAnswer.map((answerNumber) => answerOrder.indexOf(answerNumber) + 1)
         : String(answerOrder.indexOf(Number(source.correctAnswer)) + 1),

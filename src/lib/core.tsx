@@ -79,7 +79,7 @@ function Core({
           >
             <span className="answer-indicator" aria-hidden="true">{answerBtnCorrectClassName ? '✓' : answerBtnIncorrectClassName === 'incorrect' ? '×' : ''}</span>
             {questionType === 'text' && <span className="answer-content">{answer}</span>}
-            {questionType === 'photo' && <img src={answer} alt="answer" />}
+            {questionType === 'photo' && <img src={answer} alt={question.answerAltTexts?.[index] ?? `Answer ${index + 1}`} />}
           </button>
         </div>
       );
@@ -120,7 +120,7 @@ function Core({
               <span className="question-marks">{appLocale.marksOfQuestion.replace('<marks>', String(question.point))}</span>
             </h3>
             {question.questionPic && (
-              <img src={question.questionPic} alt="question" />
+              <img src={question.questionPic} alt={question.questionPicAlt ?? 'Question illustration'} />
             )}
             {renderTags(
               questionAnswerSelectionType,
@@ -147,7 +147,7 @@ function Core({
     >
       <span className="answer-indicator" aria-hidden="true">{answer.feedback === 'correct' ? '✓' : answer.feedback === 'incorrect' ? '×' : answer.selected ? '✓' : ''}</span>
       {activeQuestion?.questionType === 'photo'
-        ? <img src={answer.value} alt="answer" /> : <span className="answer-content">{answer.value}</span>}
+        ? <img src={answer.value} alt={answer.altText} /> : <span className="answer-content">{answer.value}</span>}
     </button>
   ));
 
@@ -222,7 +222,7 @@ function Core({
                 <span className="question-marks">{appLocale.marksOfQuestion.replace('<marks>', String(activeQuestion?.point))}</span>
               </h3>
               {activeQuestion && activeQuestion.questionPic && (
-                <img src={activeQuestion.questionPic} alt="question" />
+                <img src={activeQuestion.questionPic} alt={activeQuestion.questionPicAlt ?? 'Question illustration'} />
               )}
               {activeQuestion
                 && renderTags(

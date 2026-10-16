@@ -20,6 +20,7 @@ export function useQuiz(options: UseQuizOptions): QuizController {
       ...data,
       question: {
         ...data.question, answers: [...data.question.answers],
+        answerAltTexts: data.question.answerAltTexts ? [...data.question.answerAltTexts] : undefined,
         correctAnswer: Array.isArray(data.question.correctAnswer)
           ? [...data.question.correctAnswer] : data.question.correctAnswer,
       },
@@ -33,6 +34,7 @@ export function useQuiz(options: UseQuizOptions): QuizController {
         ...summary,
         questions: summary.questions.map((question) => ({
           ...question, answers: [...question.answers],
+          answerAltTexts: question.answerAltTexts ? [...question.answerAltTexts] : undefined,
           correctAnswer: Array.isArray(question.correctAnswer) ? [...question.correctAnswer] : question.correctAnswer,
         })),
         userInput: summary.userInput.map((answer) => Array.isArray(answer) ? [...answer] : answer),
