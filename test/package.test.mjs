@@ -28,6 +28,11 @@ for (const library of [root, rootCjs]) {
   }
   const html = renderToString(React.createElement(library.QuizProvider, { quiz }, React.createElement(Consumer)));
   assert.equal(html, '<span>idle</span>');
+  const markdownQuiz = { ...quiz, questions: [{ ...quiz.questions[0],
+    question: '**Server Markdown** [click](javascript:alert%281%29) <img src="x" onerror="alert(1)">' }] };
+  const defaultHtml = renderToString(React.createElement(library.default, { quiz: markdownQuiz, disableSynopsis: true }));
+  assert.match(defaultHtml, /<strong>Server Markdown<\/strong>/);
+  assert.doesNotMatch(defaultHtml, /javascript:|onerror=/);
 }
 // Importing only the root hook API must not inject default styles into a browser document.
 const browserImport = spawnSync(process.execPath, ['--input-type=module', '-e', `

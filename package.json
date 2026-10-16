@@ -58,7 +58,7 @@
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "@testing-library/react": "^16.3.3",
-    "@types/dompurify": "^3.2.0",
+    "@types/sanitize-html": "^2.16.1",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -81,10 +81,10 @@
     "url": "https://github.com/wingkwong/react-quiz-component.git"
   },
   "dependencies": {
-    "dompurify": "^3.4.17",
     "nanoid": "^6.0.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "sanitize-html": "^2.18.1",
     "snarkdown": "^2.0.0"
   },
   "exports": {

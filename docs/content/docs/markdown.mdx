@@ -5,7 +5,7 @@ description: "Use Markdown to format question text in the default quiz interface
 
 ## Question text
 
-The default UI supports Markdown in `question`: it sanitizes the question string with DOMPurify, then converts it to HTML with Snarkdown. `explanation`, text answers, answer messages, titles, and synopsis are rendered as plain text. Headless state exposes the source strings; your renderer decides how to present them.
+The default UI supports Markdown in `question`: it converts the question string to HTML with Snarkdown, then sanitizes that HTML with sanitize-html. The same sanitizer runs on the server and in the browser, including when `disableSynopsis` is enabled. Unsafe URL schemes, scripts, and event handlers are removed. `explanation`, text answers, answer messages, titles, and synopsis are rendered as plain text. Headless state exposes the source strings; your renderer decides how to present them.
 
 ```ts
 import type { Question } from 'react-quiz-component';
