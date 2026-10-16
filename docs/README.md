@@ -25,11 +25,3 @@ Rebuild the library with `pnpm build` after changing its source; restarting `pnp
 - Search uses a build-time index and runs in the browser. It has no hosted search dependency or runtime API server.
 
 Do not commit `.next`, generated MDX caches, `out`, or browser-test artifacts. The npm package includes only `dist`.
-
-## GitHub Pages
-
-The production base path is `/react-quiz-component`. The introduction is served directly at that root; documentation pages use URLs such as `/react-quiz-component/getting-started/`, without a `/docs/` prefix. The workflow checks pull requests and deploys successful `develop` builds; manual dispatch only accepts `develop`. It uses the `github-pages` environment and the Pages artifact, not committed generated HTML.
-
-When the replacement workflow is ready on `develop`, change **Settings → Pages → Build and deployment → Source** from **Deploy from a branch** to **GitHub Actions**, then run the Documentation workflow. Preserve the existing URL and do not change DNS. Switching the setting before the replacement workflow is available would interrupt the existing publishing process.
-
-Verify the homepage, a direct nested URL, search, images, and all three demos at https://wingkwong.github.io/react-quiz-component/ after deployment. Successful builds on `develop` publish the documentation automatically, including documentation for unreleased library changes.

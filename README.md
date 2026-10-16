@@ -56,7 +56,9 @@ pnpm test:docs         # Browser checks against the static export
 ```
 
 Install the test browser once with `pnpm --filter @react-quiz/docs exec playwright install chromium`.
-After changing library source, rebuild with `pnpm build` (or restart `pnpm dev`) so the docs use the updated package. Documentation and demo source live in [docs](docs/README.md). Submit contributions to `develop`; GitHub Pages publishes from `develop`.
+After changing library source, rebuild with `pnpm build` (or restart `pnpm dev`) so the docs use the updated package. Documentation and demo source live in [docs](docs/README.md).
+
+Submit contributions to `develop`.
 
 ## License
 
