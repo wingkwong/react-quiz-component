@@ -1,0 +1,66 @@
+---
+title: "Quiz component"
+description: "Explore every prop accepted by the default Quiz component, including its types, defaults, and behavior. Configure feedback, navigation, timers, callbacks, and results, then learn how to restart a quiz and customize its styling."
+---
+
+```tsx
+import Quiz, { type QuizProps } from 'react-quiz-component';
+```
+
+## Props
+
+| Name | Type | Default | Required | Description |
+| :-- | :-- | :-- | :--: | :-- |
+| `quiz` | `Quiz` | None | Y | Quiz source object. |
+| `shuffle` | `boolean` | `false` | N | Shuffle questions before rendering. |
+| `shuffleAnswer` | `boolean` | `false` | N | Shuffle answer choices before rendering. |
+| `showDefaultResult` | `boolean` | `true` | N | Show the built-in result page when the quiz ends. |
+| `onComplete` | `(summary: QuestionSummary) => void` | `undefined` | N | Called once when the quiz completes. |
+| `customResultPage` | `(summary: QuestionSummary) => React.ReactElement` | `undefined` | N | Render a custom result page. Use with `showDefaultResult={false}`. |
+| `showInstantFeedback` | `boolean` | `false` | N | Show correct or incorrect messages after answers are submitted. |
+| `continueTillCorrect` | `boolean` | `false` | N | For single-answer questions, let the user keep trying until the correct answer is selected. |
+| `revealAnswerOnSubmit` | `boolean` | `false` | N | Allow editing selections and defer correctness feedback until the quiz completes. |
+| `allowNavigation` | `boolean` | `false` | N | Show previous and next controls so users can move between questions. |
+| `onQuestionSubmit` | `(data: QuestionSubmitData) => void` | `undefined` | N | Called when a question answer is submitted with the question, user answer, and correctness. |
+| `disableSynopsis` | `boolean` | `false` | N | Skip the landing page and start the quiz immediately. |
+| `timer` | `number` | `undefined` | N | Quiz duration in seconds. Must be finite and at least `1`. |
+| `allowPauseTimer` | `boolean` | `false` | N | Allow pausing and resuming when `timer` is set. |
+| `enableProgressBar` | `boolean` | `false` | N | Show a progress bar above the quiz. |
+
+## Results and restart
+
+The default result page shows scores, explanations, correct answers, and filters for all, correct, incorrect, and unanswered questions. To supply your own result view, set `showDefaultResult={false}` and provide `customResultPage`. Set `showDefaultResult={false}` without a custom renderer to hide the result body while handling completion through `onComplete`. Supplying `customResultPage` while leaving `showDefaultResult` enabled suppresses both result bodies, so always pair the two props for custom results.
+
+The default component has no reset prop. Change its React `key` to remount it and start a new session. Props that configure the engine are captured when a session is created.
+
+See [Quiz behavior](./features.mdx) for combinations, [callbacks](./callbacks.mdx) for payloads, and [Locale](./locale.mdx) for text overrides.
+
+## Server rendering
+
+When `disableSynopsis` is combined with `shuffle` or `shuffleAnswer`, the component renders nothing on the server or during the first hydration render, then displays the prepared quiz after mounting. This prevents different server and browser random orders from causing hydration errors. Other configurations retain their server-rendered landing screen or unshuffled quiz. For custom headless interfaces, see [Server rendering and shuffling](./headless.mdx#server-rendering-and-shuffling).
+
+## Styling and themes
+
+The default stylesheet is scoped to `.react-quiz-container` and loads when `Quiz` mounts. It uses the operating system's `prefers-color-scheme` setting for dark mode; it does not follow an application's `.dark` class automatically.
+
+Wrap the component to scope overrides and give them enough specificity to override the lazy-loaded stylesheet:
+
+```jsx
+<div className="my-quiz">
+  <Quiz quiz={quiz} />
+</div>;
+```
+
+```css
+.my-quiz .react-quiz-container {
+  --quiz-max-width: 720px;
+  --color-primary: #7c3aed;
+  --color-primary-strong: #6d28d9;
+  --color-primary-soft: #f5f3ff;
+  margin: 0;
+}
+```
+
+Use `quiz.progressBarColor` for a dedicated progress color. Use the [headless API](./headless.mdx) when you need complete control over components, styling or dialogs.
+
+See [Color tokens](./color-tokens.mdx) for the complete color reference, light and dark defaults, and theme override examples.

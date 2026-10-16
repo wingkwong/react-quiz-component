@@ -1,0 +1,95 @@
+---
+title: "Hooks and context"
+description: "Build a custom quiz interface with useQuiz, or share a session across components with QuizProvider and useQuizContext. Learn how the APIs work together and which rendering responsibilities belong to your application."
+---
+
+Use the headless API when you want to supply every component yourself, including MUI, Chakra, or your own design system. The hooks and provider render no wrapper elements or browser dialogs. Default UI styles load only when you render the default `Quiz` component. The default `Quiz` component uses the same engine.
+
+```jsx
+import { useQuiz } from 'react-quiz-component';
+
+function CustomQuiz({ quiz }) {
+  const { state, actions } = useQuiz({ quiz });
+  if (state.status === 'invalid') return <p>{state.errors.join(' ')}</p>;
+  if (state.status === 'idle')
+    return <button onClick={actions.start}>Start</button>;
+  if (state.status === 'completed')
+    return (
+      <p>
+        Score: {state.summary.correctPoints} / {state.summary.totalPoints}
+      </p>
+    );
+  return (
+    <section>
+      <h2>{state.currentQuestion?.question}</h2>
+      {state.answers.map((answer) => (
+        <button
+          key={answer.answerNumber}
+          disabled={answer.disabled}
+          aria-pressed={answer.selected}
+          onClick={() => actions.selectAnswer(answer.answerNumber)}
+        >
+          {answer.value}
+        </button>
+      ))}
+      <p aria-live="polite">{state.feedback}</p>
+      {state.canGoNext && <button onClick={actions.nextQuestion}>Next</button>}
+      {state.canSubmit && <button onClick={actions.submitQuiz}>Finish</button>}
+    </section>
+  );
+}
+```
+
+For separate question, timer, navigation, and result components, share a session through context:
+
+```jsx
+import { QuizProvider, useQuizContext } from 'react-quiz-component';
+
+function StartButton() {
+  const { state, actions } = useQuizContext();
+  return state.canStart ? <button onClick={actions.start}>Start</button> : null;
+}
+
+function App({ quiz }) {
+  return (
+    <QuizProvider quiz={quiz}>
+      <StartButton />
+    </QuizProvider>
+  );
+}
+```
+
+`QuizProvider` accepts the same options as `useQuiz` and adds no DOM element. Each provider or standalone hook owns an independent session. `useQuizContext()` throws an error without an ancestor `QuizProvider`. Calling `useQuiz()` inside a provider creates a **new** session; use `useQuizContext()` to access the shared one. Import the hooks, provider, and their TypeScript types directly from `react-quiz-component`; no subpath is required.
+
+## Server rendering and shuffling
+
+The engine prepares random orders when a session is created. If your headless interface displays shuffled questions or answers during server rendering, the browser can prepare a different order during hydration. A `'use client'` directive alone does not prevent server rendering in Next.js.
+
+Keep the initial output independent of shuffled state, such as a Start button, or mount your quiz inside a client-only wrapper:
+
+```jsx
+'use client';
+import { useSyncExternalStore } from 'react';
+
+const subscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+export function ClientOnly({ children }) {
+  const hydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+  return hydrated ? children : null;
+}
+```
+
+Wrap the component that calls `useQuiz`, or the entire `QuizProvider` and its consumers, with `<ClientOnly>`. The session then starts when the wrapper mounts, including its timer. This is needed even without `autoStart` if your initial UI renders shuffled state. The default `Quiz` component handles its own auto-started shuffled view; see [Server rendering](./component.mdx#server-rendering).
+
+## Reference
+
+- [Options and session lifecycle](./headless-options.mdx)
+- [State, actions, and blocked results](./state-and-actions.mdx)
+- [Callback semantics and payloads](./callbacks.mdx)
+- [Exported TypeScript types](./types.mdx)
+
+Try the [standalone hook](./examples/hook.mdx) or [provider and context](./examples/provider.mdx) example.
+
+These minimal examples render text questions and answers. To support photo questions, render `answer.value` as an image URL when `state.currentQuestion.questionType === 'photo'`, and provide descriptive alternative text. Render `questionPic`, Markdown, explanations, and locale labels explicitly when your interface needs them. The [shared provider example](./examples/provider.mdx) also demonstrates paused and completed states.

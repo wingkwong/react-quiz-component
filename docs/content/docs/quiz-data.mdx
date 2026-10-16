@@ -1,0 +1,78 @@
+---
+title: "Quiz data"
+description: "Define quiz content with the required quiz and question fields, single or multiple answers, and optional metadata. Learn how answer indexing, validation, question selection, and points affect the questions and scores shown to users."
+---
+
+## Quiz fields
+
+| Name | Type | Required | Description |
+| :-- | :-- | :--: | :-- |
+| `quizTitle` | `string` | Y | Title shown on the landing page. |
+| `quizSynopsis` | `string` | N | Introductory text shown before the quiz starts. |
+| `nrOfQuestions` | `number` | N | Number of questions to use from `questions`. If omitted, all questions are used. |
+| `questions` | `Question[]` | Y | Question definitions. |
+| `appLocale` | `Partial<AppLocale>` | N | Locale text overrides. |
+| `progressBarColor` | `string` | N | Hex color used by the progress bar. Defaults to the theme’s blue accent (`#2563eb` in light mode). |
+
+## Question fields
+
+| Name | Type | Required | Description |
+| :-- | :-- | :--: | :-- |
+| `question` | `string` | Y | Question text. Markdown is supported. |
+| `questionType` | `'text' \| 'photo'` | Y | Use `text` for text answers or `photo` for image answer URLs. |
+| `questionPicAlt` | `string` | N | Description of the question image; an empty string marks it decorative. |
+| `questionPic` | `string` | N | Image URL displayed with the question. |
+| `answerSelectionType` | `'single' \| 'multiple'` | Y | Whether the user selects one answer or multiple answers. |
+| `answerAltTexts` | `string[]` | N | Nonempty descriptions aligned with every answer; shuffled together with the answer URLs. |
+| `answers` | `string[]` | Y | Text answers or image URLs, depending on `questionType`. |
+| `correctAnswer` | `string \| number[]` | Y | Correct answer index or indexes. See answer indexing below. |
+| `messageForCorrectAnswer` | `string` | N | Message shown for a correct answer when instant feedback is enabled. |
+| `messageForIncorrectAnswer` | `string` | N | Message shown for an incorrect answer when instant feedback is enabled. |
+| `explanation` | `string` | N | Plain-text explanation shown with correct instant feedback and on the default result page. |
+| `point` | `string \| number` | N | Points assigned to the question. |
+| `segment` | `string` | N | Label shown with the question tags. |
+| `questionIndex` | `number` | N | Assigned by the engine to prepared questions (one-based); any supplied value is replaced. |
+
+## Answer indexing
+
+Answer indexes are 1-based.
+
+For a single-answer question, `correctAnswer` is a string:
+
+```js
+const singleQuestion = {
+  question: 'Which answer is second?',
+  questionType: 'text',
+  answerSelectionType: 'single',
+  answers: ['First', 'Second', 'Third'],
+  correctAnswer: '2',
+};
+```
+
+For a multiple-answer question, `correctAnswer` is an array of numbers:
+
+```js
+const multipleQuestion = {
+  question: 'Select the first and third answers.',
+  questionType: 'text',
+  answerSelectionType: 'multiple',
+  answers: ['First', 'Second', 'Third'],
+  correctAnswer: [1, 3],
+};
+```
+
+## Validation and defaults
+
+Supply at least one question with nonempty question text and a nonempty array of string answers. Single-answer indexes must be valid numeric strings; multiple-answer indexes must be unique, in-range numbers in a nonempty array. Explicitly supply `answerSelectionType` in typed code; the runtime defaults an omitted value to `single`.
+
+`nrOfQuestions` must be a positive integer. Values larger than the available question count use all available questions. All supplied questions are validated, including those outside the selected subset. Shuffling happens before taking that subset. Original quiz objects are not mutated.
+
+`timer`, when supplied, must be finite and at least 1 second. The default component renders nothing for invalid quiz options or an invalid `progressBarColor`; headless state exposes quiz/timer validation errors with `status: 'invalid'`. The headless engine does not validate the presentation-only `progressBarColor`. Progress colors in the default UI must be three- or six-digit hex strings.
+
+## Scoring
+
+Omitted points count as zero. Prefer numeric points; string points are parsed as base-10 integers. Multiple answers earn the question's points only when the selection exactly matches the correct answers; there is no partial credit. Manual submission requires the requested number of selections for every multiple-answer question, even with navigation enabled. On timeout, a partial selection counts as incorrect; a question with no selections stays unanswered. A single-answer retry retains the first attempt's score even after a later correct response.
+
+`questionIndex` is an optional exported field assigned to prepared questions by the engine (one-based). Headless navigation indexes are zero-based; answer numbers are one-based.
+
+See [Images](./images.mdx), [Markdown](./markdown.mdx), and [Locale](./locale.mdx) for presentation data.

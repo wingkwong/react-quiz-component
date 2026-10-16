@@ -1,2 +1,13 @@
+packages:
+  - docs
+
 allowBuilds:
   '@swc/core': true
+
+# Older cssnano plugins still request the vulnerable selector-parser 6.x line.
+minimumReleaseAgeExclude:
+  - react-dom@19.3.1
+  - react@19.3.1
+
+overrides:
+  'postcss-selector-parser@<7.1.6': '^7.1.6'

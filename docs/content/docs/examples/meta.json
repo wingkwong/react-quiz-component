@@ -1,0 +1,9 @@
+{
+  "title": "Examples",
+  "pages": [
+    "default",
+    "hook",
+    "provider"
+  ],
+  "defaultOpen": true
+}
