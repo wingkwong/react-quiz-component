@@ -1,0 +1,61 @@
+---
+title: "Quick start"
+description: "Install React Quiz Component and create your first quiz with a small question dataset. Follow the quick start, then learn how to set up client components and browser-only rendering in Next.js."
+---
+
+## Installation
+
+```sh
+npm install react-quiz-component
+# or
+pnpm add react-quiz-component
+```
+
+React and React DOM are required by your application. The current package uses React 19.
+
+## Quick start
+
+```tsx
+'use client'; // Required in a Next.js App Router client boundary.
+import Quiz, { type Quiz as QuizData } from 'react-quiz-component';
+
+const quiz: QuizData = {
+  quizTitle: 'Your first quiz',
+  questions: [
+    {
+      question: 'Which hook stores local state?',
+      questionType: 'text',
+      answerSelectionType: 'single',
+      answers: ['useState', 'useEffect'],
+      correctAnswer: '1',
+      point: 10,
+    },
+  ],
+};
+
+export default function App() {
+  return <Quiz quiz={quiz} showInstantFeedback enableProgressBar />;
+}
+```
+
+`Quiz` is the default export. The `Quiz` data type is a named type export; alias it when importing both. JavaScript users can remove the type annotations.
+
+The default component loads its own stylesheet on mount. No separate CSS import is required. Headless hooks do not load those styles.
+
+## Next.js and server rendering
+
+Put interactive quizzes in a file beginning with `'use client'`. Package imports are safe in a server-rendering environment, but hooks and providers must be used inside a React client component, not a Next.js Server Component. Keep callback functions inside that boundary. Next.js still prerenders client components on the server.
+
+Use a browser-only wrapper for the default component when setting `disableSynopsis`: rendering an active question uses the browser-based Markdown sanitizer. Also use it when randomized question or answer order would appear in prerendered markup, to avoid a server/client mismatch:
+
+```tsx
+'use client';
+import dynamic from 'next/dynamic';
+
+const QuizDemo = dynamic(() => import('./quiz-demo'), { ssr: false });
+export default function PageQuiz() {
+  return <QuizDemo />;
+}
+```
+
+The dynamically imported file should export your quiz component. See the [interactive examples](./examples/default.mdx) for complete implementations.

@@ -15,7 +15,7 @@ const globals = {
   'react-scripts': 'ReactScripts',
 };
 
-const exampleDirectories = ['./src/docs/', './docs/']
+const exampleDirectories = ['./docs/']
   .map((directory) => fileURLToPath(new URL(directory, import.meta.url)));
 
 const extensions = ['.ts', '.tsx', '.js', '.jsx'];
@@ -53,7 +53,7 @@ export default [
             for (const moduleId of Object.keys(output.modules)) {
               const normalized = moduleId.replaceAll('\\', '/');
               if (exampleDirectories.some((directory) => moduleId.includes(directory))
-                || /\/node_modules\/(?:@mui|@emotion)\//.test(normalized)) {
+                || /\/node_modules\/(?:@mui|@emotion|fumadocs-core|fumadocs-ui|fumadocs-mdx|@fumadocs|next)\//.test(normalized)) {
                 this.error(`Example-only code must not be bundled in the library: ${path.basename(moduleId)}`);
               }
             }

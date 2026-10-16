@@ -1,0 +1,124 @@
+---
+title: "Color tokens"
+description: "Customize the default quiz interface with CSS color tokens for buttons, answers, feedback, surfaces, and text. Explore the light and dark defaults, apply scoped overrides, and understand how theme preferences and progress colors interact."
+---
+
+The default `Quiz` component includes its own stylesheet. Its color tokens are CSS custom properties declared on `.react-quiz-container`; no extra stylesheet import is required to use the built-in colors. These tokens style the default interface. Headless hooks and providers leave styling to your own components.
+
+## Override colors
+
+Wrap the quiz in a class and target the quiz container inside it. Setting tokens only on `:root` or the wrapper does not override the values declared directly on `.react-quiz-container`. The more specific selector below also takes precedence when the library loads its stylesheet after your application's CSS.
+
+```tsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+import './quiz-theme.css';
+
+export default function BrandedQuiz() {
+  return (
+    <div className="my-quiz">
+      <Quiz quiz={quiz} showInstantFeedback enableProgressBar />
+    </div>
+  );
+}
+```
+
+Save these overrides in `quiz-theme.css`:
+
+```css
+.my-quiz .react-quiz-container {
+  --color-primary: #7c3aed;
+  --color-primary-strong: #6d28d9;
+  --color-primary-soft: #f5f3ff;
+  --color-text-on-primary: #fff;
+  --color-border-focus: #7c3aed;
+  --color-bg-selected: #f5f3ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .my-quiz .react-quiz-container {
+    --color-primary: #c4b5fd;
+    --color-primary-strong: #ddd6fe;
+    --color-primary-soft: #2e1065;
+    --color-text-on-primary: #2e1065;
+    --color-border-focus: #c4b5fd;
+    --color-bg-selected: #2e1065;
+  }
+}
+```
+
+Each token is independent. Changing `--color-primary` does not automatically change its hover, soft-background, focus, or text colors. Override the related tokens together, keeping text and focus indicators readable against their backgrounds.
+
+## Active color tokens
+
+These tokens are used by the current default interface. The values below match the library stylesheet.
+
+| Token | Light | Dark | Used for |
+| --- | --- | --- | --- |
+| `--color-primary` | `#2563eb` | `#60a5fa` | Primary buttons, selected-answer borders and indicators, and the default progress fill. |
+| `--color-primary-strong` | `#1d4ed8` | `#93c5fd` | Primary button hover background. |
+| `--color-primary-soft` | `#eff6ff` | `#172554` | Selected-answer background. |
+| `--color-success` | `#166534` | `#86efac` | Correct-answer text, borders, feedback, and result indicators. |
+| `--color-success-soft` | `#f0fdf4` | `#142b20` | Correct-answer and success-feedback backgrounds. |
+| `--color-error` | `#b91c1c` | `#fca5a5` | Incorrect-answer text, borders, feedback, and result indicators. |
+| `--color-error-soft` | `#fef2f2` | `#321d21` | Incorrect-answer and error-feedback backgrounds. |
+| `--color-neutral-soft` | `#f4f4f5` | `#27272a` | Unanswered-answer background. |
+| `--color-bg-primary` | `#fff` | `#18181b` | Quiz container background. |
+| `--color-bg-secondary` | `#fafafa` | `#202023` | Question tags, paused-timer panel, and result-answer backgrounds. |
+| `--color-bg-tertiary` | `#fff` | `#18181b` | Button and result-filter menu backgrounds. |
+| `--color-bg-hover` | `#fafafa` | `#27272a` | Button hover background. |
+| `--color-bg-selected` | `#eff6ff` | `#172554` | Selected result-filter option background. |
+| `--color-progress-track` | `#e4e4e7` | `#3f3f46` | Unfilled progress-bar track. |
+| `--color-text-primary` | `#18181b` | `#fafafa` | Main text, headings, buttons, and result-filter options. |
+| `--color-text-secondary` | `#52525b` | `#a1a1aa` | Supporting text, question tags, explanations, and unanswered answers. |
+| `--color-text-on-primary` | `#fff` | `#172554` | Text on primary buttons and selected-answer indicators. |
+| `--color-border-primary` | `#e4e4e7` | `#3f3f46` | Container, button, panel, and menu borders; section dividers. |
+| `--color-border-secondary` | `#a1a1aa` | `#71717a` | Button hover borders, answer-indicator borders, and dropdown arrow. |
+| `--color-border-focus` | `#2563eb` | `#60a5fa` | Keyboard focus outline. |
+
+## Dark mode and application themes
+
+The default interface follows the operating system's `prefers-color-scheme` setting and sets `color-scheme` on the quiz container. It does not automatically follow an application's `.dark` class or a `data-theme` attribute. The override example above preserves that system-based behavior.
+
+To control the quiz through your application's theme switch, define complete light and dark overrides using selectors such as `.my-quiz[data-theme='light'] .react-quiz-container` and `.my-quiz[data-theme='dark'] .react-quiz-container`. Set `color-scheme: light` or `color-scheme: dark` in the corresponding rule and use the active-token table for each palette. Override both palettes so the system media query cannot leave the quiz with a mixture of light and dark colors.
+
+## Progress bar colors
+
+When `enableProgressBar` is enabled, the fill uses `--color-primary` by default and the track uses `--color-progress-track`. To give one quiz a separate fill color, set `progressBarColor` in its quiz data:
+
+```tsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const customQuiz = {
+  ...quiz,
+  progressBarColor: '#7c3aed',
+};
+
+export default function CustomProgressQuiz() {
+  return <Quiz quiz={customQuiz} enableProgressBar />;
+}
+```
+
+`progressBarColor` accepts a three- or six-digit hex color. It takes precedence over the primary token for the fill and stays the same in both themes. Omit it to let the fill follow your theme's `--color-primary`. The component sets its internal `--quiz-progress-color` property inline on the progress element; use the quiz field or the primary token instead of setting that internal property on the container.
+
+## Other declared color tokens
+
+The stylesheet also declares the following tokens, but the current default interface does not reference them. Overriding these alone has no visible effect. They are listed here to distinguish declarations from the active customization points above.
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `--color-success-strong` | `#166534` | `#86efac` |
+| `--color-error-strong` | `#b91c1c` | `#fca5a5` |
+| `--color-neutral` | `#71717a` | `#a1a1aa` |
+| `--color-indigo` | `#52525b` | `#52525b` |
+| `--color-purple` | `#52525b` | `#52525b` |
+| `--color-orange` | `#52525b` | `#52525b` |
+| `--color-cyan` | `#52525b` | `#52525b` |
+| `--color-warning` | `#a16207` | `#a16207` |
+| `--color-surface-raised` | `#fff` | `#202023` |
+| `--color-text-tertiary` | `#52525b` | `#d4d4d8` |
+| `--color-text-light` | `#71717a` | `#a1a1aa` |
+| `--color-text-neutral` | `#71717a` | `#a1a1aa` |
+| `--color-text-on-soft` | `#18181b` | `#fafafa` |
+| `--color-border-dropdown` | `#e4e4e7` | `#3f3f46` |

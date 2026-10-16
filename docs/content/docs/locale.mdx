@@ -1,0 +1,45 @@
+---
+title: "Locale"
+description: "Adapt the default quiz labels to your audience with partial locale overrides and dynamic placeholders. Customize question feedback separately, and learn which built-in dialogs require a headless interface if you need translated text."
+---
+
+## Locale overrides
+
+Add `appLocale` to the quiz source to override the supported labels below. Overrides are partial; omitted keys use the built-in English strings. Placeholders such as `<questionLength>`, `<correctIndexLength>`, `<correctPoints>`, `<totalPoints>`, `<numberOfSelection>`, and `<marks>` are replaced dynamically.
+
+```js
+const localizedQuiz = {
+  ...quiz, // Your valid quiz data.
+  appLocale: {
+    landingHeaderText: '<questionLength> Questions',
+    question: 'Question',
+    startQuizBtn: 'Start Quiz',
+    resultFilterAll: 'All',
+    resultFilterCorrect: 'Correct',
+    resultFilterIncorrect: 'Incorrect',
+    resultFilterUnanswered: 'Unanswered',
+    nextQuestionBtn: 'Next',
+    prevQuestionBtn: 'Prev',
+    resultPageHeaderText:
+      'You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.',
+    resultPagePoint: 'You scored <correctPoints> out of <totalPoints>.',
+    pauseScreenDisplay: 'Test is paused. Clicked the Resume button to continue',
+    timerTimeRemaining: 'Time Remaining',
+    timerTimeTaken: 'Time Taken',
+    pauseScreenPause: 'Pause',
+    pauseScreenResume: 'Resume',
+    singleSelectionTagText: 'Single Selection',
+    multipleSelectionTagText: 'Multiple Selection',
+    pickNumberOfSelection: 'Pick <numberOfSelection>',
+    marksOfQuestion: '(<marks> marks)',
+  },
+};
+```
+
+## Feedback and dialog text
+
+Set each question's `messageForCorrectAnswer` and `messageForIncorrectAnswer` to customize instant-feedback messages. When those strings are missing or empty, the component uses “You are correct. Please click Next to continue.” and “Incorrect answer. Please try again.” These messages are not `appLocale` keys.
+
+The default UI's incomplete-quiz alert and submit-confirmation dialog also use fixed English text. Use a headless renderer if you need custom or translated dialogs. Quiz titles, synopsis, question content, explanations, and segment labels come from your quiz data.
+
+The headless API exposes merged labels in `state.appLocale`; it does not render or interpolate them for your custom UI.

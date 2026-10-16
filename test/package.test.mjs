@@ -56,13 +56,13 @@ for (const filename of readdirSync('dist', { recursive: true })) {
   if (!filename.endsWith('.map')) continue;
   const map = JSON.parse(readFileSync(path.join('dist', filename), 'utf8'));
   for (const source of map.sources ?? []) {
-    assert.doesNotMatch(source.replaceAll('\\', '/'), /(?:^|\/)(?:docs|examples)\/|\/node_modules\/(?:@mui|@emotion)\//);
+    assert.doesNotMatch(source.replaceAll('\\', '/'), /(?:^|\/)(?:docs|examples)\/|\/node_modules\/(?:@mui|@emotion|fumadocs-core|fumadocs-ui|fumadocs-mdx|@fumadocs|next)\//);
   }
 }
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 assert.deepEqual(packageJson.files, ['dist']);
 for (const dependency of Object.keys(packageJson.dependencies ?? {})) {
-  assert.doesNotMatch(dependency, /^@(mui|emotion)\//);
+  assert.doesNotMatch(dependency, /^(?:@(mui|emotion|fumadocs)\/|fumadocs-|next$)/);
 }
 const cache = mkdtempSync(path.join(tmpdir(), 'quiz-package-check-'));
 try {

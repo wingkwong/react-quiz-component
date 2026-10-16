@@ -1,0 +1,165 @@
+---
+title: "Quiz behavior"
+description: "Configure how users move through a quiz, receive feedback, and review their results. Use focused examples to add shuffling, retries, previous and next navigation, timers, progress indicators, callbacks, and a custom result page."
+---
+
+The snippets below assume a valid `quiz` object exported from `./quiz`. Place the shown JSX in your component's return value. The [default example](./examples/default.mdx#quiz-data) provides complete sample data.
+
+## Shuffle Questions
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} shuffle />;
+```
+
+## Shuffle Answers
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} shuffleAnswer />;
+```
+
+## Instant Feedback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} showInstantFeedback />;
+```
+
+## Retry Until Correct
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} continueTillCorrect />;
+```
+
+## Reveal Answer On Submit
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} revealAnswerOnSubmit />;
+```
+
+## Previous And Next Navigation
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} allowNavigation />;
+```
+
+## Timer
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} timer={60} />;
+```
+
+## Pause And Resume Timer
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} timer={60} allowPauseTimer />;
+```
+
+## Progress Bar
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const quizWithProgressColor = {
+  ...quiz,
+  progressBarColor: '#34d399',
+};
+
+<Quiz quiz={quizWithProgressColor} enableProgressBar />;
+```
+
+## Disable Landing Synopsis
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+<Quiz quiz={quiz} disableSynopsis />;
+```
+
+## Completion Callback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const handleComplete = (summary) => {
+  console.log(summary);
+};
+
+<Quiz quiz={quiz} onComplete={handleComplete} />;
+```
+
+## Question Submit Callback
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const handleQuestionSubmit = ({ question, userAnswer, isCorrect }) => {
+  console.log(question, userAnswer, isCorrect);
+};
+
+<Quiz quiz={quiz} onQuestionSubmit={handleQuestionSubmit} />;
+```
+
+## Custom Result Page
+
+Set `showDefaultResult` to `false` when using `customResultPage`.
+
+```jsx
+import Quiz from 'react-quiz-component';
+import { quiz } from './quiz';
+
+const renderCustomResultPage = (summary) => {
+  return (
+    <div>
+      <h2>Custom result page</h2>
+      <p>
+        You scored {summary.correctPoints} out of {summary.totalPoints}.
+      </p>
+    </div>
+  );
+};
+
+<Quiz
+  quiz={quiz}
+  showDefaultResult={false}
+  customResultPage={renderCustomResultPage}
+/>;
+```
+
+## Behavior details
+
+- Immediate mode evaluates single answers on selection and multiple answers when the required selection count is reached. `showInstantFeedback` controls messages; correctness styles still follow the engine's answer state.
+- `continueTillCorrect` applies to immediate single-answer questions. Retrying does not recover points lost on the first attempt.
+- `revealAnswerOnSubmit` defers correctness feedback until quiz completion. Multiple selections can be toggled. Pair it with `allowNavigation` to let users review answers before submission.
+- `allowNavigation` permits skipping between questions, but manual submission requires nonempty input for every question. See the [exact submission rules](./state-and-actions.mdx#selection-and-submission-rules) for multiple-answer and retry modes. The default UI shows an alert for incomplete submission and a confirmation dialog for completed submission when navigation is enabled. Headless actions show no browser dialogs.
+- `disableSynopsis` skips the entire landing screen and starts the session immediately.
+- Timers start with the quiz, stop while paused, and complete the quiz on expiry, including unanswered questions. `timeTaken` is zero for untimed quizzes.
+- Use whole seconds for timers. Timing advances through one-second interval ticks rather than a wall-clock deadline; browser throttling can delay expiry.
+- Progress is based on the current question's position, not answer count: zero on the first question and 100 on completion.
+- Shuffling occurs on session creation or reset. Answer indexes in prepared questions and callback payloads reflect the shuffled order.
