@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Quiz from '../src/lib';
 import { quiz, singleQuiz } from './fixtures';
-import demoQuiz from '../src/docs/quiz';
+import demoQuiz from './demo-quiz';
 
 afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
 
@@ -37,7 +37,7 @@ describe('default UI compatibility', () => {
     expect(progress.getAttribute('value')).toBe('100');
   });
 
-  it('renders and answers the actual development demo quiz', () => {
+  it('renders and answers the representative demo quiz', () => {
     const onQuestionSubmit = vi.fn();
     render(<Quiz quiz={demoQuiz} disableSynopsis shuffleAnswer showInstantFeedback
       timer={60} allowPauseTimer enableProgressBar onQuestionSubmit={onQuestionSubmit} />);
