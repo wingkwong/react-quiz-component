@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { babel } from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
@@ -30,6 +31,8 @@ export default [
         chunkFileNames: 'chunks/[name]-[hash].js',
         exports: 'named',
         format: 'cjs',
+        // Keep require() callable while exposing the default and headless APIs.
+        footer: (chunk) => chunk.isEntry ? 'module.exports = Object.assign(exports.default, exports);' : '',
         globals,
         sourcemap: true,
       },
@@ -102,6 +105,11 @@ export default [
       {
         name: 'public-declarations',
         generateBundle() {
+          this.emitFile({
+            type: 'asset',
+            fileName: 'index.d.cts',
+            source: readFileSync(new URL('./src/lib/commonjs.d.cts', import.meta.url), 'utf8'),
+          });
           // ESM consumers need an ESM declaration entry for the default component export.
           this.emitFile({ type: 'asset', fileName: 'index.d.mts', source: [
             "declare const Quiz: typeof import('./quiz.js').default;",
