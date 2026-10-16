@@ -100,8 +100,10 @@ export function getQuizState(session: EngineState): QuizState {
   const correct = records.flatMap((record, i) => record.outcome === 'correct' ? [i] : []);
   const incorrect = records.flatMap((record, i) => record.outcome === 'incorrect' ? [i] : []);
   const unanswered = records.flatMap((record, i) => isAnswered(record.input) ? [] : [i]);
-  const ready = !!records[index] && (options.revealAnswerOnSubmit
-    ? isAnswered(records[index].input) : records[index].finished);
+  const isComplete = (record: AnswerRecord, questionIndex: number) => record.finished
+    && (!Array.isArray(record.input)
+      || record.input.length === (questions[questionIndex].correctAnswer as number[]).length);
+  const ready = !!records[index] && isComplete(records[index], index);
   const points = questions.map((question) => typeof question.point === 'string'
     ? parseInt(question.point || '0', 10) : question.point || 0);
   const timeTaken = options.timer === undefined ? 0 : options.timer - (session.remaining ?? 0);
@@ -121,9 +123,7 @@ export function getQuizState(session: EngineState): QuizState {
     canStart: status === 'idle',
     canGoNext: active && index < questions.length - 1 && (!!options.allowNavigation || ready),
     canGoPrevious: active && !!options.allowNavigation && index > 0,
-    canSubmit: active && records.every((record, i) => record.finished
-      && (!Array.isArray(record.input)
-        || record.input.length === (questions[i].correctAnswer as number[]).length)),
+    canSubmit: active && records.every(isComplete),
     canPause: active && !!options.timer && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
     progress: completed ? 100 : questions.length ? index / questions.length * 100 : 0,

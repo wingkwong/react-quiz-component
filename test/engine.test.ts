@@ -109,6 +109,28 @@ describe('quiz transitions', () => {
 });
 
 describe('completion invariants', () => {
+  it.each([[1], [1, 2, 3]])('blocks advancing with the wrong deferred selection count: %j', (...selected) => {
+    let state = createSession({ quiz: { ...quiz, questions: [...quiz.questions].reverse() },
+      autoStart: true, revealAnswerOnSubmit: true });
+    state = run(state, ...selected.map((answer): Command => ({ type: 'select', answer })));
+    expect(getQuizState(state).canGoNext).toBe(false);
+    expect(quizReducer(state, { type: 'next' }).result).toEqual({ ok: false, reason: 'answer-required' });
+    // Repair either an under-selection or an over-selection, then finish normally.
+    state = run(state, { type: 'select', answer: selected.length === 1 ? 3 : 2 },
+      { type: 'next' }, { type: 'select', answer: 2 }, { type: 'submit' });
+    expect(getQuizState(state).summary.correctPoints).toBe(15);
+  });
+
+  it('still allows leaving partial deferred answers when they can be revisited', () => {
+    let state = createSession({ quiz: { ...quiz, questions: [...quiz.questions].reverse() },
+      autoStart: true, revealAnswerOnSubmit: true, allowNavigation: true });
+    state = run(state, { type: 'select', answer: 1 }, { type: 'next' },
+      { type: 'select', answer: 2 });
+    expect(getQuizState(state).canSubmit).toBe(false);
+    state = run(state, { type: 'previous' }, { type: 'select', answer: 3 }, { type: 'submit' });
+    expect(getQuizState(state).summary.correctPoints).toBe(15);
+  });
+
   it.each([false, true])('blocks partial multiple-answer submission with deferred=%s', (revealAnswerOnSubmit) => {
     let state = createSession({ quiz, autoStart: true, allowNavigation: true, revealAnswerOnSubmit });
     state = run(state, { type: 'select', answer: 2 }, { type: 'next' }, { type: 'select', answer: 1 });

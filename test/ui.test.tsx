@@ -8,6 +8,24 @@ import demoQuiz from './demo-quiz';
 afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('default UI compatibility', () => {
+  it('requires the exact deferred selection count before leaving a question without navigation', () => {
+    const onComplete = vi.fn();
+    render(<Quiz quiz={{ ...quiz, questions: [...quiz.questions].reverse() }}
+      disableSynopsis revealAnswerOnSubmit onComplete={onComplete} />);
+    fireEvent.click(screen.getByRole('button', { name: 'X' }));
+    expect(screen.queryByRole('button', { name: 'Next' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Z' }));
+    expect(screen.getByRole('button', { name: 'Next' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Y' }));
+    expect(screen.queryByRole('button', { name: 'Next' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Y' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'B' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText('You scored 15 out of 15.')).toBeTruthy();
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  });
+
   it('exposes selection without changing answer names', () => {
     render(<Quiz quiz={quiz} disableSynopsis allowNavigation revealAnswerOnSubmit />);
     const answer = screen.getByRole('button', { name: 'B' });
