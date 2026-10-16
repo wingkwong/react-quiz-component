@@ -1,9 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import Core from './core';
 import { useQuiz } from './engine';
 import type { QuizProps } from './types';
 
+const subscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 function Quiz(props: QuizProps) {
+  // Random orders differ between server and client. Keep their initial markup
+  // identical when skipping the landing screen, then reveal the prepared quiz.
+  const [waitForHydration] = useState(
+    () => !!(props.disableSynopsis && (props.shuffle || props.shuffleAnswer)),
+  );
+  const hydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
   // Keep hook/provider imports free of default UI styles. Bundlers load this chunk on mount.
   useEffect(() => { void import('./styles.css'); }, []);
   const controller = useQuiz({
@@ -21,7 +31,7 @@ function Quiz(props: QuizProps) {
   });
   const { state, actions } = controller;
   const { quiz, appLocale, questions } = state;
-  if (state.status === 'invalid') return null;
+  if ((waitForHydration && !hydrated) || state.status === 'invalid') return null;
   if (quiz.progressBarColor !== undefined && (typeof quiz.progressBarColor !== 'string'
     || !/^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(quiz.progressBarColor))) return null;
 
