@@ -20,7 +20,7 @@ Treat state as read-only; use actions to change it. Question indexes are **zero-
 | `summary` | `QuestionSummary` payload, available throughout the session. |
 | `resultFilter`, `filteredResults` | `all`, `correct`, `incorrect`, or `unanswered`, and the matching question states. |
 
-Actions return `{ ok: true }` or `{ ok: false, reason }`; blocked actions preserve state, except a reset with invalid latest options as described below. `reason` is a typed `BlockedReason` such as `invalid-state`, `disabled-answer`, or `incomplete-quiz`.
+Actions return `{ ok: true }` or `{ ok: false, reason }`; blocked actions do not change answers or navigation. Timed actions first reconcile elapsed time and may complete an expired quiz; a reset with invalid options replaces the session as described below. `reason` is a typed `BlockedReason` such as `invalid-state`, `disabled-answer`, or `incomplete-quiz`.
 
 | Action | Behavior |
 | --- | --- |
@@ -71,4 +71,4 @@ if (!result.ok) console.log(result.reason);
 | `timer-disabled` | No timer is configured, or pausing is disabled. |
 | `invalid-filter` | Filter is not all, correct, incorrect, or unanswered. |
 
-Blocked transitions preserve state. `reset()` is the exception when the latest options are invalid: it returns `invalid-quiz` and replaces the session with validation errors.
+Blocked transitions preserve answers and navigation. Timer accounting happens before an action is checked, so even a blocked action can update elapsed time or complete an expired session. When the latest options are invalid, `reset()` returns `invalid-quiz` and replaces the session with validation errors.

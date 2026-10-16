@@ -151,3 +151,77 @@ describe('provider', () => {
     expect(() => renderHook(useQuizContext)).toThrow('useQuizContext must be used within a QuizProvider');
   });
 });
+
+describe('elapsed timer accounting', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it('catches up when a timer callback is delayed', () => {
+    vi.useFakeTimers();
+    let now = 0;
+    vi.spyOn(performance, 'now').mockImplementation(() => now);
+    const onComplete = vi.fn();
+    const { result } = renderHook(() => useQuiz({ quiz, timer: 5, autoStart: true, onComplete }));
+    now = 2500;
+    act(() => vi.advanceTimersByTime(1000));
+    expect(result.current.state.status).toBe('active');
+    expect(result.current.state.timeRemaining).toBe(3);
+    expect(result.current.state.timeTaken).toBe(2.5);
+    now = 7000;
+    act(() => vi.advanceTimersByTime(1000));
+    expect(result.current.state.status).toBe('completed');
+    expect(result.current.state.timeRemaining).toBe(0);
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete.mock.calls[0][0].timeTaken).toBe(5);
+  });
+
+  it('retains fractional elapsed time across pause and resume', () => {
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useQuiz({ quiz, timer: 2, autoStart: true, allowPauseTimer: true }));
+    act(() => vi.advanceTimersByTime(750));
+    act(() => result.current.actions.pauseTimer());
+    expect(result.current.state.timeTaken).toBeCloseTo(0.75);
+    act(() => vi.advanceTimersByTime(10000));
+    act(() => result.current.actions.resumeTimer());
+    act(() => vi.advanceTimersByTime(1249));
+    expect(result.current.state.status).toBe('active');
+    act(() => vi.advanceTimersByTime(1));
+    expect(result.current.state.status).toBe('completed');
+    expect(result.current.state.timeTaken).toBe(2);
+  });
+
+  it.each(['selectAnswer', 'pauseTimer', 'submitQuiz'] as const)('rejects %s after expiry before the callback runs', (action) => {
+    vi.useFakeTimers();
+    let now = 0;
+    vi.spyOn(performance, 'now').mockImplementation(() => now);
+    const onComplete = vi.fn();
+    const { result } = renderHook(() => useQuiz({ quiz: singleQuiz, timer: 1, autoStart: true, allowPauseTimer: true, onComplete }));
+    now = 1500;
+    act(() => {
+      const response = action === 'selectAnswer' ? result.current.actions.selectAnswer(2) : result.current.actions[action]();
+      expect(response).toEqual({ ok: false, reason: 'invalid-state' });
+    });
+    expect(result.current.state.status).toBe('completed');
+    expect(result.current.state.userInput).toEqual([undefined]);
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  });
+});
+
+it('does not replay an expired answer into a session reset by onComplete', () => {
+  vi.useFakeTimers();
+  let now = 0;
+  const clock = vi.spyOn(performance, 'now').mockImplementation(() => now);
+  let reset = () => {};
+  const onComplete = vi.fn(() => reset());
+  try {
+    const { result } = renderHook(() => useQuiz({ quiz: singleQuiz, timer: 1, autoStart: true, onComplete }));
+    reset = () => { result.current.actions.reset(); };
+    now = 1500;
+    act(() => {
+      expect(result.current.actions.selectAnswer(2)).toEqual({ ok: false, reason: 'invalid-state' });
+    });
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(result.current.state.status).toBe('active');
+    expect(result.current.state.userInput).toEqual([undefined]);
+    expect(result.current.state.timeRemaining).toBe(1);
+  } finally { clock.mockRestore(); }
+});

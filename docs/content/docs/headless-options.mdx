@@ -24,3 +24,5 @@ Quiz data and behavior options are captured at session creation. Rerendering wit
 | `onQuestionSubmit` | `(data: QuestionSubmitData) => void` | Unset | Receive evaluated attempts or committed deferred answers. |
 
 `QuizProviderProps` adds `children: ReactNode` to these options. Use one provider per independent quiz and `useQuizContext()` in its descendants.
+
+Timed sessions account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional elapsed time and excludes the paused duration. `timeRemaining` is rounded up to whole seconds for display; `timeTaken` retains fractional seconds. Expiry is checked before accepting answers, pausing, or submitting.

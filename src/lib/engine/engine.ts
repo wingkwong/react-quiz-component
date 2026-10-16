@@ -26,7 +26,8 @@ export interface EngineState {
   remaining: number | undefined;
   filter: ResultFilter;
 }
-export type Command = { type: 'start' | 'next' | 'previous' | 'submit' | 'pause' | 'resume' | 'tick' }
+export type Command = { type: 'start' | 'next' | 'previous' | 'submit' | 'pause' | 'resume' }
+  | { type: 'tick'; elapsed?: number }
   | { type: 'select'; answer: number }
   | { type: 'go'; index: number }
   | { type: 'filter'; filter: ResultFilter };
@@ -125,7 +126,7 @@ export function getQuizState(session: EngineState): QuizState {
     canPause: active && !!options.timer && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
     progress: completed ? 100 : questions.length ? index / questions.length * 100 : 0,
-    timer: options.timer, timeRemaining: session.remaining, timeTaken, summary,
+    timer: options.timer, timeRemaining: session.remaining === undefined ? undefined : Math.ceil(session.remaining), timeTaken, summary,
     appLocale: { ...defaultLocale, ...options.quiz.appLocale }, resultFilter: session.filter,
     filteredResults: questionStates.filter((question) => session.filter === 'all'
       || (session.filter === 'unanswered' ? !question.answered : question.outcome === session.filter)),
@@ -188,8 +189,8 @@ export function quizReducer(previous: EngineState, command: Command): Transition
       return blocked('timer-disabled');
     }
     if (command.type === 'pause') state.status = 'paused';
-    else {
-      state.remaining = Math.max(0, state.remaining - 1);
+    else if (command.type === 'tick') {
+      state.remaining = Math.max(0, state.remaining - (command.elapsed ?? 1));
       if (state.remaining === 0) finish();
     }
     return success();

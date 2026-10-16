@@ -179,6 +179,7 @@ function Core({
 
   const formatTime = (time: number): string => (time < 10 ? '0' : '');
   const displayTime = (time: number): string => {
+    time = Math.ceil(time);
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
