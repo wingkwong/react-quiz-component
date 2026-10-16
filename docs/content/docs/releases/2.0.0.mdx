@@ -1,3 +1,107 @@
 ---
 title: "2.0.0"
+description: "What's new in 2.0.0 and what to update when upgrading."
 ---
+
+## What's New
+
+### Build your own quiz interface
+
+Create a custom layout with your own buttons, progress display, and result page while keeping the library's scoring, navigation, and timer behavior.
+
+- Use `useQuiz` to access quiz state and actions in a component.
+- Use `QuizProvider` and `useQuizContext` to share a quiz across components, such as separate question, timer, and navigation panels.
+- Start, pause, resume, submit, or reset a quiz through actions. Read selected answers, progress, scores, and whether the user can move forward or submit.
+
+The headless APIs do not load the default quiz styles, so you can use your application's design system. See the [headless API](../headless.mdx), [hook example](../examples/hook.mdx), and [provider example](../examples/provider.mdx).
+
+### Refreshed default design
+
+The ready-made `Quiz` component has a simpler layout, clearer selected-answer indicators, a slimmer progress bar, and an updated results summary. Users can review their score and filter correct, incorrect, or unanswered questions.
+
+Customize the default interface with CSS color tokens for buttons, answers, feedback, and surfaces. See [Color tokens](../color-tokens.mdx) for theme examples and the Custom styles section below for selector changes.
+
+### Better keyboard and screen-reader support
+
+Result filters support keyboard navigation and return focus to the filter button after a selection. Selected answers expose their pressed state, and the progress bar exposes its current value to assistive technology.
+
+Add `questionPicAlt` to describe question illustrations and `answerAltTexts` to describe photo choices. Descriptions stay with the correct images when answers are shuffled. See [Images](../images.mdx) for an example.
+
+### More reliable timers and Markdown
+
+Timers account for elapsed time when browser updates are delayed. Pausing preserves the remaining time, and resuming excludes the paused duration.
+
+Markdown in questions and explanations is sanitized after rendering, including links created by Markdown syntax. It also works during server rendering without a browser DOM. If your content includes custom HTML, review the Quiz content section below.
+
+### React and TypeScript support
+
+React 18 and 19 are supported. Install compatible versions of both `react` and `react-dom` in your application.
+
+TypeScript users can import public types for quiz data, component props, callbacks, and headless state and actions directly from `react-quiz-component`. See [Types](../types.mdx) for the full reference.
+
+### CommonJS imports
+
+Existing `require()` calls continue to return the `Quiz` component. The headless APIs are also available as properties:
+
+```js
+const Quiz = require('react-quiz-component');
+const { useQuiz, QuizProvider, useQuizContext } = require('react-quiz-component');
+```
+
+Both `require('react-quiz-component').default` and `import Quiz from 'react-quiz-component'` continue to work. No import migration is needed.
+
+## Breaking Changes
+
+### Changing quiz data or settings
+
+Quiz data and behavior settings, including the timer, shuffle options, and locale, are fixed for each session. To apply new values, change the component's React `key` to start a new session:
+
+```tsx
+<Quiz key={sessionId} quiz={quiz} timer={duration} />
+```
+
+Change `sessionId` whenever you want to restart with new data or settings. If you use the headless API, call `actions.reset()` after rendering the updated options. Both approaches clear existing answers. See [Options and lifecycle](../headless-options.mdx).
+
+### Custom styles
+
+Review custom CSS and UI tests after the redesign. These selectors have changed:
+
+| Previous selector | New selector |
+| --- | --- |
+| `.startQuizWrapper` | `.start-quiz-wrapper` |
+| `.startQuizBtn` | `.start-quiz-btn` |
+| `.answerBtn` | `.answer-btn` |
+| `.questionWrapper` | `.question-wrapper` |
+| `.questionWrapperBody` | `.question-wrapper-body` |
+| `.questionModal` | `.question-modal` |
+| `.questionBtnContainer` | `.question-btn-container` |
+| `.prevQuestionBtn` | `.prev-question-btn` |
+| `.nextQuestionBtn` | `.next-question-btn` |
+| `.timerBtn` | `.timer-btn` |
+| `.timerPauseScreen` | `.timer-pause-screen` |
+
+The progress bar now uses `<progress className="quiz-progress">`. The `.quiz-progress__bar` element is removed, and `.quiz-progress__label` becomes `.quiz-progress-label`. Use `quiz.progressBarColor` to set the fill color.
+
+Styles load when the quiz mounts. Scope overrides with a selector such as `.my-quiz .react-quiz-container` so they still take precedence. See [Color tokens](../color-tokens.mdx) for supported theme settings.
+
+### Callbacks
+
+`onQuestionSubmit` and `onComplete` can run before the updated UI renders. Read results from their arguments; move code that needs the updated DOM into your own React effect.
+
+With `revealAnswerOnSubmit`, `onQuestionSubmit` now runs when leaving an answered question or completing the quiz. Unchanged answers do not emit duplicate submissions. Review analytics or saved-answer handling that depends on these events. See [Callbacks and results](../callbacks.mdx).
+
+### Quiz content
+
+- Omit `nrOfQuestions` to use all questions; `0` is no longer accepted.
+- Provide at least one question and one answer per question. Answers must be strings, and correct-answer numbers must refer to existing choices. Multiple-answer lists must be nonempty and contain no duplicates.
+- Use numeric points and a finite timer of at least one second. Invalid data causes the default component to render nothing. See [Quiz data](../quiz-data.mdx).
+- Review embedded HTML in questions and explanations. Inline styles, most class attributes, SVG, and data-URL images are removed. Use supported Markdown, ordinary image URLs, and application CSS instead.
+
+## Bug Fixes
+
+- **Submission requires complete answers.** Multiple-answer questions need the requested number of selections. Retry-until-correct questions need a correct attempt, while keeping first-attempt scoring. Timer expiry can still end an incomplete quiz.
+- **Completed answers stay locked when revisited.** Use `revealAnswerOnSubmit` if users should be able to edit answers before finishing.
+- **Partial answers count as incorrect at timeout.** Questions with no selections remain unanswered.
+- **Time taken can include fractional seconds.** Round `timeTaken` if your results display needs whole seconds.
+
+See [State and actions](../state-and-actions.mdx) for detailed behavior.
