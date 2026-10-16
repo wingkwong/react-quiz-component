@@ -1,0 +1,26 @@
+---
+title: "Options and lifecycle"
+description: "Configure the options shared by useQuiz and QuizProvider, including shuffling, navigation, timers, and callbacks. Understand when settings are captured, how resets apply updated options, and when to remount a session to switch quiz data."
+---
+
+`UseQuizOptions` accepts `quiz`, `shuffle`, `shuffleAnswer`, `continueTillCorrect`, `revealAnswerOnSubmit`, `allowNavigation`, `timer`, `allowPauseTimer`, `onQuestionSubmit`, `onComplete`, and `autoStart`. Boolean options default to `false`; the timer is off unless supplied. `autoStart` replaces the default UI's `disableSynopsis` prop. Presentation props such as `showInstantFeedback`, `showDefaultResult`, `customResultPage`, and `enableProgressBar` belong to your renderer.
+
+Quiz data and behavior options are captured at session creation. Rerendering with a new object does not restart or reshuffle the quiz. `reset()` creates a session from the latest options, reshuffles if enabled, clears answers and results, resets the timer, and honors `autoStart`. Callback references update without resetting. To switch datasets immediately, remount your component/provider using a new React `key`.
+
+## Options reference
+
+| Option | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `quiz` | `Quiz` | Required | Quiz data. |
+| `shuffle` | `boolean` | `false` | Shuffle before selecting the question subset. |
+| `shuffleAnswer` | `boolean` | `false` | Shuffle answers and remap correct answer numbers. |
+| `continueTillCorrect` | `boolean` | `false` | Retry immediate single answers; first-attempt scoring is retained. |
+| `revealAnswerOnSubmit` | `boolean` | `false` | Defer correctness feedback until quiz completion. |
+| `allowNavigation` | `boolean` | `false` | Permit skipping and revisiting questions. |
+| `timer` | `number` | Unset | Finite duration of at least one second. |
+| `allowPauseTimer` | `boolean` | `false` | Enable pausing a timed quiz. |
+| `autoStart` | `boolean` | `false` | Start immediately, including after reset. |
+| `onComplete` | `(summary: QuestionSummary) => void` | Unset | Receive completion once per session. |
+| `onQuestionSubmit` | `(data: QuestionSubmitData) => void` | Unset | Receive evaluated attempts or committed deferred answers. |
+
+`QuizProviderProps` adds `children: ReactNode` to these options. Use one provider per independent quiz and `useQuizContext()` in its descendants.

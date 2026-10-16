@@ -1,0 +1,74 @@
+---
+title: "State and actions"
+description: "Read quiz status, answer selections, feedback, progress, and results from headless state, then update the session through typed actions. Understand selection and submission rules, deferred feedback, and the reasons an action can be blocked."
+---
+
+Treat state as read-only; use actions to change it. Question indexes are **zero-based** and answer numbers are **one-based**, matching callback answer numbers.
+
+| State | Meaning |
+| --- | --- |
+| `status`, `errors` | `idle`, `active`, `paused`, `completed`, or `invalid`; invalid data produces errors rather than crashing. |
+| `quiz`, `questions`, `appLocale` | Session metadata, prepared questions, and merged locale strings. |
+| `currentQuestionIndex`, `currentQuestion`, `currentQuestionState` | Current question and its state; undefined question values are possible for invalid quizzes. |
+| `questionStates`, `userInput` | Recorded answers, per-question evaluated attempts, scoring outcomes, and feedback. |
+| `answers` | Current answer options with `answerNumber`, `value`, `selected`, `disabled`, and `feedback` (`correct`, `incorrect`, or `null`). |
+| `feedback` | Most recent immediate evaluation for the current question. `state.feedback` and question-level `feedback` remain `null` in deferred mode, including after completion. Use answer-level feedback or question `outcome` to render results. |
+| `correct`, `incorrect`, `unanswered` | Question index lists. Single-answer retries retain first-attempt scoring and recorded input even after correct feedback. |
+| `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |
+| `timer`, `timeRemaining`, `timeTaken` | Seconds; timing starts with the quiz, stops while paused, and expiry completes even with unanswered questions. Untimed quizzes have `timeTaken: 0`. |
+| `progress` | Position-based percentage: zero on the first question and 100 on completion. |
+| `summary` | `QuestionSummary` payload, available throughout the session. |
+| `resultFilter`, `filteredResults` | `all`, `correct`, `incorrect`, or `unanswered`, and the matching question states. |
+
+Actions return `{ ok: true }` or `{ ok: false, reason }`; blocked actions preserve state, except a reset with invalid latest options as described below. `reason` is a typed `BlockedReason` such as `invalid-state`, `disabled-answer`, or `incomplete-quiz`.
+
+| Action | Behavior |
+| --- | --- |
+| `start()` | Starts an idle session. |
+| `selectAnswer(answerNumber)` | Evaluates immediate answers, or edits deferred answers; multiple deferred selections toggle. |
+| `nextQuestion()` | Advances when allowed; never submits on the final question. |
+| `previousQuestion()`, `goToQuestion(index)` | Navigate when `allowNavigation` is enabled. |
+| `submitQuiz()` | Completes an active quiz when `canSubmit` is true. No browser dialog is opened. |
+| `pauseTimer()`, `resumeTimer()` | Pause/resume a timed session when enabled. Selection and navigation are blocked while paused. |
+| `setResultFilter(filter)` | Sets the result filter without changing quiz answers. |
+| `reset()` | Rebuilds the session from the latest options. Invalid latest options return `invalid-quiz` and expose validation errors. |
+
+Immediate multiple-answer questions are evaluated when the required selection count is reached. `continueTillCorrect` applies to immediate single-answer questions. In deferred mode, correctness is tracked for scoring but no correctness feedback is shown during selection.
+
+## Selection and submission rules
+
+In immediate mode, selected answers are disabled and cannot be deselected. A finished question cannot be edited on revisit. In deferred mode, single-answer choices can be replaced and multiple-answer choices can be toggled until completion.
+
+`canSubmit` requires an active session and nonempty input for every question. Without `allowNavigation`, every question must also be finished: an immediate multiple-answer question needs the required selection count, and a retry-until-correct question needs a correct attempt. With `allowNavigation`, nonempty input is enough, even for an unfinished immediate question. Deferred multiple-answer questions can be submitted with any nonempty selection; only an exact match scores points.
+
+The headless `submitQuiz()` action can submit from any question when `canSubmit` is true. The default component submits through Next on the final question. Timer expiry completes automatically even when `canSubmit` is false.
+
+`setResultFilter()` works in every non-invalid status; it does not require completion. The unanswered filter means no input, not “no evaluated outcome.”
+
+## Deferred results in custom UIs
+
+Deferred mode hides answer-level correctness feedback until completion. It still updates `outcome`, `correct`, `incorrect`, and `summary` for scoring while answers are being edited. Avoid displaying those scoring fields before completion if your UI should conceal correctness. After completion, `answers[].feedback` identifies all correct choices and any incorrect selected choices.
+
+## Blocked actions
+
+Check `result.ok` before reading `result.reason`:
+
+```tsx
+const result = actions.submitQuiz();
+if (!result.ok) console.log(result.reason);
+```
+
+| Reason | Meaning |
+| --- | --- |
+| `invalid-quiz` | Quiz options failed validation. |
+| `invalid-state` | The action is unavailable in the current session status. |
+| `invalid-answer` | Answer number is not an in-range integer. |
+| `disabled-answer` | That answer is currently disabled. |
+| `invalid-index` | Question index is not an in-range integer. |
+| `navigation-disabled` | Previous/direct navigation requires `allowNavigation`. |
+| `answer-required` | The current question must be finished before advancing. |
+| `incomplete-quiz` | Manual submission requirements are not met. |
+| `timer-disabled` | No timer is configured, or pausing is disabled. |
+| `invalid-filter` | Filter is not all, correct, incorrect, or unanswered. |
+
+Blocked transitions preserve state. `reset()` is the exception when the latest options are invalid: it returns `invalid-quiz` and replaces the session with validation errors.

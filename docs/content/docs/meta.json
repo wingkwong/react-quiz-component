@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "---Getting started---",
+    "index",
+    "getting-started",
+    "quiz-data",
+    "---Guides---",
+    "features",
+    "color-tokens",
+    "images",
+    "markdown",
+    "locale",
+    "---API reference---",
+    "component",
+    "headless",
+    "headless-options",
+    "state-and-actions",
+    "callbacks",
+    "types",
+    "---Examples---",
+    "...examples"
+  ]
+}

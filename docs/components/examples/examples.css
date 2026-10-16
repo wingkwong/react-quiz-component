@@ -1,0 +1,37 @@
+.headless-demo {
+  display: grid;
+  gap: 16px;
+}
+.headless-demo h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.headless-demo .answers {
+  display: grid;
+  gap: 8px;
+}
+.headless-demo button,
+.headless-demo select {
+  border: 1px solid var(--color-fd-border, #d4d4d8);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 4px 8px 4px 0;
+  cursor: pointer;
+  background: var(--color-fd-background, #fff);
+  color: var(--color-fd-foreground, #18181b);
+}
+.headless-demo button:hover {
+  background: var(--color-fd-muted, #f4f4f5);
+}
+.headless-demo button[aria-pressed='true'] {
+  border-color: var(--color-fd-primary, #2563eb);
+  background: var(--color-fd-accent, #eff6ff);
+}
+.headless-demo button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.headless-demo :focus-visible {
+  outline: 2px solid var(--color-fd-primary, #2563eb);
+  outline-offset: 3px;
+}

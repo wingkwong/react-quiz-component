@@ -77,67 +77,11 @@ export interface QuizProps {
   enableProgressBar?: boolean;
 }
 
-export interface CoreProps {
-  questions: Question[];
-  appLocale: AppLocale;
-  showDefaultResult?: boolean;
-  onComplete?: (summary: QuestionSummary) => void;
-  customResultPage?: (summary: QuestionSummary) => React.ReactElement;
-  showInstantFeedback?: boolean;
-  continueTillCorrect?: boolean;
-  revealAnswerOnSubmit?: boolean;
-  allowNavigation?: boolean;
-  onQuestionSubmit?: (data: { question: Question; userAnswer: number | number[] | undefined; isCorrect: boolean }) => void;
-  timer?: number;
-  allowPauseTimer?: boolean;
-  enableProgressBar?: boolean;
-  progressBarColor?: string;
-}
-
-export interface ButtonState {
-  [key: number]: {
-    disabled?: boolean;
-    className?: string;
-  };
-}
-
-export interface CheckAnswerParams {
-  userInput: (number | number[] | undefined)[];
-  userAttempt: number;
-  currentQuestionIndex: number;
-  continueTillCorrect?: boolean;
-  showNextQuestionButton: boolean;
-  incorrect: number[];
-  correct: number[];
-  setButtons: React.Dispatch<React.SetStateAction<ButtonState>>;
-  setIsCorrect: React.Dispatch<React.SetStateAction<boolean>>;
-  setIncorrectAnswer: React.Dispatch<React.SetStateAction<boolean>>;
-  setCorrect: React.Dispatch<React.SetStateAction<number[]>>;
-  setIncorrect: React.Dispatch<React.SetStateAction<number[]>>;
-  setShowNextQuestionButton: React.Dispatch<React.SetStateAction<boolean>>;
-  setUserInput: React.Dispatch<React.SetStateAction<(number | number[] | undefined)[]>>;
-  setUserAttempt: React.Dispatch<React.SetStateAction<number>>;
-}
-
-export interface SelectAnswerParams {
-  userInput: (number | number[] | undefined)[];
-  currentQuestionIndex: number;
-  setButtons: React.Dispatch<React.SetStateAction<ButtonState>>;
-  setShowNextQuestionButton: React.Dispatch<React.SetStateAction<boolean>>;
-  incorrect: number[];
-  correct: number[];
-  setCorrect: React.Dispatch<React.SetStateAction<number[]>>;
-  setIncorrect: React.Dispatch<React.SetStateAction<number[]>>;
-  setUserInput: React.Dispatch<React.SetStateAction<(number | number[] | undefined)[]>>;
-}
-
 export interface InstantFeedbackProps {
   showInstantFeedback?: boolean;
   incorrectAnswer: boolean;
   correctAnswer: boolean;
   question: Question;
-  onQuestionSubmit?: (data: { question: Question; userAnswer: number | number[] | undefined; isCorrect: boolean }) => void;
-  userAnswer: number | number[] | undefined;
 }
 
 export interface ExplanationProps {

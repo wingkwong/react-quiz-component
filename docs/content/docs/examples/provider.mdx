@@ -1,0 +1,31 @@
+---
+title: "Provider and context"
+description: "Share one quiz session across separate question, timer, navigation, and results components using QuizProvider and useQuizContext. Try pausing the timer, revisiting questions, and filtering results, then explore the complete implementation and quiz data."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+## Try the quiz
+
+<p>Review answers with previous/next, pause the timer, submit, and filter results.</p>
+
+<ExamplePreview name="provider" />
+
+## Implementation
+
+`QuizProvider` and `useQuizContext` provide quiz state and actions without rendering or styling an interface. This example builds a custom UI. For a complete styled quiz with no custom CSS, use the [default `Quiz` component](./default.mdx).
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="provider" />
+
+## Custom styles
+
+Save this stylesheet as `examples.css` alongside the component. The implementation imports it to style the layout, answer buttons, result filter, and keyboard focus. The CSS uses the documentation theme colors when available, with fallback colors for your own application.
+
+<ExampleSource name="styles" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

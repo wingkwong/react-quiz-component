@@ -3,14 +3,19 @@
   "version": "1.1.2",
   "description": "Customizable React quiz component for JSON-powered quizzes with scoring, timers, single or multiple choice answers, images, markdown, and callbacks.",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
-    "build:docs": "webpack --mode production",
+    "dev": "pnpm build && pnpm --filter @react-quiz/docs dev",
+    "build:docs": "pnpm build && pnpm --filter @react-quiz/docs build",
     "build": "rollup -c",
     "lint": "oxlint src --fix --react-plugin --jsx-a11y-plugin --import-plugin",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json",
+    "test": "vitest run",
+    "test:package": "node test/package.test.mjs",
+    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "typecheck:docs": "pnpm --filter @react-quiz/docs typecheck",
+    "test:docs": "pnpm --filter @react-quiz/docs test"
   },
   "keywords": [
     "react",
@@ -42,28 +47,22 @@
   "devDependencies": {
     "@babel/core": "^8.0.7",
     "@babel/plugin-transform-class-properties": "^8.0.1",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^8.0.1",
     "@babel/plugin-transform-object-rest-spread": "^8.0.1",
     "@babel/preset-env": "^8.0.7",
     "@babel/preset-react": "^8.0.1",
     "@babel/preset-typescript": "^8.0.7",
     "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-commonjs": "^29.0.3",
-    "@rollup/plugin-html": "^2.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
-    "@rollup/plugin-swc": "^0.4.1",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
+    "@testing-library/react": "^16.3.3",
     "@types/dompurify": "^3.2.0",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "babel-loader": "^10.1.1",
-    "css-loader": "^7.1.5",
-    "css-minimizer-webpack-plugin": "^8.0.0",
-    "html-webpack-plugin": "^5.6.8",
-    "mini-css-extract-plugin": "^2.10.2",
+    "jsdom": "^30.1.2",
     "oxlint": "^1.85.0",
     "prop-types": "^15.8.1",
     "react": "^19.3.1",
@@ -71,12 +70,9 @@
     "rollup": "^4.63.6",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "terser-webpack-plugin": "^5.6.1",
     "tslib": "^2.8.1",
     "typescript": "^6.0.3",
-    "webpack": "^5.111.1",
-    "webpack-cli": "^7.2.3",
-    "webpack-dev-server": "^6.0.0"
+    "vitest": "^5.0.4"
   },
   "author": "WK Wong <wkwdev@proton.me>",
   "homepage": "https://github.com/wingkwong/react-quiz-component",
@@ -90,5 +86,22 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "snarkdown": "^2.0.0"
-  }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "packageManager": "pnpm@10.10.0"
 }

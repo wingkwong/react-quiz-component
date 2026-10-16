@@ -1,0 +1,95 @@
+import type { ReactNode } from 'react';
+import type { AppLocale, Question, QuestionSummary, Quiz } from '../types';
+
+export type UserAnswer = number | number[] | undefined;
+export type QuizStatus = 'idle' | 'active' | 'paused' | 'completed' | 'invalid';
+export type AnswerFeedback = 'correct' | 'incorrect' | null;
+export type ResultFilter = 'all' | 'correct' | 'incorrect' | 'unanswered';
+export interface QuestionSubmitData {
+  question: Question;
+  userAnswer: UserAnswer;
+  isCorrect: boolean;
+}
+export interface UseQuizOptions {
+  quiz: Quiz;
+  shuffle?: boolean;
+  shuffleAnswer?: boolean;
+  continueTillCorrect?: boolean;
+  revealAnswerOnSubmit?: boolean;
+  allowNavigation?: boolean;
+  timer?: number;
+  allowPauseTimer?: boolean;
+  autoStart?: boolean;
+  onComplete?: (summary: QuestionSummary) => void;
+  onQuestionSubmit?: (data: QuestionSubmitData) => void;
+}
+export interface QuizProviderProps extends UseQuizOptions { children: ReactNode }
+export interface AnswerState {
+  readonly answerNumber: number;
+  readonly value: string;
+  readonly selected: boolean;
+  readonly disabled: boolean;
+  readonly feedback: AnswerFeedback;
+}
+export interface QuestionAttempt {
+  readonly userAnswer: UserAnswer;
+  readonly isCorrect: boolean;
+}
+export interface QuestionState {
+  readonly question: Question;
+  readonly index: number;
+  readonly userAnswer: UserAnswer;
+  readonly attempts: readonly QuestionAttempt[];
+  readonly outcome: AnswerFeedback;
+  readonly feedback: AnswerFeedback;
+  readonly answered: boolean;
+  readonly answers: readonly AnswerState[];
+}
+export interface QuizState {
+  readonly status: QuizStatus;
+  readonly errors: readonly string[];
+  readonly quiz: Quiz;
+  readonly questions: readonly Question[];
+  readonly currentQuestionIndex: number;
+  readonly currentQuestion: Question | undefined;
+  readonly currentQuestionState: QuestionState | undefined;
+  readonly questionStates: readonly QuestionState[];
+  readonly userInput: readonly UserAnswer[];
+  readonly answers: readonly AnswerState[];
+  readonly feedback: AnswerFeedback;
+  readonly correct: readonly number[];
+  readonly incorrect: readonly number[];
+  readonly unanswered: readonly number[];
+  readonly canStart: boolean;
+  readonly canGoNext: boolean;
+  readonly canGoPrevious: boolean;
+  readonly canSubmit: boolean;
+  readonly canPause: boolean;
+  readonly canResume: boolean;
+  readonly allowNavigation: boolean;
+  readonly progress: number;
+  readonly timer: number | undefined;
+  readonly timeRemaining: number | undefined;
+  readonly timeTaken: number;
+  readonly summary: QuestionSummary;
+  readonly appLocale: AppLocale;
+  readonly resultFilter: ResultFilter;
+  readonly filteredResults: readonly QuestionState[];
+}
+export type BlockedReason = 'invalid-quiz' | 'invalid-state' | 'invalid-answer'
+  | 'disabled-answer' | 'invalid-index' | 'navigation-disabled' | 'answer-required'
+  | 'incomplete-quiz' | 'timer-disabled' | 'invalid-filter';
+export type ActionResult = { ok: true } | { ok: false; reason: BlockedReason };
+export interface QuizActions {
+  start: () => ActionResult;
+  selectAnswer: (answerNumber: number) => ActionResult;
+  nextQuestion: () => ActionResult;
+  previousQuestion: () => ActionResult;
+  goToQuestion: (index: number) => ActionResult;
+  submitQuiz: () => ActionResult;
+  pauseTimer: () => ActionResult;
+  resumeTimer: () => ActionResult;
+  setResultFilter: (filter: ResultFilter) => ActionResult;
+  reset: () => ActionResult;
+}
+export interface QuizController { state: QuizState; actions: QuizActions }

@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+.example-preview {
+  border: 1px solid var(--color-fd-border, #d4d4d8);
+  border-radius: 12px;
+  padding: 20px;
+  margin-block: 24px;
+}
+
+.example-preview .react-quiz-container {
+  margin: 0 0 16px;
+  max-inline-size: 100%;
+}

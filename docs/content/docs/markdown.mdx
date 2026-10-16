@@ -1,0 +1,21 @@
+---
+title: "Markdown"
+description: "Use Markdown to format question text in the default quiz interface. See a typed question example, learn which fields remain plain text, and understand what your own renderer needs to handle when using the headless API."
+---
+
+## Question text
+
+The default UI supports Markdown in `question`: it sanitizes the question string with DOMPurify, then converts it to HTML with Snarkdown. `explanation`, text answers, answer messages, titles, and synopsis are rendered as plain text. Headless state exposes the source strings; your renderer decides how to present them.
+
+```ts
+import type { Question } from 'react-quiz-component';
+
+const question: Question = {
+  question: 'Which hook stores **local state**?',
+  questionType: 'text',
+  answerSelectionType: 'single',
+  answers: ['useState', 'useEffect'],
+  correctAnswer: '1',
+  explanation: 'useState returns a value and a setter.',
+};
+```
