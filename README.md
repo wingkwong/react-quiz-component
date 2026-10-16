@@ -10,6 +10,8 @@ JSON-powered React quizzes with scoring, timers, feedback, images, multiple-choi
 npm install react-quiz-component
 ```
 
+React and React DOM 18 or 19 are required as peer dependencies.
+
 ## Quick start
 
 ```tsx
@@ -50,6 +52,7 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm test:package
+pnpm test:react        # Installs packed consumers to verify React 18 and 19 (requires registry access)
 pnpm build:docs        # Static site in docs/out
 pnpm typecheck:docs
 pnpm test:docs         # Browser checks against the static export

@@ -66,6 +66,11 @@ for (const filename of readdirSync('dist', { recursive: true })) {
 }
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 assert.deepEqual(packageJson.files, ['dist']);
+for (const dependency of ['react', 'react-dom']) {
+  assert.equal(packageJson.dependencies?.[dependency], undefined);
+  assert.equal(packageJson.peerDependencies[dependency], '^18.0.0 || ^19.0.0');
+  assert.ok(packageJson.devDependencies[dependency]);
+}
 for (const dependency of Object.keys(packageJson.dependencies ?? {})) {
   assert.doesNotMatch(dependency, /^(?:@(mui|emotion|fumadocs)\/|fumadocs-|next$)/);
 }

@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit && tsc -p test/tsconfig.json",
     "test": "vitest run",
     "test:package": "node test/package.test.mjs",
+    "test:react": "node test/react-compat.test.mjs",
     "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck:docs": "pnpm --filter @react-quiz/docs typecheck",
     "test:docs": "pnpm --filter @react-quiz/docs test"
@@ -82,10 +83,12 @@
   },
   "dependencies": {
     "nanoid": "^6.0.2",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
     "sanitize-html": "^2.18.1",
     "snarkdown": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "exports": {
     ".": {
