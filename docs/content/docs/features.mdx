@@ -156,10 +156,10 @@ const renderCustomResultPage = (summary) => {
 
 - Immediate mode evaluates single answers on selection and multiple answers when the required selection count is reached. `showInstantFeedback` controls messages; correctness styles still follow the engine's answer state.
 - `continueTillCorrect` applies to immediate single-answer questions. Retrying does not recover points lost on the first attempt.
-- `revealAnswerOnSubmit` defers correctness feedback until quiz completion. Multiple selections can be toggled. Pair it with `allowNavigation` to let users review answers before submission.
+- `revealAnswerOnSubmit` defers correctness feedback until quiz completion. Multiple selections can be toggled. Without `allowNavigation`, select exactly the requested number of answers before Next becomes available. Pair it with `allowNavigation` to let users review answers before submission.
 - `allowNavigation` permits skipping between questions, but manual submission requires a finished answer for every question. See the [exact submission rules](./state-and-actions.mdx#selection-and-submission-rules) for multiple-answer and retry modes. The default UI shows an alert for incomplete submission and a confirmation dialog for completed submission when navigation is enabled. Headless actions show no browser dialogs.
 - `disableSynopsis` skips the entire landing screen and starts the session immediately.
 - Timers start with the quiz, stop while paused, and complete the quiz on expiry, including unanswered questions. `timeTaken` is zero for untimed quizzes.
-- Use whole seconds for timers. Timing advances through one-second interval ticks rather than a wall-clock deadline; browser throttling can delay expiry.
+- Timers account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional seconds and excludes paused time. Expiry is checked before accepting answers, pausing, or submitting; `timeRemaining` is rounded up for display and `timeTaken` can include fractional seconds.
 - Progress is based on the current question's position, not answer count: zero on the first question and 100 on completion.
 - Shuffling occurs on session creation or reset. Answer indexes in prepared questions and callback payloads reflect the shuffled order.

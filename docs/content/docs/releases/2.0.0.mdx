@@ -35,7 +35,7 @@ Add `questionPicAlt` to describe question illustrations and `answerAltTexts` to 
 
 Timers account for elapsed time when browser updates are delayed. Pausing preserves the remaining time, and resuming excludes the paused duration.
 
-Markdown in questions and explanations is sanitized after rendering, including links created by Markdown syntax. It also works during server rendering without a browser DOM. If your content includes custom HTML, review the Quiz content section below.
+Markdown in question text is sanitized after rendering, including links created by Markdown syntax. It also works during server rendering without a browser DOM. Explanations, answer messages, and text answers remain plain text. If your question content includes custom HTML, review the Quiz content section below.
 
 ### React and TypeScript support
 
@@ -99,11 +99,13 @@ With `revealAnswerOnSubmit`, `onQuestionSubmit` now runs when leaving an answere
 - Omit `nrOfQuestions` to use all questions; `0` is no longer accepted.
 - Provide at least one question and one answer per question. Answers must be strings, and correct-answer numbers must refer to existing choices. Multiple-answer lists must be nonempty and contain no duplicates.
 - Use numeric points and a finite timer of at least one second. Invalid data causes the default component to render nothing. See [Quiz data](../quiz-data.mdx).
-- Review embedded HTML in questions and explanations. Inline styles, most class attributes, SVG, and data-URL images are removed. Use supported Markdown, ordinary image URLs, and application CSS instead.
+- Review embedded HTML in question text. Inline styles, most class attributes, SVG, and data-URL images are removed. Use supported Markdown, ordinary image URLs, and application CSS instead. Explanations continue to render as plain text.
 
 ## Bug Fixes
 
 - **Submission requires complete answers.** Multiple-answer questions need the requested number of selections. Retry-until-correct questions need a correct attempt, while keeping first-attempt scoring. Timer expiry can still end an incomplete quiz.
+- **Deferred answers cannot strand users.** When navigation is disabled, Next requires exactly the requested number of multiple-answer selections, so users can fix incomplete answers before leaving the question.
+- **Auto-started shuffled quizzes hydrate safely.** With `disableSynopsis` and either shuffle option, the default component displays the quiz after mounting, avoiding mismatched server and browser random orders. Custom headless renderers should follow the [server-rendering guidance](../headless.mdx#server-rendering-and-shuffling).
 - **Completed answers stay locked when revisited.** Use `revealAnswerOnSubmit` if users should be able to edit answers before finishing.
 - **Partial answers count as incorrect at timeout.** Questions with no selections remain unanswered.
 - **Time taken can include fractional seconds.** Round `timeTaken` if your results display needs whole seconds.

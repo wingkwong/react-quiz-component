@@ -61,6 +61,28 @@ function App({ quiz }) {
 
 `QuizProvider` accepts the same options as `useQuiz` and adds no DOM element. Each provider or standalone hook owns an independent session. `useQuizContext()` throws an error without an ancestor `QuizProvider`. Calling `useQuiz()` inside a provider creates a **new** session; use `useQuizContext()` to access the shared one. Import the hooks, provider, and their TypeScript types directly from `react-quiz-component`; no subpath is required.
 
+## Server rendering and shuffling
+
+The engine prepares random orders when a session is created. If your headless interface displays shuffled questions or answers during server rendering, the browser can prepare a different order during hydration. A `'use client'` directive alone does not prevent server rendering in Next.js.
+
+Keep the initial output independent of shuffled state, such as a Start button, or mount your quiz inside a client-only wrapper:
+
+```jsx
+'use client';
+import { useSyncExternalStore } from 'react';
+
+const subscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+export function ClientOnly({ children }) {
+  const hydrated = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+  return hydrated ? children : null;
+}
+```
+
+Wrap the component that calls `useQuiz`, or the entire `QuizProvider` and its consumers, with `<ClientOnly>`. The session then starts when the wrapper mounts, including its timer. This is needed even without `autoStart` if your initial UI renders shuffled state. The default `Quiz` component handles its own auto-started shuffled view; see [Server rendering](./component.mdx#server-rendering).
+
 ## Reference
 
 - [Options and session lifecycle](./headless-options.mdx)

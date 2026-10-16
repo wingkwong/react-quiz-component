@@ -39,7 +39,7 @@ Immediate multiple-answer questions are evaluated when the required selection co
 
 In immediate mode, selected answers are disabled and cannot be deselected. A finished question cannot be edited on revisit. In deferred mode, single-answer choices can be replaced and multiple-answer choices can be toggled until completion.
 
-`canSubmit` requires an active session and a finished answer for every question, independently of `allowNavigation`. Multiple-answer questions require the requested selection count in both immediate and deferred modes; only an exact match scores points. A retry-until-correct question needs a correct attempt. Navigation still permits skipping and revisiting incomplete questions.
+`canSubmit` requires an active session and a finished answer for every question, independently of `allowNavigation`. Multiple-answer questions require the requested selection count in both immediate and deferred modes; only an exact match scores points. A retry-until-correct question needs a correct attempt. Without `allowNavigation`, `canGoNext` applies the same completion rule to the current question, so too few or too many deferred selections block advancing. With `allowNavigation`, users can still skip and revisit incomplete questions.
 
 The headless `submitQuiz()` action can submit from any question when `canSubmit` is true. The default component submits through Next on the final question. Timer expiry completes automatically even when `canSubmit` is false.
 

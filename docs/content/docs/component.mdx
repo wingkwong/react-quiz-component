@@ -35,6 +35,10 @@ The default component has no reset prop. Change its React `key` to remount it an
 
 See [Quiz behavior](./features.mdx) for combinations, [callbacks](./callbacks.mdx) for payloads, and [Locale](./locale.mdx) for text overrides.
 
+## Server rendering
+
+When `disableSynopsis` is combined with `shuffle` or `shuffleAnswer`, the component renders nothing on the server or during the first hydration render, then displays the prepared quiz after mounting. This prevents different server and browser random orders from causing hydration errors. Other configurations retain their server-rendered landing screen or unshuffled quiz. For custom headless interfaces, see [Server rendering and shuffling](./headless.mdx#server-rendering-and-shuffling).
+
 ## Styling and themes
 
 The default stylesheet is scoped to `.react-quiz-container` and loads when `Quiz` mounts. It uses the operating system's `prefers-color-scheme` setting for dark mode; it does not follow an application's `.dark` class automatically.
