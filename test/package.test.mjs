@@ -17,10 +17,16 @@ for (const name of ['useQuiz', 'QuizProvider', 'useQuizContext']) {
 }
 assert.equal(typeof root.default, 'function');
 assert.equal(typeof rootCjs.default, 'function');
+assert.equal(typeof rootCjs, 'function');
+assert.equal(rootCjs, rootCjs.default);
 const quiz = {
   quizTitle: 'Server quiz',
   questions: [{ question: 'Example', questionType: 'text', answerSelectionType: 'single', answers: ['Yes'], correctAnswer: '1' }],
 };
+assert.equal(
+  renderToString(React.createElement(rootCjs, { quiz, disableSynopsis: true })),
+  renderToString(React.createElement(rootCjs.default, { quiz, disableSynopsis: true })),
+);
 for (const library of [root, rootCjs]) {
   function Consumer() {
     const { state } = library.useQuizContext();

@@ -28,10 +28,16 @@ try {
       import * as esm from 'react-quiz-component';
       const require = createRequire(import.meta.url);
       const cjs = require('react-quiz-component');
+      assert.equal(typeof cjs, 'function');
+      assert.equal(cjs, cjs.default);
       const libraryRequire = createRequire(require.resolve('react-quiz-component'));
       assert.equal(libraryRequire.resolve('react'), require.resolve('react'));
       assert.equal(libraryRequire.resolve('react-dom'), require.resolve('react-dom'));
       const quiz = { quizTitle: 'Consumer', questions: [{ question: '**Hello**', questionType: 'text', answerSelectionType: 'single', answers: ['Yes'], correctAnswer: '1' }] };
+      assert.equal(
+        renderToString(React.createElement(cjs, { quiz, disableSynopsis: true })),
+        renderToString(React.createElement(cjs.default, { quiz, disableSynopsis: true })),
+      );
       for (const library of [esm, cjs]) {
         function Consumer() {
           const { state } = library.useQuizContext();
