@@ -119,8 +119,9 @@ export function getQuizState(session: EngineState): QuizState {
     canStart: status === 'idle',
     canGoNext: active && index < questions.length - 1 && (!!options.allowNavigation || ready),
     canGoPrevious: active && !!options.allowNavigation && index > 0,
-    canSubmit: active && unanswered.length === 0
-      && (!!options.allowNavigation || records.every((record) => record.finished)),
+    canSubmit: active && records.every((record, i) => record.finished
+      && (!Array.isArray(record.input)
+        || record.input.length === (questions[i].correctAnswer as number[]).length)),
     canPause: active && !!options.timer && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
     progress: completed ? 100 : questions.length ? index / questions.length * 100 : 0,
@@ -152,6 +153,16 @@ export function quizReducer(previous: EngineState, command: Command): Transition
     submissions.push({ question: state.questions[index], ...attempt });
   };
   const finish = () => {
+    // Timeout can leave an immediate multiple-answer selection unevaluated.
+    // Preserve it as an incorrect attempt; untouched questions stay unanswered.
+    state.records.forEach((record, index) => {
+      if (isAnswered(record.input) && record.outcome === null) {
+        const attempt = { userAnswer: copyAnswer(record.input), isCorrect: false };
+        state.records[index] = { ...record, outcome: 'incorrect', feedback: 'incorrect',
+          finished: true, attempts: [...record.attempts, attempt] };
+        submissions.push({ question: state.questions[index], ...attempt });
+      }
+    });
     state.records.forEach((_, index) => commit(index));
     state.status = 'completed';
     completed = true;

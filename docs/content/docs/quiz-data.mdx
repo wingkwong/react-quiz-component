@@ -69,7 +69,7 @@ Supply at least one question with nonempty question text and a nonempty array of
 
 ## Scoring
 
-Omitted points count as zero. Prefer numeric points; string points are parsed as base-10 integers. Multiple answers earn the question's points only when the selection exactly matches the correct answers; there is no partial credit. A single-answer retry retains the first attempt's score even after a later correct response.
+Omitted points count as zero. Prefer numeric points; string points are parsed as base-10 integers. Multiple answers earn the question's points only when the selection exactly matches the correct answers; there is no partial credit. Manual submission requires the requested number of selections for every multiple-answer question, even with navigation enabled. On timeout, a partial selection counts as incorrect; a question with no selections stays unanswered. A single-answer retry retains the first attempt's score even after a later correct response.
 
 `questionIndex` is an optional exported field assigned to prepared questions by the engine (one-based). Headless navigation indexes are zero-based; answer numbers are one-based.
 

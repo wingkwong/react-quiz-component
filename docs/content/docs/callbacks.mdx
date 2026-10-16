@@ -34,13 +34,13 @@ type QuestionSubmitData = {
 
 For `userInput` and `userAnswer`, single-answer questions use a 1-based number such as `2`, multiple-answer questions use a 1-based number array such as `[1, 3]`, and unanswered questions can be `undefined`.
 
-`summary.questions` contains prepared questions after subsetting/shuffling. The incorrect count does not include unanswered questions. Inspect `userInput` for unanswered entries (`undefined` or an empty array). A partially selected immediate multiple-answer question may have input without an evaluated outcome when the timer expires.
+`summary.questions` contains prepared questions after subsetting/shuffling. The incorrect count does not include unanswered questions. Inspect `userInput` for unanswered entries (`undefined` or an empty array). When the timer expires, a partially selected multiple-answer question is evaluated as incorrect and emits a submission event if that selection has not already been committed. Questions with no input remain unanswered.
 
 See [Quiz behavior](./features.mdx) for callback and custom-result snippets.
 
 ## Delivery order and retained payloads
 
-On completion, pending deferred `onQuestionSubmit` events run in question order before `onComplete`. Unanswered questions do not emit a submission event. Immediate-mode attempts have already emitted their events when evaluated.
+On completion, pending deferred `onQuestionSubmit` events run in question order before `onComplete`. Unanswered questions do not emit a submission event. Immediate-mode attempts have already emitted their events when evaluated, except partial multiple-answer selections, which are evaluated as incorrect at timeout.
 
 Callback payloads are copied from engine state, so you can retain them or update their arrays without changing the quiz. Treat `state.summary` and other state returned by hooks as read-only; the copied callback payload guarantee does not apply to state objects.
 

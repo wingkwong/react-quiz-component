@@ -107,3 +107,29 @@ describe('quiz transitions', () => {
     } finally { random.mockRestore(); }
   });
 });
+
+describe('completion invariants', () => {
+  it.each([false, true])('blocks partial multiple-answer submission with deferred=%s', (revealAnswerOnSubmit) => {
+    let state = createSession({ quiz, autoStart: true, allowNavigation: true, revealAnswerOnSubmit });
+    state = run(state, { type: 'select', answer: 2 }, { type: 'next' }, { type: 'select', answer: 1 });
+    expect(getQuizState(state).canSubmit).toBe(false);
+    expect(quizReducer(state, { type: 'submit' }).result).toEqual({ ok: false, reason: 'incomplete-quiz' });
+    state = run(state, { type: 'previous' }, { type: 'next' }, { type: 'select', answer: 3 }, { type: 'submit' });
+    expect(getQuizState(state).summary.correctPoints).toBe(15);
+  });
+
+  it.each([false, true])('classifies partial selections on timeout with deferred=%s', (revealAnswerOnSubmit) => {
+    let state = createSession({ quiz, timer: 1, autoStart: true, allowNavigation: true, revealAnswerOnSubmit });
+    state = run(state, { type: 'next' }, { type: 'select', answer: 1 });
+    const transition = quizReducer(state, { type: 'tick' });
+    const view = getQuizState(transition.state);
+    expect(view.status).toBe('completed');
+    expect(view.correct).toEqual([]);
+    expect(view.incorrect).toEqual([1]);
+    expect(view.unanswered).toEqual([0]);
+    expect(view.summary.correctPoints).toBe(0);
+    expect(transition.submissions).toHaveLength(1);
+    expect(transition.submissions[0]).toMatchObject({ userAnswer: [1], isCorrect: false });
+    expect(getQuizState(run(transition.state, { type: 'filter', filter: 'incorrect' })).filteredResults).toHaveLength(1);
+  });
+});
