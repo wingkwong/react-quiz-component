@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Provider } from '@/components/provider';
 import './global.css';
 
@@ -17,7 +18,21 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen"><Provider>{children}</Provider></body>
+      <body className="flex flex-col min-h-screen">
+        <Provider>{children}</Provider>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-5Q764BZBKL"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-5Q764BZBKL');
+          `}
+        </Script>
+      </body>
     </html>
   );
 }
