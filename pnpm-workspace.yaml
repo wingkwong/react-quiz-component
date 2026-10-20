@@ -3,11 +3,62 @@ packages:
 
 allowBuilds:
   '@swc/core': true
+  esbuild: true
 
 # Older cssnano plugins still request the vulnerable selector-parser 6.x line.
 minimumReleaseAgeExclude:
   - react-dom@19.3.1
   - react@19.3.1
+  - '@fumadocs/base-ui@16.17.7'
+  - '@oxlint/binding-android-arm-eabi@1.89.0'
+  - '@oxlint/binding-android-arm64@1.89.0'
+  - '@oxlint/binding-darwin-arm64@1.89.0'
+  - '@oxlint/binding-darwin-x64@1.89.0'
+  - '@oxlint/binding-freebsd-x64@1.89.0'
+  - '@oxlint/binding-linux-arm-gnueabihf@1.89.0'
+  - '@oxlint/binding-linux-arm-musleabihf@1.89.0'
+  - '@oxlint/binding-linux-arm64-gnu@1.89.0'
+  - '@oxlint/binding-linux-arm64-musl@1.89.0'
+  - '@oxlint/binding-linux-ppc64-gnu@1.89.0'
+  - '@oxlint/binding-linux-riscv64-gnu@1.89.0'
+  - '@oxlint/binding-linux-riscv64-musl@1.89.0'
+  - '@oxlint/binding-linux-s390x-gnu@1.89.0'
+  - '@oxlint/binding-linux-x64-gnu@1.89.0'
+  - '@oxlint/binding-linux-x64-musl@1.89.0'
+  - '@oxlint/binding-openharmony-arm64@1.89.0'
+  - '@oxlint/binding-win32-arm64-msvc@1.89.0'
+  - '@oxlint/binding-win32-ia32-msvc@1.89.0'
+  - '@oxlint/binding-win32-x64-msvc@1.89.0'
+  - '@rollup/rollup-android-arm-eabi@4.64.12'
+  - '@rollup/rollup-android-arm64@4.64.12'
+  - '@rollup/rollup-darwin-arm64@4.64.12'
+  - '@rollup/rollup-darwin-x64@4.64.12'
+  - '@rollup/rollup-freebsd-arm64@4.64.12'
+  - '@rollup/rollup-freebsd-x64@4.64.12'
+  - '@rollup/rollup-linux-arm-gnueabihf@4.64.12'
+  - '@rollup/rollup-linux-arm-musleabihf@4.64.12'
+  - '@rollup/rollup-linux-arm64-gnu@4.64.12'
+  - '@rollup/rollup-linux-arm64-musl@4.64.12'
+  - '@rollup/rollup-linux-loong64-gnu@4.64.12'
+  - '@rollup/rollup-linux-loong64-musl@4.64.12'
+  - '@rollup/rollup-linux-ppc64-gnu@4.64.12'
+  - '@rollup/rollup-linux-ppc64-musl@4.64.12'
+  - '@rollup/rollup-linux-riscv64-gnu@4.64.12'
+  - '@rollup/rollup-linux-riscv64-musl@4.64.12'
+  - '@rollup/rollup-linux-s390x-gnu@4.64.12'
+  - '@rollup/rollup-linux-x64-gnu@4.64.12'
+  - '@rollup/rollup-linux-x64-musl@4.64.12'
+  - '@rollup/rollup-openbsd-x64@4.64.12'
+  - '@rollup/rollup-openharmony-arm64@4.64.12'
+  - '@rollup/rollup-win32-arm64-msvc@4.64.12'
+  - '@rollup/rollup-win32-ia32-msvc@4.64.12'
+  - '@rollup/rollup-win32-x64-gnu@4.64.12'
+  - '@rollup/rollup-win32-x64-msvc@4.64.12'
+  - fumadocs-core@16.17.7
+  - fumadocs-mdx@15.4.8
+  - lucide-react@1.60.0
+  - oxlint@1.89.0
+  - rollup@4.64.12
 
 overrides:
   'postcss-selector-parser@<7.1.6': '^7.1.6'
