@@ -9,7 +9,7 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "fumadocs-core": "16.17.7",
+    "fumadocs-core": "16.17.8",
     "fumadocs-mdx": "15.4.8",
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.17.7",
     "lucide-react": "1.60.0",
