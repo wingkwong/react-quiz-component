@@ -9,7 +9,7 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - react-dom@19.3.1
   - react@19.3.1
-  - '@fumadocs/base-ui@16.17.7'
+  - '@fumadocs/base-ui@16.17.7 || 16.17.8'
   - '@oxlint/binding-android-arm-eabi@1.89.0'
   - '@oxlint/binding-android-arm64@1.89.0'
   - '@oxlint/binding-darwin-arm64@1.89.0'
@@ -54,11 +54,26 @@ minimumReleaseAgeExclude:
   - '@rollup/rollup-win32-ia32-msvc@4.64.12'
   - '@rollup/rollup-win32-x64-gnu@4.64.12'
   - '@rollup/rollup-win32-x64-msvc@4.64.12'
-  - fumadocs-core@16.17.7
-  - fumadocs-mdx@15.4.8
+  - fumadocs-core@16.17.7 || 16.17.8
+  - fumadocs-mdx@15.4.8 || 15.4.10
   - lucide-react@1.60.0
   - oxlint@1.89.0
   - rollup@4.64.12
+  - '@babel/core@8.0.9'
+  - '@babel/helper-string-parser@8.0.8'
+  - '@babel/helpers@8.0.8'
+  - '@babel/parser@8.0.8'
+  - '@babel/types@8.0.8'
+  - '@next/env@16.4.3'
+  - '@next/swc-darwin-arm64@16.4.3'
+  - '@next/swc-darwin-x64@16.4.3'
+  - '@next/swc-linux-arm64-gnu@16.4.3'
+  - '@next/swc-linux-arm64-musl@16.4.3'
+  - '@next/swc-linux-x64-gnu@16.4.3'
+  - '@next/swc-linux-x64-musl@16.4.3'
+  - '@next/swc-win32-arm64-msvc@16.4.3'
+  - '@next/swc-win32-x64-msvc@16.4.3'
+  - next@16.4.3
 
 overrides:
   'postcss-selector-parser@<7.1.6': '^7.1.6'
