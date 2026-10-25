@@ -8,6 +8,8 @@ export interface AppLocale {
   resultFilterUnanswered: string;
   nextQuestionBtn: string;
   prevQuestionBtn: string;
+  quitQuizBtn?: string;
+  quitQuizConfirm?: string;
   resultPageHeaderText: string;
   resultPagePoint: string;
   pauseScreenDisplay: string;
@@ -78,6 +80,7 @@ export interface QuizProps {
   timer?: number;
   allowPauseTimer?: boolean;
   enableProgressBar?: boolean;
+  allowQuit?: boolean;
 }
 
 export interface InstantFeedbackProps {

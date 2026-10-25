@@ -1,12 +1,12 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import type { AppLocale, QuizResultFilterProps } from '../types';
 
-const FILTER_OPTIONS: { value: string; localeKey: keyof AppLocale }[] = [
+const FILTER_OPTIONS = [
   { value: 'all', localeKey: 'resultFilterAll' },
   { value: 'correct', localeKey: 'resultFilterCorrect' },
   { value: 'incorrect', localeKey: 'resultFilterIncorrect' },
   { value: 'unanswered', localeKey: 'resultFilterUnanswered' },
-];
+] satisfies { value: string; localeKey: keyof AppLocale }[];
 
 function QuizResultFilter({ filteredValue, handleChange, appLocale }: QuizResultFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
