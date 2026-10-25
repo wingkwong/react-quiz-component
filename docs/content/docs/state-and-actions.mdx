@@ -16,7 +16,7 @@ Treat state as read-only; use actions to change it. Question indexes are **zero-
 | `correct`, `incorrect`, `unanswered` | Question index lists. Single-answer retries retain first-attempt scoring and recorded input even after correct feedback. |
 | `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |
 | `timer`, `timeRemaining`, `timeTaken` | Seconds; timing starts with the quiz, stops while paused, and expiry completes even with unanswered questions. Untimed quizzes have `timeTaken: 0`. |
-| `progress` | Position-based percentage: zero on the first question and 100 on completion. |
+| `progress` | Percentage of questions with the required number of selected answers, regardless of correctness. Skipping or revisiting questions does not increase it; timeout preserves actual progress. Partial or excessive multiple selections do not count. |
 | `summary` | `QuestionSummary` payload, available throughout the session. |
 | `resultFilter`, `filteredResults` | `all`, `correct`, `incorrect`, or `unanswered`, and the matching question states. |
 

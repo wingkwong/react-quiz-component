@@ -6,10 +6,8 @@ function ProgressBar({
   progressBarColor = 'var(--color-primary)',
   progress,
   height = '6px',
-  quizLength,
-  isEndQuiz,
 }: ProgressBarProps) {
-  const percentage = isEndQuiz ? 100 : quizLength > 0 ? Math.min(100, Math.max(0, (progress - 1) * 100 / quizLength)) : 0;
+  const percentage = Math.min(100, Math.max(0, progress));
 
   return (
     <div className="quiz-progress-wrapper">

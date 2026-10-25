@@ -95,8 +95,6 @@ export interface ProgressBarProps {
   progressBarColor?: string;
   progress: number;
   height?: string;
-  quizLength: number;
-  isEndQuiz: boolean;
 }
 
 export interface QuizResultFilterProps {

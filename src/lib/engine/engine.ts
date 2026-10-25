@@ -104,6 +104,9 @@ export function getQuizState(session: EngineState): QuizState {
     && (!Array.isArray(record.input)
       || record.input.length === (questions[questionIndex].correctAnswer as number[]).length);
   const ready = !!records[index] && isComplete(records[index], index);
+  const answeredCount = records.filter((record, questionIndex) => isAnswered(record.input)
+    && (!Array.isArray(record.input)
+      || record.input.length === (questions[questionIndex].correctAnswer as number[]).length)).length;
   const points = questions.map((question) => typeof question.point === 'string'
     ? parseInt(question.point || '0', 10) : question.point || 0);
   const timeTaken = options.timer === undefined ? 0 : options.timer - (session.remaining ?? 0);
@@ -126,7 +129,7 @@ export function getQuizState(session: EngineState): QuizState {
     canSubmit: active && records.every(isComplete),
     canPause: active && !!options.timer && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
-    progress: completed ? 100 : questions.length ? index / questions.length * 100 : 0,
+    progress: questions.length ? answeredCount / questions.length * 100 : 0,
     timer: options.timer, timeRemaining: session.remaining === undefined ? undefined : Math.ceil(session.remaining), timeTaken, summary,
     appLocale: { ...defaultLocale, ...options.quiz.appLocale }, resultFilter: session.filter,
     filteredResults: questionStates.filter((question) => session.filter === 'all'
