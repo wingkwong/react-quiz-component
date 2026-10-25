@@ -14,7 +14,7 @@ Treat state as read-only; use actions to change it. Question indexes are **zero-
 | `answers` | Current answer options with `answerNumber`, `value`, `altText`, `selected`, `disabled`, and `feedback` (`correct`, `incorrect`, or `null`). |
 | `feedback` | Most recent immediate evaluation for the current question. `state.feedback` and question-level `feedback` remain `null` in deferred mode, including after completion. Use answer-level feedback or question `outcome` to render results. |
 | `correct`, `incorrect`, `unanswered` | Question index lists. Single-answer retries retain first-attempt scoring and recorded input even after correct feedback. |
-| `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |
+| `canStart`, `canGoNext`, `canGoPrevious`, `canSubmit`, `canQuit`, `canPause`, `canResume` | Whether each action is currently allowed. `allowNavigation` reports the session setting. |
 | `timer`, `timeRemaining`, `timeTaken` | Seconds; timing starts with the quiz, stops while paused, and expiry completes even with unanswered questions. Untimed quizzes have `timeTaken: 0`. |
 | `progress` | Position-based percentage: zero on the first question and 100 on completion. |
 | `summary` | `QuestionSummary` payload, available throughout the session. |
@@ -29,6 +29,7 @@ Actions return `{ ok: true }` or `{ ok: false, reason }`; blocked actions do not
 | `nextQuestion()` | Advances when allowed; never submits on the final question. |
 | `previousQuestion()`, `goToQuestion(index)` | Navigate when `allowNavigation` is enabled. |
 | `submitQuiz()` | Completes an active quiz when `canSubmit` is true. No browser dialog is opened. |
+| `quitQuiz()` | Completes an active or paused quiz with the current answers, including incomplete or untouched quizzes. No browser dialog is opened. |
 | `pauseTimer()`, `resumeTimer()` | Pause/resume a timed session when enabled. Selection and navigation are blocked while paused. |
 | `setResultFilter(filter)` | Sets the result filter without changing quiz answers. |
 | `reset()` | Rebuilds the session from the latest options. Invalid latest options return `invalid-quiz` and expose validation errors. |
@@ -41,7 +42,7 @@ In immediate mode, selected answers are disabled and cannot be deselected. A fin
 
 `canSubmit` requires an active session and a finished answer for every question, independently of `allowNavigation`. Multiple-answer questions require the requested selection count in both immediate and deferred modes; only an exact match scores points. A retry-until-correct question needs a correct attempt. Without `allowNavigation`, `canGoNext` applies the same completion rule to the current question, so too few or too many deferred selections block advancing. With `allowNavigation`, users can still skip and revisit incomplete questions.
 
-The headless `submitQuiz()` action can submit from any question when `canSubmit` is true. The default component submits through Next on the final question. Timer expiry completes automatically even when `canSubmit` is false.
+The headless `submitQuiz()` action can submit from any question when `canSubmit` is true. The default component submits through Next on the final question. Timer expiry completes automatically even when `canSubmit` is false. `quitQuiz()` explicitly permits early completion when `canQuit` is true, without relaxing normal submission requirements. Partial multiple-answer selections count as incorrect; untouched questions remain unanswered. Pending answer callbacks run before `onComplete`, once per completion. Headless consumers supply their own confirmation UI.
 
 `setResultFilter()` works in every non-invalid status; it does not require completion. The unanswered filter means no input, not “no evaluated outcome.”
 

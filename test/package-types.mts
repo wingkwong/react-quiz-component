@@ -9,9 +9,12 @@ const controller: QuizController = useQuiz(options);
 const state: QuizState = controller.state;
 const actions: QuizActions = controller.actions;
 const result: ActionResult = actions.start();
+const quitResult: ActionResult = actions.quitQuiz();
+const canQuit: boolean = state.canQuit;
+void [quitResult, canQuit];
 void [Quiz, useQuiz, QuizProvider, useQuizContext, state, result];
 
-createElement(Quiz, { quiz: data });
+createElement(Quiz, { quiz: data, allowQuit: true });
 // The provider requires children in its props even when the child is null.
 const providerProps = { quiz: data, children: null };
 createElement(QuizProvider, providerProps);

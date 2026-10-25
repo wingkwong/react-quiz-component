@@ -4,7 +4,7 @@ import type { Quiz as QuizData, QuizProps, QuizController } from 'react-quiz-com
 import { createElement } from 'react';
 
 const data: QuizData = { quizTitle: 'Typed CommonJS quiz', questions: [] };
-const props: QuizProps = { quiz: data };
+const props: QuizProps = { quiz: data, allowQuit: true };
 const options: library.UseQuizOptions = { quiz: data };
 const hook: typeof library.useQuiz = library.useQuiz;
 const controller: () => QuizController = () => useQuiz(options);

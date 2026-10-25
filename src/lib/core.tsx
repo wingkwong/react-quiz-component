@@ -5,12 +5,13 @@ import { rawMarkup } from './core-components/helpers';
 import { isAnswered } from './engine/engine';
 import InstantFeedback from './core-components/instant-feedback';
 import Explanation from './core-components/explanation';
+import defaultLocale from './locale';
 import type { QuizProps, Question } from './types';
 import type { QuizController, ResultFilter } from './engine';
 
 function Core({
   controller, showDefaultResult, customResultPage, showInstantFeedback,
-  enableProgressBar,
+  enableProgressBar, allowQuit,
 }: QuizProps & { controller: QuizController }) {
   const { state, actions } = controller;
   const {
@@ -266,6 +267,15 @@ function Core({
               {appLocale.pauseScreenDisplay}
             </span>
           )}
+        </div>
+      )}
+      {allowQuit && state.canQuit && (
+        <div className="question-btn-container">
+          <button type="button" className="quit-quiz-btn btn" onClick={() => {
+            if (confirm(appLocale.quitQuizConfirm ?? defaultLocale.quitQuizConfirm)) actions.quitQuiz();
+          }}>
+            {appLocale.quitQuizBtn ?? defaultLocale.quitQuizBtn}
+          </button>
         </div>
       )}
       {endQuiz && showDefaultResultState && customResultPage === undefined

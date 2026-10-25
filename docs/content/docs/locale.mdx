@@ -20,6 +20,8 @@ const localizedQuiz = {
     resultFilterUnanswered: 'Unanswered',
     nextQuestionBtn: 'Next',
     prevQuestionBtn: 'Prev',
+    quitQuizBtn: 'Submit and quit',
+    quitQuizConfirm: 'Submit your answers and quit the quiz?',
     resultPageHeaderText:
       'You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.',
     resultPagePoint: 'You scored <correctPoints> out of <totalPoints>.',
@@ -39,6 +41,8 @@ const localizedQuiz = {
 ## Feedback and dialog text
 
 Set each question's `messageForCorrectAnswer` and `messageForIncorrectAnswer` to customize instant-feedback messages. When those strings are missing or empty, the component uses “You are correct. Please click Next to continue.” and “Incorrect answer. Please try again.” These messages are not `appLocale` keys.
+
+The optional early-quit button and its confirmation use `quitQuizBtn` and `quitQuizConfirm`.
 
 The default UI's incomplete-quiz alert and submit-confirmation dialog also use fixed English text. Use a headless renderer if you need custom or translated dialogs. Quiz titles, synopsis, question content, explanations, and segment labels come from your quiz data.
 

@@ -1,6 +1,6 @@
 import type { AppLocale } from './types';
 
-const defaultLocale: AppLocale = {
+const defaultLocale = {
   landingHeaderText: '<questionLength> Questions',
   question: 'Question',
   startQuizBtn: 'Start Quiz',
@@ -10,6 +10,8 @@ const defaultLocale: AppLocale = {
   resultFilterUnanswered: 'Unanswered',
   nextQuestionBtn: 'Next',
   prevQuestionBtn: 'Prev',
+  quitQuizBtn: 'Submit and quit',
+  quitQuizConfirm: 'Submit your answers and quit the quiz?',
   resultPageHeaderText: 'You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.',
   resultPagePoint: 'You scored <correctPoints> out of <totalPoints>.',
   pauseScreenDisplay: 'Test is paused. Clicked the Resume button to continue',
@@ -21,6 +23,6 @@ const defaultLocale: AppLocale = {
   multipleSelectionTagText: 'Multiple Selection',
   pickNumberOfSelection: 'Pick <numberOfSelection>',
   marksOfQuestion: '(<marks> marks)',
-};
+} satisfies AppLocale;
 
 export default defaultLocale;

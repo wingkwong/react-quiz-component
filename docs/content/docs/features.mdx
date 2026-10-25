@@ -163,3 +163,15 @@ const renderCustomResultPage = (summary) => {
 - Timers account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional seconds and excludes paused time. Expiry is checked before accepting answers, pausing, or submitting; `timeRemaining` is rounded up for display and `timeTaken` can include fractional seconds.
 - Progress is based on the current question's position, not answer count: zero on the first question and 100 on completion.
 - Shuffling occurs on session creation or reset. Answer indexes in prepared questions and callback payloads reflect the shuffled order.
+
+## Early completion
+
+Set `allowQuit` to offer a confirmed exit with partial results:
+
+```tsx
+<Quiz quiz={quiz} allowQuit onComplete={(summary) => saveResults(summary)} />
+```
+
+The button is available after starting, including while paused. Cancelling the confirmation keeps the session running. Confirming ends the session, stops its timer, and shows the configured result page. Partial multiple-answer selections are incorrect; untouched questions stay unanswered. Customize the button and confirmation through `quiz.appLocale.quitQuizBtn` and `quitQuizConfirm`.
+
+Headless renderers can call `actions.quitQuiz()` when `state.canQuit` is true and provide their own confirmation. Normal `submitQuiz()` still requires complete answers.
