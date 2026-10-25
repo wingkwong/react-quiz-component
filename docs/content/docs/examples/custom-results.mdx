@@ -1,0 +1,29 @@
+---
+title: "Custom results"
+description: "Replace the default result page with your own score summary."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `showDefaultResult`, `customResultPage`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Answer both questions to see a custom result summary with your score and the number of correct answers.
+
+<ExamplePreview name="custom-results" />
+
+## How it works
+
+Always pair `customResultPage` with `showDefaultResult={false}`. The renderer receives a `QuestionSummary`. Leaving the default results enabled while supplying a custom renderer suppresses both result bodies.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="custom-results" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

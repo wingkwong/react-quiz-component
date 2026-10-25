@@ -1,0 +1,29 @@
+---
+title: "Per-question timer"
+description: "Give each question a separate deadline with pause and resume controls."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `questionTimer`, `allowPauseTimer`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Start the quiz and watch the 15-second question countdown. Pause and resume, or let a question expire to advance automatically. The final question expiry completes the quiz.
+
+<ExamplePreview name="question-timer" />
+
+## How it works
+
+Each question receives its own budget. Expiry locks the question; untouched questions remain unanswered and partial multiple-answer selections count as incorrect. You can also combine `questionTimer` with an overall `timer`.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="question-timer" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

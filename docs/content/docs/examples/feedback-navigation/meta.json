@@ -1,0 +1,10 @@
+{
+  "title": "Feedback and navigation",
+  "pages": [
+    "../immediate-feedback",
+    "../retry-until-correct",
+    "../review-before-submitting"
+  ],
+  "defaultOpen": false,
+  "collapsible": true
+}

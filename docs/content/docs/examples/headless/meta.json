@@ -1,0 +1,10 @@
+{
+  "title": "Headless",
+  "pages": [
+    "../hook",
+    "../provider",
+    "../all-questions"
+  ],
+  "defaultOpen": false,
+  "collapsible": true
+}

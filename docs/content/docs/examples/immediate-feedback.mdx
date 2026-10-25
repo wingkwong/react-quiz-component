@@ -1,0 +1,29 @@
+---
+title: "Immediate feedback"
+description: "Show feedback messages and highlight correct choices after an attempt."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `showInstantFeedback`, `showCorrectAnswer`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Choose useEffect to see an incorrect message and the correct choice highlighted. On the next question, select two choices to evaluate your answer.
+
+<ExamplePreview name="immediate-feedback" />
+
+## How it works
+
+`showInstantFeedback` controls messages; `showCorrectAnswer` independently highlights the correct choices after evaluation. A multiple-answer question is evaluated when the required number of choices is selected. Correct choices that you did not select stay unselected.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="immediate-feedback" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

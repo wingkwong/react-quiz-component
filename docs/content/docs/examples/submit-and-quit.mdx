@@ -1,0 +1,29 @@
+---
+title: "Submit and quit"
+description: "Finish early with partial results, including while the timer is paused."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `allowQuit`, `timer`, `allowPauseTimer`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Start, answer the first question, and pause the timer. Choose Submit and quit, cancel once to keep the session, then confirm to finish with partial results.
+
+<ExamplePreview name="submit-and-quit" />
+
+## How it works
+
+`allowQuit` offers a confirmed exit after the quiz starts, including while paused. Cancelling preserves the session; confirming stops the timer and shows results. Untouched questions remain unanswered and partial multiple-answer selections count as incorrect.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="submit-and-quit" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

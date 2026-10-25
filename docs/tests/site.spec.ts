@@ -92,13 +92,16 @@ test('every exported page and its internal URLs work under the Pages prefix', as
 test('static search navigates to a result and nested pages refresh', async ({ page }) => {
   await page.goto(`${prefix}/`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Introduction');
+  // The browser-only preview confirms hydration before using the server-rendered search trigger.
+  await expect(page.locator('[data-example="default"]').getByRole('button', { name: /^Start quiz$/i })).toBeVisible();
   await page.getByRole('button', { name: /Search/i }).first().click();
   const input = page.getByRole('dialog').getByRole('combobox');
   await input.fill('continueTillCorrect');
   const result = page.getByRole('dialog').getByRole('option').first();
   await expect(result).toBeVisible();
   await result.click();
-  await expect(page).toHaveURL(new RegExp(`${prefix}/headless-options/`));
+  await expect(page).not.toHaveURL(`${prefix}/`);
+  await expect(page.locator('main')).toContainText('continueTillCorrect');
   await page.reload();
   await expect(page.locator('h1').first()).toBeVisible();
 });

@@ -1,0 +1,29 @@
+---
+title: "Review before submitting"
+description: "Edit answers and navigate between questions before revealing results."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `revealAnswerOnSubmit`, `allowNavigation`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Select an answer, use Next and Prev to review it, then change your choice. Select two answers on the second question and press Next to confirm submission.
+
+<ExamplePreview name="review-before-submitting" />
+
+## How it works
+
+`revealAnswerOnSubmit` keeps correctness hidden until completion and lets you edit selections. It takes precedence over immediate feedback and correct-answer highlighting. `allowNavigation` permits skipping and revisiting questions, but submission requires complete answers. An incomplete submission shows an alert; a complete submission asks for confirmation.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="review-before-submitting" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

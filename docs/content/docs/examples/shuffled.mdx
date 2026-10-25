@@ -1,0 +1,29 @@
+---
+title: "Shuffled questions and answers"
+description: "Shuffle questions and answer choices when a new quiz session starts."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `shuffle`, `shuffleAnswer`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Start the quiz and answer both questions in their displayed order. Use Restart quiz to create a fresh session and shuffle again.
+
+<ExamplePreview name="shuffled" />
+
+## How it works
+
+Shuffling happens when a session is created. Changing the React `key` remounts the component and clears the previous answers. A new shuffle may produce the same order. Prepared answer indexes and callback payloads follow the shuffled choices.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="shuffled" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

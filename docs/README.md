@@ -18,6 +18,7 @@ Rebuild the library with `pnpm build` after changing its source; restarting `pnp
 ## Authoring
 
 - Pages: `content/docs/*.mdx`, ordered by `meta.json`.
+- Examples use collapsible sidebar groups whose metadata references the flat example pages with `../page-name`, preserving public URLs. Keep every `QuizProps` entry in the component reference linked to a runnable example.
 - Interactive demos: `components/examples/`; each imports from the package root.
 - `ExampleSource` reads the runnable source during the build for highlighted, copyable examples.
 - `ExamplePreview` mounts demos only in the browser to avoid hydration mismatches from random sessions.

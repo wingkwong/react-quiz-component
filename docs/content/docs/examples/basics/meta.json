@@ -1,0 +1,9 @@
+{
+  "title": "Basics",
+  "pages": [
+    "../default",
+    "../immediate-start"
+  ],
+  "defaultOpen": false,
+  "collapsible": true
+}
