@@ -31,6 +31,9 @@ export interface Question {
   questionType: QuestionType;
   questionPic?: string;
   questionPicAlt?: string;
+  questionAudio?: string;
+  questionAudioLabel?: string;
+  questionAudioTranscript?: string;
   answerSelectionType: AnswerSelectionType;
   answers: string[];
   answerAltTexts?: string[];

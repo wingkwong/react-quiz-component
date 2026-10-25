@@ -6,6 +6,7 @@ import { isAnswered } from './engine/engine';
 import InstantFeedback from './core-components/instant-feedback';
 import Explanation from './core-components/explanation';
 import defaultLocale from './locale';
+import QuestionAudio from './core-components/question-audio';
 import type { QuizProps, Question } from './types';
 import type { QuizController, ResultFilter } from './engine';
 
@@ -128,6 +129,7 @@ function Core({
               Array.isArray(question.correctAnswer) ? question.correctAnswer.length : 1,
               question.segment,
             )}
+            <QuestionAudio question={question} />
             <div className="result-answer">
               {renderAnswerInResult(question, userInputIndex)}
             </div>
@@ -229,6 +231,7 @@ function Core({
                   Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
                   activeQuestion.segment,
                 )}
+              {activeQuestion && <QuestionAudio key={activeQuestion.questionIndex} question={activeQuestion} />}
               <div className="question-modal">
                 <InstantFeedback
                   question={activeQuestion!}

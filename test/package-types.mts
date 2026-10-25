@@ -22,3 +22,9 @@ createElement(QuizProvider, providerProps);
 createElement(Quiz, { quiz: data, showCorrectAnswer: true });
 const revealOptions: UseQuizOptions = { quiz: data, showCorrectAnswer: true };
 void revealOptions;
+const audioData: QuizData = { quizTitle: 'Listening', questions: [{
+  question: 'What did you hear?', questionType: 'text', answerSelectionType: 'single',
+  questionAudio: '/question.mp3', questionAudioLabel: 'Listen', questionAudioTranscript: 'Hello.',
+  answers: ['Hello', 'Goodbye'], correctAnswer: '1',
+}] };
+createElement(Quiz, { quiz: audioData });
