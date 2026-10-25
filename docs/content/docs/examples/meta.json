@@ -3,7 +3,8 @@
   "pages": [
     "default",
     "hook",
-    "provider"
+    "provider",
+    "all-questions"
   ],
   "defaultOpen": true
 }

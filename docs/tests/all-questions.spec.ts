@@ -1,0 +1,41 @@
+import { expect, test } from '@playwright/test';
+
+test('all questions can be edited and reviewed before one final submission', async ({ page }, testInfo) => {
+  await page.goto('/react-quiz-component/examples/all-questions/');
+  const demo = page.locator('[data-example="all-questions"]');
+  await demo.getByRole('button', { name: 'Start quiz' }).click();
+  await expect(demo.getByRole('group')).toHaveCount(2);
+  const submit = demo.getByRole('button', { name: 'Submit quiz' });
+  await expect(submit).toBeDisabled();
+  await demo.getByRole('button', { name: 'useEffect', exact: true }).click();
+  await demo.getByRole('button', { name: 'createRoot', exact: true }).click();
+  await expect(submit).toBeDisabled();
+  await demo.getByRole('button', { name: 'renderToString', exact: true }).click();
+  await expect(submit).toBeEnabled();
+  await expect(demo).not.toContainText('Score:');
+  await demo.getByRole('button', { name: 'querySelector', exact: true }).click();
+  await expect(submit).toBeDisabled();
+  await demo.getByRole('button', { name: 'querySelector', exact: true }).click();
+  await demo.getByRole('button', { name: 'useState', exact: true }).click();
+  await expect(demo.getByRole('button', { name: 'useEffect', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  await demo.getByLabel('Questions per page').selectOption('1');
+  await expect(demo.getByRole('group')).toHaveCount(1);
+  await demo.getByRole('button', { name: 'Next page' }).click();
+  await expect(demo.getByRole('button', { name: 'createRoot', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await demo.getByRole('button', { name: 'renderToString', exact: true }).click();
+  await demo.getByRole('button', { name: 'Previous page' }).click();
+  await expect(submit).toBeDisabled(); // The incomplete question is on another page.
+  await demo.getByLabel('Questions per page').selectOption('2');
+  await demo.getByRole('button', { name: 'renderToString', exact: true }).click();
+  await demo.screenshot({ path: testInfo.outputPath('all-questions-review.png') });
+  await submit.click();
+  await expect(demo.getByText('Score: 30 / 30', { exact: true })).toBeVisible();
+  await expect(demo.getByRole('listitem')).toHaveCount(2);
+  await demo.getByRole('button', { name: 'Try again' }).click();
+  await demo.getByRole('button', { name: 'Start quiz' }).click();
+  await expect(submit).toBeDisabled();
+  await expect(demo.locator('[aria-pressed="true"]')).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await demo.screenshot({ path: testInfo.outputPath('all-questions-mobile.png') });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
