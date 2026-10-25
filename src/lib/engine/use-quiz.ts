@@ -56,7 +56,8 @@ export function useQuiz(options: UseQuizOptions): QuizController {
       applyTransition(timed);
       // Expiry may advance the question, and callbacks may reset the session.
       // Never replay an interaction intended for the previous question/session.
-      if (command.type !== 'tick' && (timed.completed || timed.state.index !== previousIndex
+      const targetsQuestion = ['select', 'next', 'previous', 'go', 'submit'].includes(command.type);
+      if (command.type !== 'tick' && (timed.completed || (targetsQuestion && timed.state.index !== previousIndex)
         || current.current !== timed.state)) return { ok: false, reason: 'invalid-state' };
     }
     if (command.type === 'tick') return { ok: true };

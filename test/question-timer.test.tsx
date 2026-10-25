@@ -175,3 +175,17 @@ it('stops scheduling when an expiry callback resets to invalid quiz data', () =>
   expect(result.current.state.status).toBe('invalid');
   expect(vi.getTimerCount()).toBe(0);
 });
+
+it.each(['quitQuiz', 'pauseTimer'] as const)('allows session-wide %s after a question deadline', (action) => {
+  vi.useFakeTimers();
+  let now = 0;
+  vi.spyOn(performance, 'now').mockImplementation(() => now);
+  const onComplete = vi.fn();
+  const { result } = renderHook(() => useQuiz({ quiz, autoStart: true, questionTimer: 1, allowPauseTimer: true, onComplete }));
+  now = 1100;
+  act(() => { expect(result.current.actions[action]()).toEqual({ ok: true }); });
+  expect(result.current.state.status).toBe(action === 'quitQuiz' ? 'completed' : 'paused');
+  expect(result.current.state.timeTaken).toBeCloseTo(1.1);
+  expect(result.current.state.userInput).toEqual([undefined, undefined]);
+  expect(onComplete).toHaveBeenCalledTimes(action === 'quitQuiz' ? 1 : 0);
+});
