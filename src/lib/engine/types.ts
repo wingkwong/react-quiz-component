@@ -19,6 +19,7 @@ export interface UseQuizOptions {
   showCorrectAnswer?: boolean;
   allowNavigation?: boolean;
   timer?: number;
+  questionTimer?: number;
   allowPauseTimer?: boolean;
   autoStart?: boolean;
   onComplete?: (summary: QuestionSummary) => void;
@@ -45,6 +46,8 @@ export interface QuestionState {
   readonly outcome: AnswerFeedback;
   readonly feedback: AnswerFeedback;
   readonly answered: boolean;
+  readonly timedOut: boolean;
+  readonly timeRemaining: number | undefined;
   readonly answers: readonly AnswerState[];
 }
 export interface QuizState {
@@ -72,6 +75,8 @@ export interface QuizState {
   readonly allowNavigation: boolean;
   readonly progress: number;
   readonly timer: number | undefined;
+  readonly questionTimer: number | undefined;
+  readonly questionTimeRemaining: number | undefined;
   readonly timeRemaining: number | undefined;
   readonly timeTaken: number;
   readonly summary: QuestionSummary;

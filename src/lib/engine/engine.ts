@@ -15,6 +15,8 @@ interface AnswerRecord {
   revision: number;
   submittedRevision: number;
   finished: boolean;
+  timedOut: boolean;
+  remaining: number | undefined;
 }
 export interface EngineState {
   options: UseQuizOptions;
@@ -25,6 +27,7 @@ export interface EngineState {
   records: AnswerRecord[];
   remaining: number | undefined;
   filter: ResultFilter;
+  elapsed: number;
 }
 export type Command = { type: 'start' | 'next' | 'previous' | 'submit' | 'quit' | 'pause' | 'resume' }
   | { type: 'tick'; elapsed?: number }
@@ -64,9 +67,11 @@ export function createSession(options: UseQuizOptions): EngineState {
     records: questions.map(() => ({
       input: undefined, selected: [], attempts: [], outcome: null, feedback: null,
       revision: 0, submittedRevision: 0, finished: false,
+      timedOut: false, remaining: options.questionTimer,
     })),
     remaining: options.timer,
     filter: 'all',
+    elapsed: 0,
   };
 }
 
@@ -82,6 +87,8 @@ export function getQuizState(session: EngineState): QuizState {
       question, index: questionIndex, userAnswer: record.input,
       attempts: record.attempts, outcome: record.outcome, feedback: record.feedback,
       answered: isAnswered(record.input),
+      timedOut: record.timedOut,
+      timeRemaining: record.remaining === undefined ? undefined : Math.ceil(record.remaining),
       answers: question.answers.map((value, answerIndex) => {
         const answerNumber = answerIndex + 1;
         const selected = record.selected.includes(answerNumber);
@@ -91,7 +98,7 @@ export function getQuizState(session: EngineState): QuizState {
         return {
           answerNumber, value, selected,
           altText: question.answerAltTexts?.[answerIndex] ?? `Answer ${answerNumber}`,
-          disabled: !active || (!deferred && (record.finished || selected)),
+          disabled: !active || record.timedOut || (!deferred && (record.finished || selected)),
           feedback: revealCorrect ? (correct ? 'correct' : selected ? 'incorrect' : null)
             : !deferred && selected ? (correct ? 'correct' : 'incorrect') : null,
         };
@@ -101,16 +108,16 @@ export function getQuizState(session: EngineState): QuizState {
   const correct = records.flatMap((record, i) => record.outcome === 'correct' ? [i] : []);
   const incorrect = records.flatMap((record, i) => record.outcome === 'incorrect' ? [i] : []);
   const unanswered = records.flatMap((record, i) => isAnswered(record.input) ? [] : [i]);
-  const isComplete = (record: AnswerRecord, questionIndex: number) => record.finished
+  const isComplete = (record: AnswerRecord, questionIndex: number) => record.timedOut || (record.finished
     && (!Array.isArray(record.input)
-      || record.input.length === (questions[questionIndex].correctAnswer as number[]).length);
+      || record.input.length === (questions[questionIndex].correctAnswer as number[]).length));
   const ready = !!records[index] && isComplete(records[index], index);
   const answeredCount = records.filter((record, questionIndex) => isAnswered(record.input)
     && (!Array.isArray(record.input)
       || record.input.length === (questions[questionIndex].correctAnswer as number[]).length)).length;
   const points = questions.map((question) => typeof question.point === 'string'
     ? parseInt(question.point || '0', 10) : question.point || 0);
-  const timeTaken = options.timer === undefined ? 0 : options.timer - (session.remaining ?? 0);
+  const timeTaken = session.elapsed;
   const userInput = records.map((record) => record.input);
   const summary = {
     numberOfQuestions: questions.length, numberOfCorrectAnswers: correct.length,
@@ -129,10 +136,11 @@ export function getQuizState(session: EngineState): QuizState {
     canGoPrevious: active && !!options.allowNavigation && index > 0,
     canSubmit: active && records.every(isComplete),
     canQuit: active || status === 'paused',
-    canPause: active && !!options.timer && !!options.allowPauseTimer,
+    canPause: active && !!(options.timer || options.questionTimer) && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
     progress: questions.length ? answeredCount / questions.length * 100 : 0,
     timer: options.timer, timeRemaining: session.remaining === undefined ? undefined : Math.ceil(session.remaining), timeTaken, summary,
+    questionTimer: options.questionTimer, questionTimeRemaining: questionStates[index]?.timeRemaining,
     appLocale: { ...defaultLocale, ...options.quiz.appLocale }, resultFilter: session.filter,
     filteredResults: questionStates.filter((question) => session.filter === 'all'
       || (session.filter === 'unanswered' ? !question.answered : question.outcome === session.filter)),
@@ -159,18 +167,20 @@ export function quizReducer(previous: EngineState, command: Command): Transition
     };
     submissions.push({ question: state.questions[index], ...attempt });
   };
-  const finish = () => {
+  const finalizeAnswer = (index: number) => {
     // Timeout or early quit can leave a multiple-answer selection unevaluated.
     // Preserve it as an incorrect attempt; untouched questions stay unanswered.
-    state.records.forEach((record, index) => {
-      if (isAnswered(record.input) && record.outcome === null) {
-        const attempt = { userAnswer: copyAnswer(record.input), isCorrect: false };
-        state.records[index] = { ...record, outcome: 'incorrect', feedback: 'incorrect',
-          finished: true, attempts: [...record.attempts, attempt] };
-        submissions.push({ question: state.questions[index], ...attempt });
-      }
-    });
-    state.records.forEach((_, index) => commit(index));
+    const record = state.records[index];
+    if (isAnswered(record.input) && record.outcome === null) {
+      const attempt = { userAnswer: copyAnswer(record.input), isCorrect: false };
+      state.records[index] = { ...record, outcome: 'incorrect', feedback: 'incorrect',
+        finished: true, attempts: [...record.attempts, attempt] };
+      submissions.push({ question: state.questions[index], ...attempt });
+    }
+    commit(index);
+  };
+  const finish = () => {
+    state.records.forEach((_, index) => finalizeAnswer(index));
     state.status = 'completed';
     completed = true;
   };
@@ -196,13 +206,36 @@ export function quizReducer(previous: EngineState, command: Command): Transition
   }
   if (state.status !== 'active') return blocked('invalid-state');
   if (command.type === 'pause' || command.type === 'tick') {
-    if (state.remaining === undefined || (command.type === 'pause' && !state.options.allowPauseTimer)) {
+    if ((state.remaining === undefined && state.options.questionTimer === undefined)
+      || (command.type === 'pause' && !state.options.allowPauseTimer)) {
       return blocked('timer-disabled');
     }
     if (command.type === 'pause') state.status = 'paused';
     else if (command.type === 'tick') {
-      state.remaining = Math.max(0, state.remaining - (command.elapsed ?? 1));
-      if (state.remaining === 0) finish();
+      let elapsed = command.elapsed ?? 1;
+      while (elapsed > 0 && state.status === 'active') {
+        const record = state.records[state.index];
+        const duration = Math.min(elapsed, state.remaining ?? Infinity,
+          record.timedOut ? Infinity : record.remaining ?? Infinity);
+        elapsed -= duration;
+        state.elapsed += duration;
+        if (state.remaining !== undefined) state.remaining = Math.max(0, state.remaining - duration);
+        if (record.remaining !== undefined && !record.timedOut) {
+          state.records[state.index] = { ...record, remaining: Math.max(0, record.remaining - duration) };
+        }
+        const questionExpired = !record.timedOut && state.records[state.index].remaining === 0;
+        if (questionExpired) {
+          finalizeAnswer(state.index);
+          state.records[state.index] = { ...state.records[state.index], timedOut: true };
+        }
+        if (state.remaining === 0) {
+          finish();
+        } else if (questionExpired) {
+          const next = state.records.findIndex((candidate, index) => index > state.index && !candidate.timedOut);
+          if (next === -1) finish();
+          else state.index = next;
+        }
+      }
     }
     return success();
   }

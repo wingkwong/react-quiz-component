@@ -25,6 +25,7 @@ function Quiz(props: QuizProps) {
     showCorrectAnswer: props.showCorrectAnswer,
     allowNavigation: props.allowNavigation,
     timer: props.timer,
+    questionTimer: props.questionTimer,
     allowPauseTimer: props.allowPauseTimer,
     onComplete: props.onComplete,
     onQuestionSubmit: props.onQuestionSubmit,
