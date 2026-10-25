@@ -16,6 +16,7 @@ export interface UseQuizOptions {
   shuffleAnswer?: boolean;
   continueTillCorrect?: boolean;
   revealAnswerOnSubmit?: boolean;
+  showCorrectAnswer?: boolean;
   allowNavigation?: boolean;
   timer?: number;
   allowPauseTimer?: boolean;

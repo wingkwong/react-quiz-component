@@ -33,7 +33,7 @@ Actions return `{ ok: true }` or `{ ok: false, reason }`; blocked actions do not
 | `setResultFilter(filter)` | Sets the result filter without changing quiz answers. |
 | `reset()` | Rebuilds the session from the latest options. Invalid latest options return `invalid-quiz` and expose validation errors. |
 
-Immediate multiple-answer questions are evaluated when the required selection count is reached. `continueTillCorrect` applies to immediate single-answer questions. In deferred mode, correctness is tracked for scoring but no correctness feedback is shown during selection.
+Immediate multiple-answer questions are evaluated when the required selection count is reached. `continueTillCorrect` applies to immediate single-answer questions. With `showCorrectAnswer`, all correct choices receive answer-level feedback after an evaluated immediate attempt, including an incorrect attempt. Multiple-answer questions wait for the required selection count. Unselected correct choices remain unselected; this does not change scoring or disable retries. In deferred mode, correctness is tracked for scoring but no correctness feedback is shown during selection, even with `showCorrectAnswer`.
 
 ## Selection and submission rules
 

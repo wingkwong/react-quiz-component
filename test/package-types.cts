@@ -15,3 +15,7 @@ createElement(QuizProvider, { quiz: data, children: null });
 // @ts-expect-error The callable CommonJS export still requires quiz data.
 createElement(library, {});
 void [hook, controller];
+
+createElement(Quiz, { quiz: data, showCorrectAnswer: true });
+const revealOptions: library.UseQuizOptions = { quiz: data, showCorrectAnswer: true };
+void revealOptions;

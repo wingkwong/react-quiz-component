@@ -32,6 +32,18 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} showInstantFeedback />;
 ```
 
+## Reveal correct choices immediately
+
+Use `showCorrectAnswer` to highlight the correct choice after a single-answer attempt, or all correct choices after a complete multiple-answer attempt:
+
+```tsx
+<Quiz quiz={quiz} showCorrectAnswer showInstantFeedback />
+```
+
+`showInstantFeedback` controls the message separately; it is not required for highlighting. Correct choices that the user did not select remain unselected. With `continueTillCorrect`, retries remain available and scoring still uses the first attempt. `revealAnswerOnSubmit` takes precedence and keeps correctness hidden until quiz completion.
+
+Headless consumers pass `showCorrectAnswer` to `useQuiz` or `QuizProvider` and render `state.answers[].feedback`.
+
 ## Retry Until Correct
 
 ```jsx
