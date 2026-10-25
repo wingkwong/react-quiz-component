@@ -17,7 +17,7 @@ function Core({
   const { state, actions } = controller;
   const {
     questions, currentQuestionIndex, currentQuestion: activeQuestion,
-    appLocale, correct, timer, timeRemaining,
+    appLocale, correct, timer, timeRemaining, questionTimer, questionTimeRemaining, timeTaken,
     resultFilter: filteredValue, summary: questionSummary, allowNavigation,
   } = state;
   const { totalPoints, correctPoints } = questionSummary;
@@ -202,12 +202,17 @@ function Core({
       )}
       <div className="quiz-header">
         {!endQuiz && <span className="question-count">{`${appLocale.question} ${currentQuestionIndex + 1} / ${questions.length}`}</span>}
-        {timer && (
+        {(timer || (endQuiz && questionTimer)) && (
           <span className="quiz-timer">
-            {isRunning ? appLocale.timerTimeRemaining : appLocale.timerTimeTaken}: <b>{displayTime(isRunning ? timeRemaining || 0 : timer - (timeRemaining || 0))}</b>
+            {isRunning ? appLocale.timerTimeRemaining : appLocale.timerTimeTaken}: <b>{displayTime(isRunning ? timeRemaining || 0 : timeTaken)}</b>
           </span>
         )}
-        {!endQuiz && timer && allowPauseTimer && (
+        {!endQuiz && questionTimer && (
+          <span className="quiz-question-timer">
+            {appLocale.question} — {appLocale.timerTimeRemaining}: <b>{displayTime(questionTimeRemaining || 0)}</b>
+          </span>
+        )}
+        {!endQuiz && allowPauseTimer && (
           <button type="button" className="timer-btn" onClick={isRunning ? actions.pauseTimer : actions.resumeTimer}>
             {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
           </button>

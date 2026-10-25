@@ -1,13 +1,16 @@
 import type { Question } from '../types';
 import type { UseQuizOptions } from './types';
 
-export function validateOptions({ quiz, timer }: UseQuizOptions): string[] {
+export function validateOptions({ quiz, timer, questionTimer }: UseQuizOptions): string[] {
   const errors: string[] = [];
   if (!quiz || !Array.isArray(quiz.questions) || quiz.questions.length === 0) {
     return ['Quiz must contain at least one question.'];
   }
   if (timer !== undefined && (!Number.isFinite(timer) || timer < 1)) {
     errors.push('timer must be a finite number greater than or equal to 1.');
+  }
+  if (questionTimer !== undefined && (!Number.isFinite(questionTimer) || questionTimer < 1)) {
+    errors.push('questionTimer must be a finite number greater than or equal to 1.');
   }
   if (quiz.nrOfQuestions !== undefined
     && (!Number.isInteger(quiz.nrOfQuestions) || quiz.nrOfQuestions < 1)) {

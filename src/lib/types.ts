@@ -81,6 +81,7 @@ export interface QuizProps {
   onQuestionSubmit?: (data: { question: Question; userAnswer: number | number[] | undefined; isCorrect: boolean }) => void;
   disableSynopsis?: boolean;
   timer?: number;
+  questionTimer?: number;
   allowPauseTimer?: boolean;
   enableProgressBar?: boolean;
   allowQuit?: boolean;

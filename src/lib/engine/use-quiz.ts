@@ -47,14 +47,18 @@ export function useQuiz(options: UseQuizOptions): QuizController {
     const now = performance.now();
     // Reconcile time before every action as well as scheduled updates, so a
     // throttled callback cannot allow answers or a pause after the deadline.
-    if (current.current.status === 'active' && current.current.remaining !== undefined) {
+    if (current.current.status === 'active'
+      && (current.current.remaining !== undefined || current.current.options.questionTimer !== undefined)) {
+      const previousIndex = current.current.index;
       const elapsed = lastTick.current === null ? 0 : Math.max(0, now - lastTick.current) / 1000;
       lastTick.current = now;
       const timed = quizReducer(current.current, { type: 'tick', elapsed });
       applyTransition(timed);
-      // A completion callback may reset the session. Do not apply the expired
-      // interaction to that new session.
-      if (timed.completed && command.type !== 'tick') return { ok: false, reason: 'invalid-state' };
+      // Expiry may advance the question, and callbacks may reset the session.
+      // Never replay an interaction intended for the previous question/session.
+      const targetsQuestion = ['select', 'next', 'previous', 'go', 'submit'].includes(command.type);
+      if (command.type !== 'tick' && (timed.completed || (targetsQuestion && timed.state.index !== previousIndex)
+        || current.current !== timed.state)) return { ok: false, reason: 'invalid-state' };
     }
     if (command.type === 'tick') return { ok: true };
     const transition = quizReducer(current.current, command);
@@ -85,21 +89,25 @@ export function useQuiz(options: UseQuizOptions): QuizController {
   }), [execute]);
 
   useEffect(() => {
-    if (session.status !== 'active' || session.options.timer === undefined) return undefined;
+    if (session.status !== 'active'
+      || (session.options.timer === undefined && session.options.questionTimer === undefined)) return undefined;
     if (lastTick.current === null) lastTick.current = performance.now();
     let timeout: ReturnType<typeof setTimeout>;
     const schedule = () => {
-      const remaining = current.current.remaining;
-      if (current.current.status !== 'active' || remaining === undefined) return;
+      if (current.current.status !== 'active') return;
+      const record = current.current.records[current.current.index];
+      const remaining = [current.current.remaining, record.timedOut ? undefined : record.remaining]
+        .filter((value): value is number => value !== undefined && value > 0);
+      if (!remaining.length) return;
       // Schedule the next display boundary, including fractional time retained
       // across pauses, and catch up in one transition if the callback is late.
-      const delay = (remaining - Math.ceil(remaining) + 1) * 1000;
+      const delay = Math.min(...remaining.map((value) => value - Math.ceil(value) + 1)) * 1000;
       timeout = setTimeout(() => { execute({ type: 'tick' }); schedule(); }, Math.max(1, delay));
     };
     schedule();
     return () => clearTimeout(timeout);
     // The options object identifies a session, including an active-to-active reset.
-  }, [execute, session.status, session.options]);
+  }, [execute, session.status, session.options, session.index]);
 
   return useMemo(() => ({ state: getQuizState(session), actions }), [session, actions]);
 }

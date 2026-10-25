@@ -19,3 +19,4 @@ void [hook, controller];
 createElement(Quiz, { quiz: data, showCorrectAnswer: true });
 const revealOptions: library.UseQuizOptions = { quiz: data, showCorrectAnswer: true };
 void revealOptions;
+createElement(Quiz, { quiz: data, questionTimer: 30 });

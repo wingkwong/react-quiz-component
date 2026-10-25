@@ -34,14 +34,16 @@ type QuestionSubmitData = {
 
 For `userInput` and `userAnswer`, single-answer questions use a 1-based number such as `2`, multiple-answer questions use a 1-based number array such as `[1, 3]`, and unanswered questions can be `undefined`.
 
-`summary.questions` contains prepared questions after subsetting/shuffling. The incorrect count does not include unanswered questions. Inspect `userInput` for unanswered entries (`undefined` or an empty array). On timer expiry or early quit, a partially selected multiple-answer question is evaluated as incorrect and emits a submission event if that selection has not already been committed. Questions with no input remain unanswered.
+`summary.questions` contains prepared questions after subsetting/shuffling. The incorrect count does not include unanswered questions. Inspect `userInput` for unanswered entries (`undefined` or an empty array). On overall or per-question timer expiry or early quit, a partially selected multiple-answer question is evaluated as incorrect and emits a submission event if that selection has not already been committed. Questions with no input remain unanswered.
 
 See [Quiz behavior](./features.mdx) for callback and custom-result snippets.
 
 ## Delivery order and retained payloads
 
-On completion, pending deferred `onQuestionSubmit` events run in question order before `onComplete`. Unanswered questions do not emit a submission event. Immediate-mode attempts have already emitted their events when evaluated, except partial multiple-answer selections, which are evaluated as incorrect at timeout or early quit.
+On completion, pending deferred `onQuestionSubmit` events run in question order before `onComplete`. Unanswered questions do not emit a submission event. Immediate-mode attempts have already emitted their events when evaluated, except partial multiple-answer selections, which are evaluated as incorrect at overall or per-question timeout or early quit.
 
 Callback payloads are copied from engine state, so you can retain them or update their arrays without changing the quiz. Treat `state.summary` and other state returned by hooks as read-only; the copied callback payload guarantee does not apply to state objects.
 
 Callbacks run synchronously and their return values are ignored. Handle failures in your own callbacks and catch rejected promises from async persistence work. A thrown callback error propagates to its caller; it does not undo the accepted quiz action.
+
+A question deadline commits that question before advancing. Final-question expiry also completes the quiz; it does not redeliver an already committed answer. Untouched expired questions emit no answer event.

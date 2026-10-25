@@ -7,6 +7,12 @@ const data: QuizData = { quizTitle: 'Typed quiz', questions: [] };
 const options: UseQuizOptions = { quiz: data };
 const controller: QuizController = useQuiz(options);
 const state: QuizState = controller.state;
+createElement(Quiz, { quiz: data, questionTimer: 30 });
+const questionTimerOptions: UseQuizOptions = { quiz: data, questionTimer: 30 };
+const questionRemaining: number | undefined = state.questionTimeRemaining;
+const expired: boolean | undefined = state.currentQuestionState?.timedOut;
+void [questionTimerOptions, questionRemaining, expired];
+
 const actions: QuizActions = controller.actions;
 const result: ActionResult = actions.start();
 const quitResult: ActionResult = actions.quitQuiz();
