@@ -1,0 +1,57 @@
+---
+title: "2.1.0"
+description: "Per-question timers, audio questions, early submission, optional correct-answer highlighting, improved answer feedback, and expanded interactive examples."
+---
+
+<div className="not-prose -mt-8 text-sm text-fd-muted-foreground [&+h2]:mt-6">
+  Release date: <time dateTime="2026-10-25">October 25, 2026</time>
+</div>
+
+## What's New
+
+### Per-question timers
+
+Set `questionTimer` to give each question a time limit in seconds. Expired questions lock and advance automatically; the quiz completes when no later unexpired question remains.
+
+Question timers support pause/resume, preserve remaining time when navigating, and work alongside the overall `timer`. Headless consumers can read `state.questionTimeRemaining` and each question state's `timeRemaining` and `timedOut` fields.
+
+See [Options and lifecycle](../headless-options.mdx#per-question-deadlines) and the [question timer example](../examples/question-timer.mdx).
+
+### Audio questions
+
+Add `questionAudio`, with optional `questionAudioLabel` and `questionAudioTranscript`, to display native audio controls in questions and result reviews. Audio never autoplays, and navigating away, pausing, or completing the quiz stops playback.
+
+See [Audio questions](../audio.mdx) and the [audio example](../examples/audio.mdx).
+
+### Submit and quit
+
+Enable `allowQuit` to let users finish early with partial results through a confirmation dialog, including while paused. Headless consumers can use `actions.quitQuiz()` and `state.canQuit`, with their own confirmation UI.
+
+Partial multiple-answer selections count as incorrect; untouched questions remain unanswered. Pending answer callbacks run before `onComplete`, which fires once per completed session.
+
+See [State and actions](../state-and-actions.mdx) and the [submit and quit example](../examples/submit-and-quit.mdx).
+
+### Correct-answer highlighting
+
+Enable `showCorrectAnswer` to reveal all correct choices after an evaluated immediate attempt, including an incorrect attempt. This does not change scoring or disable retries. Deferred feedback through `revealAnswerOnSubmit` continues to take precedence.
+
+See the [immediate feedback example](../examples/immediate-feedback.mdx).
+
+## UI Improvements
+
+- Refreshed single- and multiple-answer selection indicators.
+- Clearer disabled choices and softer hover states.
+- Consistent icons for correct and incorrect feedback.
+- More readable result explanations, with a localized heading through `appLocale.resultPageExplanation`.
+
+## Behavior Change
+
+The progress bar and headless `state.progress` now measure the percentage of questions with the required number of selected answers, regardless of correctness. Skipping or revisiting questions no longer increases progress, and timeout or early completion preserves actual progress instead of forcing it to 100%. Partial or excessive multiple-answer selections do not count toward progress.
+
+If your custom interface uses `state.progress` to display the current position, use `state.currentQuestionIndex` and `state.questions.length` instead. See [State and actions](../state-and-actions.mdx).
+
+## Documentation and Maintenance
+
+- Added interactive examples for timers, audio, photos, callbacks, custom results, early submission, and editable [all-questions or paginated layouts](../examples/all-questions.mdx).
+- Grouped examples by topic and linked every default component prop to a runnable example.
+- Updated dependencies and expanded regression coverage for timers, progress, early submission, audio, and answer feedback.
