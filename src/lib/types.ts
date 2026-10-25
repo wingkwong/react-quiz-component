@@ -12,6 +12,7 @@ export interface AppLocale {
   quitQuizConfirm?: string;
   resultPageHeaderText: string;
   resultPagePoint: string;
+  resultPageExplanation?: string;
   pauseScreenDisplay: string;
   timerTimeRemaining: string;
   timerTimeTaken: string;
@@ -97,6 +98,7 @@ export interface InstantFeedbackProps {
 export interface ExplanationProps {
   question: Question;
   isResultPage: boolean;
+  label?: string;
 }
 
 export interface ProgressBarProps {

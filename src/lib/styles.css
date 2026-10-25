@@ -543,11 +543,25 @@
 
 .react-quiz-container .result-answer-wrapper .explanation {
   margin-block-start: 16px;
-  padding-inline-start: 12px;
-  border-inline-start: 2px solid var(--color-border-primary);
+  padding: 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
   color: var(--color-text-secondary);
   font-size: 14px;
   line-height: 1.65;
+}
+
+.react-quiz-container .result-answer-wrapper .explanation-title {
+  margin-block-end: 4px;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.react-quiz-container .result-answer-wrapper .explanation-content {
+  white-space: pre-line;
 }
 
 .react-quiz-container .quiz-result-filter {

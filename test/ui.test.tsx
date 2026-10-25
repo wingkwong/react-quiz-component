@@ -8,6 +8,25 @@ import demoQuiz from './demo-quiz';
 afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('default UI compatibility', () => {
+  it.each([undefined, 'Why this answer'])('labels result explanations using locale %s', (label) => {
+    const explanation = 'B is the correct answer.\nReview the question before continuing.';
+    const source = {
+      ...quiz,
+      appLocale: label ? { resultPageExplanation: label } : {},
+      questions: [{ ...quiz.questions[0], explanation }, quiz.questions[1]],
+    };
+    const { container } = render(<Quiz quiz={source} disableSynopsis showInstantFeedback />);
+    fireEvent.click(screen.getByRole('button', { name: 'B' }));
+    expect(screen.queryByText(label ?? 'Explanation')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.click(screen.getByRole('button', { name: 'X' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Z' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText(label ?? 'Explanation')).toBeTruthy();
+    expect(container.querySelectorAll('.explanation')).toHaveLength(1);
+    expect(container.querySelector('.explanation-content')?.textContent).toBe(explanation);
+  });
+
   it('requires the exact deferred selection count before leaving a question without navigation', () => {
     const onComplete = vi.fn();
     render(<Quiz quiz={{ ...quiz, questions: [...quiz.questions].reverse() }}

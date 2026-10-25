@@ -133,7 +133,7 @@ function Core({
             <div className="result-answer">
               {renderAnswerInResult(question, userInputIndex)}
             </div>
-            <Explanation question={question} isResultPage />
+            <Explanation question={question} isResultPage label={appLocale.resultPageExplanation} />
           </div>
         );
       });
