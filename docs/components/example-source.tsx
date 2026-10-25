@@ -3,6 +3,8 @@ import path from 'node:path';
 import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc';
 
 const files = {
+  photos: 'photos.tsx',
+  audio: 'audio.tsx',
   'immediate-start': 'immediate-start.tsx',
   'immediate-feedback': 'immediate-feedback.tsx',
   'retry-until-correct': 'retry-until-correct.tsx',

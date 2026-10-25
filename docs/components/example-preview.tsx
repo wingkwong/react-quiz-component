@@ -2,6 +2,8 @@
 import dynamic from 'next/dynamic';
 
 const previews = {
+  photos: dynamic(() => import('./examples/photos'), { ssr: false }),
+  audio: dynamic(() => import('./examples/audio'), { ssr: false }),
   'immediate-start': dynamic(() => import('./examples/immediate-start'), { ssr: false }),
   'immediate-feedback': dynamic(() => import('./examples/immediate-feedback'), { ssr: false }),
   'retry-until-correct': dynamic(() => import('./examples/retry-until-correct'), { ssr: false }),

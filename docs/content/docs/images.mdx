@@ -5,6 +5,8 @@ description: "Add an image to a question or use photos as answer choices in the 
 
 import Link from 'next/link';
 
+Try the [question images and photo answers example](./examples/photos.mdx) for a runnable quiz and downloadable assets.
+
 ## Question and answer images
 
 Set `questionPic` to an image URL to show it above the answers. For image choices, set `questionType: 'photo'` and put image URLs in `answers`. Answer indexing stays one-based. Supply `answerAltTexts`, a nonempty description for each answer in the same order, so screen readers can distinguish the photos. Descriptions move with their images when answers are shuffled. Older quizzes without descriptions use numbered labels such as “Answer 1”; these identify the choice but do not describe its image. Use `questionPicAlt` to describe a question image (or an empty string for a decorative image).

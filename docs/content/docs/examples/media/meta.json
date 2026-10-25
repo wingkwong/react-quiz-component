@@ -1,0 +1,6 @@
+{
+  "title": "Media",
+  "pages": ["../photos", "../audio"],
+  "defaultOpen": false,
+  "collapsible": true
+}

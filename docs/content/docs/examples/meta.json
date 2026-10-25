@@ -2,6 +2,7 @@
   "title": "Examples",
   "pages": [
     "basics",
+    "media",
     "randomization",
     "feedback-navigation",
     "timing-completion",

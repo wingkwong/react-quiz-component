@@ -24,7 +24,7 @@ test('examples sidebar groups collapse with keyboard and expand for the active p
   await examples.focus();
   await page.keyboard.press('Enter');
   await expect(examples).toHaveAttribute('aria-expanded', 'true');
-  for (const name of ['Basics', 'Randomization', 'Feedback and navigation', 'Timing and completion', 'Results and callbacks', 'Headless']) {
+  for (const name of ['Basics', 'Media', 'Randomization', 'Feedback and navigation', 'Timing and completion', 'Results and callbacks', 'Headless']) {
     await expect(sidebar.getByRole('button', { name, exact: true })).toHaveAttribute('aria-expanded', 'false');
   }
   await sidebar.getByRole('button', { name: 'Headless', exact: true }).scrollIntoViewIfNeeded();
