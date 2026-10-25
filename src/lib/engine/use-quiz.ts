@@ -71,6 +71,7 @@ export function useQuiz(options: UseQuizOptions): QuizController {
     previousQuestion: () => execute({ type: 'previous' }),
     goToQuestion: (index) => execute({ type: 'go', index }),
     submitQuiz: () => execute({ type: 'submit' }),
+    quitQuiz: () => execute({ type: 'quit' }),
     pauseTimer: () => execute({ type: 'pause' }),
     resumeTimer: () => execute({ type: 'resume' }),
     setResultFilter: (filter) => execute({ type: 'filter', filter }),

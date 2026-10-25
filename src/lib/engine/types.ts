@@ -65,6 +65,7 @@ export interface QuizState {
   readonly canGoNext: boolean;
   readonly canGoPrevious: boolean;
   readonly canSubmit: boolean;
+  readonly canQuit: boolean;
   readonly canPause: boolean;
   readonly canResume: boolean;
   readonly allowNavigation: boolean;
@@ -88,6 +89,7 @@ export interface QuizActions {
   previousQuestion: () => ActionResult;
   goToQuestion: (index: number) => ActionResult;
   submitQuiz: () => ActionResult;
+  quitQuiz: () => ActionResult;
   pauseTimer: () => ActionResult;
   resumeTimer: () => ActionResult;
   setResultFilter: (filter: ResultFilter) => ActionResult;

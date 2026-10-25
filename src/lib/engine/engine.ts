@@ -26,7 +26,7 @@ export interface EngineState {
   remaining: number | undefined;
   filter: ResultFilter;
 }
-export type Command = { type: 'start' | 'next' | 'previous' | 'submit' | 'pause' | 'resume' }
+export type Command = { type: 'start' | 'next' | 'previous' | 'submit' | 'quit' | 'pause' | 'resume' }
   | { type: 'tick'; elapsed?: number }
   | { type: 'select'; answer: number }
   | { type: 'go'; index: number }
@@ -124,6 +124,7 @@ export function getQuizState(session: EngineState): QuizState {
     canGoNext: active && index < questions.length - 1 && (!!options.allowNavigation || ready),
     canGoPrevious: active && !!options.allowNavigation && index > 0,
     canSubmit: active && records.every(isComplete),
+    canQuit: active || status === 'paused',
     canPause: active && !!options.timer && !!options.allowPauseTimer,
     canResume: status === 'paused', allowNavigation: !!options.allowNavigation,
     progress: completed ? 100 : questions.length ? index / questions.length * 100 : 0,
@@ -155,7 +156,7 @@ export function quizReducer(previous: EngineState, command: Command): Transition
     submissions.push({ question: state.questions[index], ...attempt });
   };
   const finish = () => {
-    // Timeout can leave an immediate multiple-answer selection unevaluated.
+    // Timeout or early quit can leave a multiple-answer selection unevaluated.
     // Preserve it as an incorrect attempt; untouched questions stay unanswered.
     state.records.forEach((record, index) => {
       if (isAnswered(record.input) && record.outcome === null) {
@@ -182,6 +183,11 @@ export function quizReducer(previous: EngineState, command: Command): Transition
   if (command.type === 'resume') {
     if (state.status !== 'paused') return blocked('invalid-state');
     state.status = 'active';
+    return success();
+  }
+  if (command.type === 'quit') {
+    if (!getQuizState(state).canQuit) return blocked('invalid-state');
+    finish();
     return success();
   }
   if (state.status !== 'active') return blocked('invalid-state');
