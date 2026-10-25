@@ -216,7 +216,7 @@
   margin-block: 10px;
   padding: 14px 16px;
   border-radius: var(--border-radius-xl);
-  transition: var(--transition-default), box-shadow 150ms ease;
+  transition: var(--transition-default);
 }
 
 .react-quiz-container .answer-content {
@@ -226,7 +226,6 @@
 
 .react-quiz-container .answer-btn:hover:not(:disabled) {
   border-color: var(--answer-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--answer-accent) 16%, transparent);
   cursor: pointer;
 }
 
@@ -359,22 +358,45 @@
 .react-quiz-container .question-modal .alert {
   padding: 16px;
   margin-block-end: 16px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-xl);
   border: 1px solid;
 }
 
 .react-quiz-container .alert.correct {
   color: var(--color-success);
   background: var(--color-success-soft);
+  border-color: color-mix(in srgb, var(--color-success) 18%, var(--color-bg-primary));
+}
+
+.react-quiz-container .feedback-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.react-quiz-container .feedback-icon {
+  flex: 0 0 20px;
+  inline-size: 20px;
+  block-size: 20px;
+  margin-block-start: 1px;
 }
 
 .react-quiz-container .alert.incorrect {
   color: var(--color-error);
   background: var(--color-error-soft);
+  border-color: color-mix(in srgb, var(--color-error) 18%, var(--color-bg-primary));
 }
 
 .react-quiz-container .alert .explanation {
-  margin-block-start: 8px;
+  margin-block-start: 12px;
+  padding-block-start: 12px;
+  border-block-start: 1px solid color-mix(in srgb, var(--color-success) 14%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .react-quiz-container img {
