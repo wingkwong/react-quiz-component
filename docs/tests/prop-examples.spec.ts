@@ -34,6 +34,8 @@ test('examples sidebar groups collapse with keyboard and expand for the active p
   await page.keyboard.press('Space');
   await expect(basics).toHaveAttribute('aria-expanded', 'true');
   await sidebar.getByRole('link', { name: 'Immediate start', exact: true }).click();
+  // Wait for client-side navigation so reload cannot return to the previous page.
+  await expect(page).toHaveURL(`${prefix}/examples/immediate-start/`);
   await page.reload();
   await expect(examples).toHaveAttribute('aria-expanded', 'true');
   await expect(basics).toHaveAttribute('aria-expanded', 'true');
