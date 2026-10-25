@@ -161,5 +161,5 @@ const renderCustomResultPage = (summary) => {
 - `disableSynopsis` skips the entire landing screen and starts the session immediately.
 - Timers start with the quiz, stop while paused, and complete the quiz on expiry, including unanswered questions. `timeTaken` is zero for untimed quizzes.
 - Timers account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional seconds and excludes paused time. Expiry is checked before accepting answers, pausing, or submitting; `timeRemaining` is rounded up for display and `timeTaken` can include fractional seconds.
-- Progress is based on the current question's position, not answer count: zero on the first question and 100 on completion.
+- Progress counts questions with the required number of selected answers, regardless of correctness. Skipping questions does not increase it, partial or excessive multiple selections do not count, and timeout preserves actual progress.
 - Shuffling occurs on session creation or reset. Answer indexes in prepared questions and callback payloads reflect the shuffled order.
