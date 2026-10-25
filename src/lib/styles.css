@@ -327,6 +327,16 @@
   border-block-start: 1px solid var(--color-border-primary);
 }
 
+.react-quiz-container .question-audio {
+  margin-block: 16px;
+}
+
+.react-quiz-container .question-audio audio {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
+
 .react-quiz-container .next-question-btn {
   margin-inline-start: auto;
 }
