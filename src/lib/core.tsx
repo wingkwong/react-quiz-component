@@ -77,7 +77,7 @@ function Core({
             disabled
             className={`answer-btn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
-            <span className="answer-indicator" aria-hidden="true">{answerBtnCorrectClassName ? '✓' : answerBtnIncorrectClassName === 'incorrect' ? '×' : ''}</span>
+            <span className={`answer-indicator answer-indicator-${questionAnswerSelectionType}`} aria-hidden="true" />
             {questionType === 'text' && <span className="answer-content">{answer}</span>}
             {questionType === 'photo' && <img src={answer} alt={question.answerAltTexts?.[index] ?? `Answer ${index + 1}`} />}
           </button>
@@ -145,7 +145,7 @@ function Core({
       className={`answer-btn btn ${answer.feedback ?? (answer.selected ? 'selected' : '')}`}
       onClick={() => actions.selectAnswer(answer.answerNumber)}
     >
-      <span className="answer-indicator" aria-hidden="true">{answer.feedback === 'correct' ? '✓' : answer.feedback === 'incorrect' ? '×' : answer.selected ? '✓' : ''}</span>
+      <span className={`answer-indicator answer-indicator-${answerSelectionType}`} aria-hidden="true" />
       {activeQuestion?.questionType === 'photo'
         ? <img src={answer.value} alt={answer.altText} /> : <span className="answer-content">{answer.value}</span>}
     </button>
