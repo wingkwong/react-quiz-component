@@ -230,6 +230,11 @@
   cursor: pointer;
 }
 
+.react-quiz-container .question-wrapper-body .answer-btn:disabled:not(.selected):not(.correct):not(.incorrect) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .react-quiz-container .answer-indicator {
   display: inline-flex;
   flex: 0 0 20px;

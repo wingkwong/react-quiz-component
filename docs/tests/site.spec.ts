@@ -18,9 +18,22 @@ for (const name of ['default', 'hook', 'provider']) {
       await demo.getByRole('button', { name: 'Resume timer' }).click();
     }
     await demo.getByRole('button', { name: 'useState', exact: true }).click();
+    if (name === 'default') {
+      await expect(demo.getByRole('button', { name: 'useEffect', exact: true })).toBeDisabled();
+      await expect(demo.getByRole('button', { name: 'useEffect', exact: true })).toHaveCSS('opacity', '0.5');
+      await expect(demo.getByRole('button', { name: 'useState', exact: true })).toHaveCSS('opacity', '1');
+    }
     await demo.getByRole('button', { name: name === 'default' ? 'Next' : 'Next question', exact: true }).click();
     await demo.getByRole('button', { name: 'createRoot', exact: true }).click();
     await demo.getByRole('button', { name: 'renderToString', exact: true }).click();
+    if (name === 'default') {
+      const unselected = demo.getByRole('button', { name: 'querySelector', exact: true });
+      await expect(unselected).toBeDisabled();
+      await expect(unselected).toHaveCSS('opacity', '0.5');
+      await expect(unselected).toHaveCSS('cursor', 'not-allowed');
+      await expect(demo.getByRole('button', { name: 'createRoot', exact: true })).toHaveCSS('opacity', '1');
+      await page.screenshot({ path: testInfo.outputPath('disabled-multiple-answers.png') });
+    }
     if (name === 'provider') {
       await demo.getByRole('button', { name: 'Previous question' }).click();
       await expect(demo.getByRole('button', { name: 'useState', exact: true })).toHaveAttribute('aria-pressed', 'true');
