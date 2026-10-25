@@ -5,17 +5,19 @@ import { rawMarkup } from './core-components/helpers';
 import { isAnswered } from './engine/engine';
 import InstantFeedback from './core-components/instant-feedback';
 import Explanation from './core-components/explanation';
+import defaultLocale from './locale';
+import QuestionAudio from './core-components/question-audio';
 import type { QuizProps, Question } from './types';
 import type { QuizController, ResultFilter } from './engine';
 
 function Core({
   controller, showDefaultResult, customResultPage, showInstantFeedback,
-  enableProgressBar,
+  enableProgressBar, allowQuit,
 }: QuizProps & { controller: QuizController }) {
   const { state, actions } = controller;
   const {
     questions, currentQuestionIndex, currentQuestion: activeQuestion,
-    appLocale, correct, timer, timeRemaining,
+    appLocale, correct, timer, timeRemaining, questionTimer, questionTimeRemaining, timeTaken,
     resultFilter: filteredValue, summary: questionSummary, allowNavigation,
   } = state;
   const { totalPoints, correctPoints } = questionSummary;
@@ -77,7 +79,7 @@ function Core({
             disabled
             className={`answer-btn btn ${answerBtnCorrectClassName}${answerBtnIncorrectClassName}`}
           >
-            <span className="answer-indicator" aria-hidden="true">{answerBtnCorrectClassName ? '✓' : answerBtnIncorrectClassName === 'incorrect' ? '×' : ''}</span>
+            <span className={`answer-indicator answer-indicator-${questionAnswerSelectionType}`} aria-hidden="true" />
             {questionType === 'text' && <span className="answer-content">{answer}</span>}
             {questionType === 'photo' && <img src={answer} alt={question.answerAltTexts?.[index] ?? `Answer ${index + 1}`} />}
           </button>
@@ -127,10 +129,11 @@ function Core({
               Array.isArray(question.correctAnswer) ? question.correctAnswer.length : 1,
               question.segment,
             )}
+            <QuestionAudio question={question} />
             <div className="result-answer">
               {renderAnswerInResult(question, userInputIndex)}
             </div>
-            <Explanation question={question} isResultPage />
+            <Explanation question={question} isResultPage label={appLocale.resultPageExplanation} />
           </div>
         );
       });
@@ -145,7 +148,7 @@ function Core({
       className={`answer-btn btn ${answer.feedback ?? (answer.selected ? 'selected' : '')}`}
       onClick={() => actions.selectAnswer(answer.answerNumber)}
     >
-      <span className="answer-indicator" aria-hidden="true">{answer.feedback === 'correct' ? '✓' : answer.feedback === 'incorrect' ? '×' : answer.selected ? '✓' : ''}</span>
+      <span className={`answer-indicator answer-indicator-${answerSelectionType}`} aria-hidden="true" />
       {activeQuestion?.questionType === 'photo'
         ? <img src={answer.value} alt={answer.altText} /> : <span className="answer-content">{answer.value}</span>}
     </button>
@@ -193,20 +196,23 @@ function Core({
     <div className="question-wrapper">
       {enableProgressBar && (
         <ProgressBar
-          progress={currentQuestionIndex + 1}
-          quizLength={questions.length}
-          isEndQuiz={endQuiz}
+          progress={state.progress}
           progressBarColor={progressBarColor}
         />
       )}
       <div className="quiz-header">
         {!endQuiz && <span className="question-count">{`${appLocale.question} ${currentQuestionIndex + 1} / ${questions.length}`}</span>}
-        {timer && (
+        {(timer || (endQuiz && questionTimer)) && (
           <span className="quiz-timer">
-            {isRunning ? appLocale.timerTimeRemaining : appLocale.timerTimeTaken}: <b>{displayTime(isRunning ? timeRemaining || 0 : timer - (timeRemaining || 0))}</b>
+            {isRunning ? appLocale.timerTimeRemaining : appLocale.timerTimeTaken}: <b>{displayTime(isRunning ? timeRemaining || 0 : timeTaken)}</b>
           </span>
         )}
-        {!endQuiz && timer && allowPauseTimer && (
+        {!endQuiz && questionTimer && (
+          <span className="quiz-question-timer">
+            {appLocale.question} — {appLocale.timerTimeRemaining}: <b>{displayTime(questionTimeRemaining || 0)}</b>
+          </span>
+        )}
+        {!endQuiz && allowPauseTimer && (
           <button type="button" className="timer-btn" onClick={isRunning ? actions.pauseTimer : actions.resumeTimer}>
             {isRunning ? appLocale.pauseScreenPause : appLocale.pauseScreenResume}
           </button>
@@ -230,6 +236,7 @@ function Core({
                   Array.isArray(activeQuestion.correctAnswer) ? activeQuestion.correctAnswer.length : 1,
                   activeQuestion.segment,
                 )}
+              {activeQuestion && <QuestionAudio key={activeQuestion.questionIndex} question={activeQuestion} />}
               <div className="question-modal">
                 <InstantFeedback
                   question={activeQuestion!}
@@ -266,6 +273,15 @@ function Core({
               {appLocale.pauseScreenDisplay}
             </span>
           )}
+        </div>
+      )}
+      {allowQuit && state.canQuit && (
+        <div className="question-btn-container">
+          <button type="button" className="quit-quiz-btn btn" onClick={() => {
+            if (confirm(appLocale.quitQuizConfirm ?? defaultLocale.quitQuizConfirm)) actions.quitQuiz();
+          }}>
+            {appLocale.quitQuizBtn ?? defaultLocale.quitQuizBtn}
+          </button>
         </div>
       )}
       {endQuiz && showDefaultResultState && customResultPage === undefined

@@ -1,0 +1,9 @@
+{
+  "title": "Results and callbacks",
+  "pages": [
+    "../callbacks",
+    "../custom-results"
+  ],
+  "defaultOpen": false,
+  "collapsible": true
+}

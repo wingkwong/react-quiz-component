@@ -8,8 +8,11 @@ export interface AppLocale {
   resultFilterUnanswered: string;
   nextQuestionBtn: string;
   prevQuestionBtn: string;
+  quitQuizBtn?: string;
+  quitQuizConfirm?: string;
   resultPageHeaderText: string;
   resultPagePoint: string;
+  resultPageExplanation?: string;
   pauseScreenDisplay: string;
   timerTimeRemaining: string;
   timerTimeTaken: string;
@@ -29,6 +32,9 @@ export interface Question {
   questionType: QuestionType;
   questionPic?: string;
   questionPicAlt?: string;
+  questionAudio?: string;
+  questionAudioLabel?: string;
+  questionAudioTranscript?: string;
   answerSelectionType: AnswerSelectionType;
   answers: string[];
   answerAltTexts?: string[];
@@ -71,12 +77,15 @@ export interface QuizProps {
   showInstantFeedback?: boolean;
   continueTillCorrect?: boolean;
   revealAnswerOnSubmit?: boolean;
+  showCorrectAnswer?: boolean;
   allowNavigation?: boolean;
   onQuestionSubmit?: (data: { question: Question; userAnswer: number | number[] | undefined; isCorrect: boolean }) => void;
   disableSynopsis?: boolean;
   timer?: number;
+  questionTimer?: number;
   allowPauseTimer?: boolean;
   enableProgressBar?: boolean;
+  allowQuit?: boolean;
 }
 
 export interface InstantFeedbackProps {
@@ -89,14 +98,13 @@ export interface InstantFeedbackProps {
 export interface ExplanationProps {
   question: Question;
   isResultPage: boolean;
+  label?: string;
 }
 
 export interface ProgressBarProps {
   progressBarColor?: string;
   progress: number;
   height?: string;
-  quizLength: number;
-  isEndQuiz: boolean;
 }
 
 export interface QuizResultFilterProps {

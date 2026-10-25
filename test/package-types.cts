@@ -4,7 +4,7 @@ import type { Quiz as QuizData, QuizProps, QuizController } from 'react-quiz-com
 import { createElement } from 'react';
 
 const data: QuizData = { quizTitle: 'Typed CommonJS quiz', questions: [] };
-const props: QuizProps = { quiz: data };
+const props: QuizProps = { quiz: data, allowQuit: true };
 const options: library.UseQuizOptions = { quiz: data };
 const hook: typeof library.useQuiz = library.useQuiz;
 const controller: () => QuizController = () => useQuiz(options);
@@ -15,3 +15,8 @@ createElement(QuizProvider, { quiz: data, children: null });
 // @ts-expect-error The callable CommonJS export still requires quiz data.
 createElement(library, {});
 void [hook, controller];
+
+createElement(Quiz, { quiz: data, showCorrectAnswer: true });
+const revealOptions: library.UseQuizOptions = { quiz: data, showCorrectAnswer: true };
+void revealOptions;
+createElement(Quiz, { quiz: data, questionTimer: 30 });

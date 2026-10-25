@@ -1,0 +1,29 @@
+---
+title: "Quiz timer"
+description: "Set an overall quiz deadline with pause and resume controls."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `timer`, `allowPauseTimer`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Start the quiz to begin the 60-second countdown. Pause, resume, then answer the questions or let the timer expire.
+
+<ExamplePreview name="quiz-timer" />
+
+## How it works
+
+The timer starts when the quiz starts. Pausing excludes paused time from the budget. Expiry completes the quiz with the answers collected so far; untouched questions remain unanswered.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="quiz-timer" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

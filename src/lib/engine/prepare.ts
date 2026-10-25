@@ -1,13 +1,16 @@
 import type { Question } from '../types';
 import type { UseQuizOptions } from './types';
 
-export function validateOptions({ quiz, timer }: UseQuizOptions): string[] {
+export function validateOptions({ quiz, timer, questionTimer }: UseQuizOptions): string[] {
   const errors: string[] = [];
   if (!quiz || !Array.isArray(quiz.questions) || quiz.questions.length === 0) {
     return ['Quiz must contain at least one question.'];
   }
   if (timer !== undefined && (!Number.isFinite(timer) || timer < 1)) {
     errors.push('timer must be a finite number greater than or equal to 1.');
+  }
+  if (questionTimer !== undefined && (!Number.isFinite(questionTimer) || questionTimer < 1)) {
+    errors.push('questionTimer must be a finite number greater than or equal to 1.');
   }
   if (quiz.nrOfQuestions !== undefined
     && (!Number.isInteger(quiz.nrOfQuestions) || quiz.nrOfQuestions < 1)) {
@@ -28,6 +31,15 @@ export function validateOptions({ quiz, timer }: UseQuizOptions): string[] {
       return;
     }
     const selection = question.answerSelectionType ?? 'single';
+    if (question.questionAudio !== undefined
+      && (typeof question.questionAudio !== 'string' || !question.questionAudio.trim())) {
+      errors.push(`${prefix}questionAudio must be a nonempty audio source string.`);
+    }
+    for (const field of ['questionAudioLabel', 'questionAudioTranscript'] as const) {
+      if (question[field] !== undefined && typeof question[field] !== 'string') {
+        errors.push(`${prefix}${field} must be a string.`);
+      }
+    }
     if (question.answerAltTexts !== undefined && (!Array.isArray(question.answerAltTexts)
       || question.answerAltTexts.length !== question.answers.length
       || question.answerAltTexts.some((alt) => typeof alt !== 'string' || !alt.trim()))) {

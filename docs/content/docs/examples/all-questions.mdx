@@ -1,0 +1,31 @@
+---
+title: "All questions and review"
+description: "Show every question together or paginate a quiz, edit selections, review answers, and submit once using the existing headless API."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+## Try the quiz
+
+Answer in any order. Change single choices, toggle multiple choices, or switch the number of questions per page without losing answers. Correctness and scores appear only after submission.
+
+<ExamplePreview name="all-questions" />
+
+## Implementation
+
+This is a custom headless layout; the default `Quiz` component continues to show one question at a time. Install `react-quiz-component`, then copy the component, `quiz.ts`, and `examples.css` into the same directory. Next.js applications need a client boundary; the preview mounts in the browser.
+
+Render `state.questionStates` rather than just the current question. `allowNavigation` permits targeting any question, and `revealAnswerOnSubmit` keeps choices editable until submission. Each click first calls `goToQuestion(index)` and, only if it succeeds, `selectAnswer(answerNumber)`. Both actions see the latest session within the same React event.
+
+Pagination only changes which questions are displayed. `state.canSubmit` checks the entire quiz, including hidden pages, and requires exactly the requested number of multiple selections. The summary and question outcomes are available internally before submission; this example deliberately renders them only after completion. It uses text questions without a timer; add image or audio rendering separately when your data requires it.
+
+<ExampleSource name="all-questions" />
+
+## Custom styles
+
+<ExampleSource name="styles" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

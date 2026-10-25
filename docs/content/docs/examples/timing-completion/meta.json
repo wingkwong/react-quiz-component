@@ -1,0 +1,10 @@
+{
+  "title": "Timing and completion",
+  "pages": [
+    "../quiz-timer",
+    "../question-timer",
+    "../submit-and-quit"
+  ],
+  "defaultOpen": false,
+  "collapsible": true
+}

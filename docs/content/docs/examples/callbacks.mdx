@@ -1,0 +1,29 @@
+---
+title: "Callback events"
+description: "Inspect submitted-answer and completion payloads without the built-in result page."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `onQuestionSubmit`, `onComplete`, `showDefaultResult`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Answer each question and inspect its submission payload below the quiz. Complete the quiz to see the completion summary instead of the built-in result page.
+
+<ExamplePreview name="callbacks" />
+
+## How it works
+
+`onQuestionSubmit` runs when an immediate attempt is evaluated; `onComplete` runs once per completed session. This example uses `showDefaultResult={false}` without a custom renderer, so the completion UI belongs to the surrounding application. The payloads shown here remain local to this demo. See [Callbacks and results](../callbacks.mdx) for deferred-mode delivery and payload details.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="callbacks" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

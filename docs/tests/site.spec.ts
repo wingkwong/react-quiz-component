@@ -18,9 +18,22 @@ for (const name of ['default', 'hook', 'provider']) {
       await demo.getByRole('button', { name: 'Resume timer' }).click();
     }
     await demo.getByRole('button', { name: 'useState', exact: true }).click();
+    if (name === 'default') {
+      await expect(demo.getByRole('button', { name: 'useEffect', exact: true })).toBeDisabled();
+      await expect(demo.getByRole('button', { name: 'useEffect', exact: true })).toHaveCSS('opacity', '0.5');
+      await expect(demo.getByRole('button', { name: 'useState', exact: true })).toHaveCSS('opacity', '1');
+    }
     await demo.getByRole('button', { name: name === 'default' ? 'Next' : 'Next question', exact: true }).click();
     await demo.getByRole('button', { name: 'createRoot', exact: true }).click();
     await demo.getByRole('button', { name: 'renderToString', exact: true }).click();
+    if (name === 'default') {
+      const unselected = demo.getByRole('button', { name: 'querySelector', exact: true });
+      await expect(unselected).toBeDisabled();
+      await expect(unselected).toHaveCSS('opacity', '0.5');
+      await expect(unselected).toHaveCSS('cursor', 'not-allowed');
+      await expect(demo.getByRole('button', { name: 'createRoot', exact: true })).toHaveCSS('opacity', '1');
+      await page.screenshot({ path: testInfo.outputPath('disabled-multiple-answers.png') });
+    }
     if (name === 'provider') {
       await demo.getByRole('button', { name: 'Previous question' }).click();
       await expect(demo.getByRole('button', { name: 'useState', exact: true })).toHaveAttribute('aria-pressed', 'true');
@@ -79,13 +92,16 @@ test('every exported page and its internal URLs work under the Pages prefix', as
 test('static search navigates to a result and nested pages refresh', async ({ page }) => {
   await page.goto(`${prefix}/`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Introduction');
+  // The browser-only preview confirms hydration before using the server-rendered search trigger.
+  await expect(page.locator('[data-example="default"]').getByRole('button', { name: /^Start quiz$/i })).toBeVisible();
   await page.getByRole('button', { name: /Search/i }).first().click();
   const input = page.getByRole('dialog').getByRole('combobox');
   await input.fill('continueTillCorrect');
   const result = page.getByRole('dialog').getByRole('option').first();
   await expect(result).toBeVisible();
   await result.click();
-  await expect(page).toHaveURL(new RegExp(`${prefix}/headless-options/`));
+  await expect(page).not.toHaveURL(`${prefix}/`);
+  await expect(page.locator('main')).toContainText('continueTillCorrect');
   await page.reload();
   await expect(page.locator('h1').first()).toBeVisible();
 });

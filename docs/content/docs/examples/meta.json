@@ -1,9 +1,14 @@
 {
   "title": "Examples",
   "pages": [
-    "default",
-    "hook",
-    "provider"
+    "basics",
+    "media",
+    "randomization",
+    "feedback-navigation",
+    "timing-completion",
+    "results-callbacks",
+    "headless"
   ],
-  "defaultOpen": true
+  "defaultOpen": false,
+  "collapsible": true
 }

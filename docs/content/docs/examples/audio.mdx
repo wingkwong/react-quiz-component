@@ -1,0 +1,32 @@
+---
+title: "Audio questions"
+description: "Play a bundled audio clip in a quiz with native controls, an accessible label, a transcript, and result review."
+---
+
+import Link from 'next/link';
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Fields demonstrated: `questionAudio`, `questionAudioLabel`, and `questionAudioTranscript` inside the `quiz` prop.
+
+## Try the quiz
+
+Start the quiz, play the clip using the native audio controls, and count the tones. You can also read the text alternative. Choose an answer and finish to replay the clip in the result review.
+
+<ExamplePreview name="audio" />
+
+## How it works
+
+`questionAudio` adds native playback controls above the answers. `questionType` still describes the answer choices, so this demo uses `text`. The clip is a locally bundled, synthetic two-tone WAV file; no external audio service is needed.
+
+Audio never autoplays and uses `preload="none"`. `questionAudioLabel` names the player, while `questionAudioTranscript` provides a visible text alternative linked to its accessible description. This demonstration deliberately gives equivalent information in text; for assessments where that discloses the answer, provide an equivalent accessible assessment in your application.
+
+Completing the quiz stops the question's player; the result review has its own player. See the [Audio guide](../audio.mdx) for playback lifecycle and format details.
+
+## Implementation
+
+Download <Link href="/audio/two-tones.wav" prefetch={false} download>two-tones.wav</Link> into your app's `public/audio` directory. Install `react-quiz-component` and copy the component below; its quiz data is included.
+
+The example uses `NEXT_PUBLIC_BASE_PATH` for this site's deployment prefix. In another React setup, replace `basePath` with your public asset prefix, or an empty string when hosting at the domain root. Next.js applications need a client boundary. `Quiz` loads its own stylesheet automatically.
+
+<ExampleSource name="audio" />

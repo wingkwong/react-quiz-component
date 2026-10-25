@@ -1,0 +1,40 @@
+---
+title: "Audio questions"
+description: "Add MP3 or other browser-supported audio to quiz questions, with native playback controls, an accessible label, and a transcript."
+---
+
+Set `questionAudio` to an audio URL. The default component shows native controls above the answers and in the result review. `questionType` still describes the answers: use `text` for text choices or `photo` for image choices.
+
+Try the [audio example](./examples/audio.mdx) with a bundled, downloadable clip and complete runnable source.
+
+```tsx
+import Quiz, { type Quiz as QuizData } from 'react-quiz-component';
+
+const quiz: QuizData = {
+  quizTitle: 'Listening practice',
+  questions: [{
+    question: 'Which greeting does the speaker use?',
+    questionType: 'text',
+    answerSelectionType: 'single',
+    questionAudio: '/audio/greeting.mp3',
+    questionAudioLabel: 'Listen to the greeting',
+    questionAudioTranscript: 'The speaker says: Good morning.',
+    answers: ['Good morning', 'Good evening'],
+    correctAnswer: '1',
+  }],
+};
+
+export default function ListeningQuiz() {
+  return <Quiz quiz={quiz} />;
+}
+```
+
+Place your file at `public/audio/greeting.mp3`, or use an accessible hosted URL. Include your deployment's base path when hosting under a subdirectory. Audio is not loaded in advance (`preload="none"`) and never autoplays. MP3 and other formats depend on the browser's media support; the library does not encode or host files.
+
+Provide `questionAudioLabel` in your audience's language and a transcript or equivalent text alternative. The transcript is rendered as plain text and linked to the player's accessible description. For assessments where displaying the transcript would disclose the answer, supply an equivalent accessible assessment through your application.
+
+Navigating away, pausing the quiz, completing it, or unmounting the player stops playback. Returning to a question creates a fresh player. Audio playback does not pause the quiz timer automatically.
+
+## Headless rendering
+
+The audio fields stay with each prepared question when questions or answers are shuffled. Headless consumers render their own `<audio controls>` element from `state.currentQuestion.questionAudio` and manage playback when navigating, pausing, or finishing. The engine's scoring and answer-selection behavior are unchanged.

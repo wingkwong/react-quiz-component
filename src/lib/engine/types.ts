@@ -16,8 +16,10 @@ export interface UseQuizOptions {
   shuffleAnswer?: boolean;
   continueTillCorrect?: boolean;
   revealAnswerOnSubmit?: boolean;
+  showCorrectAnswer?: boolean;
   allowNavigation?: boolean;
   timer?: number;
+  questionTimer?: number;
   allowPauseTimer?: boolean;
   autoStart?: boolean;
   onComplete?: (summary: QuestionSummary) => void;
@@ -44,6 +46,8 @@ export interface QuestionState {
   readonly outcome: AnswerFeedback;
   readonly feedback: AnswerFeedback;
   readonly answered: boolean;
+  readonly timedOut: boolean;
+  readonly timeRemaining: number | undefined;
   readonly answers: readonly AnswerState[];
 }
 export interface QuizState {
@@ -65,11 +69,14 @@ export interface QuizState {
   readonly canGoNext: boolean;
   readonly canGoPrevious: boolean;
   readonly canSubmit: boolean;
+  readonly canQuit: boolean;
   readonly canPause: boolean;
   readonly canResume: boolean;
   readonly allowNavigation: boolean;
   readonly progress: number;
   readonly timer: number | undefined;
+  readonly questionTimer: number | undefined;
+  readonly questionTimeRemaining: number | undefined;
   readonly timeRemaining: number | undefined;
   readonly timeTaken: number;
   readonly summary: QuestionSummary;
@@ -88,6 +95,7 @@ export interface QuizActions {
   previousQuestion: () => ActionResult;
   goToQuestion: (index: number) => ActionResult;
   submitQuiz: () => ActionResult;
+  quitQuiz: () => ActionResult;
   pauseTimer: () => ActionResult;
   resumeTimer: () => ActionResult;
   setResultFilter: (filter: ResultFilter) => ActionResult;

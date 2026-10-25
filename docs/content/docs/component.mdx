@@ -11,21 +11,24 @@ import Quiz, { type QuizProps } from 'react-quiz-component';
 
 | Name | Type | Default | Required | Description |
 | :-- | :-- | :-- | :--: | :-- |
-| `quiz` | `Quiz` | None | Y | Quiz source object. |
-| `shuffle` | `boolean` | `false` | N | Shuffle questions before rendering. |
-| `shuffleAnswer` | `boolean` | `false` | N | Shuffle answer choices before rendering. |
-| `showDefaultResult` | `boolean` | `true` | N | Show the built-in result page when the quiz ends. |
-| `onComplete` | `(summary: QuestionSummary) => void` | `undefined` | N | Called once when the quiz completes. |
-| `customResultPage` | `(summary: QuestionSummary) => React.ReactElement` | `undefined` | N | Render a custom result page. Use with `showDefaultResult={false}`. |
-| `showInstantFeedback` | `boolean` | `false` | N | Show correct or incorrect messages after answers are submitted. |
-| `continueTillCorrect` | `boolean` | `false` | N | For single-answer questions, let the user keep trying until the correct answer is selected. |
-| `revealAnswerOnSubmit` | `boolean` | `false` | N | Allow editing selections and defer correctness feedback until the quiz completes. |
-| `allowNavigation` | `boolean` | `false` | N | Show previous and next controls so users can move between questions. |
-| `onQuestionSubmit` | `(data: QuestionSubmitData) => void` | `undefined` | N | Called when a question answer is submitted with the question, user answer, and correctness. |
-| `disableSynopsis` | `boolean` | `false` | N | Skip the landing page and start the quiz immediately. |
-| `timer` | `number` | `undefined` | N | Quiz duration in seconds. Must be finite and at least `1`. |
-| `allowPauseTimer` | `boolean` | `false` | N | Allow pausing and resuming when `timer` is set. |
-| `enableProgressBar` | `boolean` | `false` | N | Show a progress bar above the quiz. |
+| [`quiz`](./examples/default.mdx) | `Quiz` | None | Y | Quiz source object. |
+| [`shuffle`](./examples/shuffled.mdx) | `boolean` | `false` | N | Shuffle questions before rendering. |
+| [`shuffleAnswer`](./examples/shuffled.mdx) | `boolean` | `false` | N | Shuffle answer choices before rendering. |
+| [`showDefaultResult`](./examples/callbacks.mdx) | `boolean` | `true` | N | Show the built-in result page when the quiz ends. |
+| [`onComplete`](./examples/callbacks.mdx) | `(summary: QuestionSummary) => void` | `undefined` | N | Called once when the quiz completes. |
+| [`customResultPage`](./examples/custom-results.mdx) | `(summary: QuestionSummary) => React.ReactElement` | `undefined` | N | Render a custom result page. Use with `showDefaultResult={false}`. |
+| [`showInstantFeedback`](./examples/immediate-feedback.mdx) | `boolean` | `false` | N | Show correct or incorrect messages after answers are submitted. |
+| [`showCorrectAnswer`](./examples/immediate-feedback.mdx) | `boolean` | `false` | N | Highlight all correct choices after an evaluated immediate attempt. Deferred mode takes precedence. |
+| [`continueTillCorrect`](./examples/retry-until-correct.mdx) | `boolean` | `false` | N | For single-answer questions, let the user keep trying until the correct answer is selected. |
+| [`revealAnswerOnSubmit`](./examples/review-before-submitting.mdx) | `boolean` | `false` | N | Allow editing selections and defer correctness feedback until the quiz completes. |
+| [`allowNavigation`](./examples/review-before-submitting.mdx) | `boolean` | `false` | N | Show previous and next controls so users can move between questions. |
+| [`onQuestionSubmit`](./examples/callbacks.mdx) | `(data: QuestionSubmitData) => void` | `undefined` | N | Called when a question answer is submitted with the question, user answer, and correctness. |
+| [`disableSynopsis`](./examples/immediate-start.mdx) | `boolean` | `false` | N | Skip the landing page and start the quiz immediately. |
+| [`timer`](./examples/quiz-timer.mdx) | `number` | `undefined` | N | Quiz duration in seconds. Must be finite and at least `1`. |
+| [`questionTimer`](./examples/question-timer.mdx) | `number` | `undefined` | N | Time budget per question in seconds, at least `1`. Expiry locks the question and advances; the final expiry completes the quiz. |
+| [`allowPauseTimer`](./examples/quiz-timer.mdx) | `boolean` | `false` | N | Allow pausing and resuming when `timer` or `questionTimer` is set. |
+| [`allowQuit`](./examples/submit-and-quit.mdx) | `boolean` | `false` | N | Show a confirmed Submit and quit action, including while paused, to finish with partial results. |
+| [`enableProgressBar`](./examples/default.mdx) | `boolean` | `false` | N | Show a progress bar above the quiz. |
 
 ## Results and restart
 
