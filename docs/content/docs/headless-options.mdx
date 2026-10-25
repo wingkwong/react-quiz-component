@@ -3,7 +3,7 @@ title: "Options and lifecycle"
 description: "Configure the options shared by useQuiz and QuizProvider, including shuffling, navigation, timers, and callbacks. Understand when settings are captured, how resets apply updated options, and when to remount a session to switch quiz data."
 ---
 
-`UseQuizOptions` accepts `quiz`, `shuffle`, `shuffleAnswer`, `continueTillCorrect`, `revealAnswerOnSubmit`, `showCorrectAnswer`, `allowNavigation`, `timer`, `allowPauseTimer`, `onQuestionSubmit`, `onComplete`, and `autoStart`. Boolean options default to `false`; the timer is off unless supplied. `autoStart` replaces the default UI's `disableSynopsis` prop. Presentation props such as `showInstantFeedback`, `showDefaultResult`, `customResultPage`, and `enableProgressBar` belong to your renderer.
+`UseQuizOptions` accepts `quiz`, `shuffle`, `shuffleAnswer`, `continueTillCorrect`, `revealAnswerOnSubmit`, `showCorrectAnswer`, `allowNavigation`, `timer`, `questionTimer`, `allowPauseTimer`, `onQuestionSubmit`, `onComplete`, and `autoStart`. Boolean options default to `false`; the timer is off unless supplied. `autoStart` replaces the default UI's `disableSynopsis` prop. Presentation props such as `showInstantFeedback`, `showDefaultResult`, `customResultPage`, and `enableProgressBar` belong to your renderer.
 
 Quiz data and behavior options are captured at session creation. Rerendering with a new object does not restart or reshuffle the quiz. `reset()` creates a session from the latest options, reshuffles if enabled, clears answers and results, resets the timer, and honors `autoStart`. Callback references update without resetting. To switch datasets immediately, remount your component/provider using a new React `key`.
 
@@ -19,6 +19,7 @@ Quiz data and behavior options are captured at session creation. Rerendering wit
 | `showCorrectAnswer` | `boolean` | `false` | Reveal all correct choices after an evaluated immediate attempt; ignored during deferred selection. |
 | `allowNavigation` | `boolean` | `false` | Permit skipping and revisiting questions. |
 | `timer` | `number` | Unset | Finite duration of at least one second. |
+| `questionTimer` | `number` | Unset | Finite time budget per question of at least one second. Expiry locks the question and advances. |
 | `allowPauseTimer` | `boolean` | `false` | Enable pausing a timed quiz. |
 | `autoStart` | `boolean` | `false` | Start immediately, including after reset. |
 | `onComplete` | `(summary: QuestionSummary) => void` | Unset | Receive completion once per session. |
@@ -27,3 +28,13 @@ Quiz data and behavior options are captured at session creation. Rerendering wit
 `QuizProviderProps` adds `children: ReactNode` to these options. Use one provider per independent quiz and `useQuizContext()` in its descendants.
 
 Timed sessions account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional elapsed time and excludes the paused duration. `timeRemaining` is rounded up to whole seconds for display; `timeTaken` retains fractional seconds. Expiry is checked before accepting answers, pausing, or submitting.
+
+## Per-question deadlines
+
+`questionTimer` assigns each prepared question its own budget. It starts when that question is active and retains fractional remaining time when navigating away. Revisiting a question does not reset its budget. Pause/resume freezes both clocks when enabled.
+
+On expiry, the current answer is committed and locked, then the engine advances to the next question whose budget has not expired. Partially selected multiple answers count as incorrect; untouched questions remain unanswered. If no later unexpired question exists, the quiz completes. Expired questions can be revisited for review but cannot be edited; their clocks do not restart. Manual submission accepts expired questions alongside complete answers for the remaining questions.
+
+`timer` remains an independent overall limit. The first deadline takes effect, and delayed callbacks account for elapsed time across successive question deadlines. A late answer or navigation action intended for an expired question returns `invalid-state` rather than applying to the next question. Completion is still delivered once per session.
+
+`timeTaken` includes active elapsed time whenever either timer is configured, excluding pauses and stopping at completion. It remains zero for untimed sessions. Read `questionTimeRemaining` for the active question and `questionStates[index].timeRemaining` / `timedOut` for individual questions. Remaining times are rounded up for display. Reset clears expiry flags and restores all budgets.

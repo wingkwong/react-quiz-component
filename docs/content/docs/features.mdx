@@ -80,6 +80,16 @@ import { quiz } from './quiz';
 <Quiz quiz={quiz} timer={60} />;
 ```
 
+## Per-question timer
+
+Give each question its own time budget, optionally alongside an overall limit:
+
+```jsx
+<Quiz quiz={quiz} questionTimer={30} timer={180} allowPauseTimer />;
+```
+
+Expiry locks the question and advances automatically; expiry on the final available question completes the quiz. Unanswered questions stay unanswered and partial multiple selections count as incorrect. Navigation preserves each question’s remaining budget, including on revisit. See [Per-question deadlines](./headless-options.mdx#per-question-deadlines) for submission, delayed-callback, and review behavior.
+
 ## Pause And Resume Timer
 
 ```jsx
@@ -169,9 +179,9 @@ const renderCustomResultPage = (summary) => {
 - Immediate mode evaluates single answers on selection and multiple answers when the required selection count is reached. `showInstantFeedback` controls messages; correctness styles still follow the engine's answer state.
 - `continueTillCorrect` applies to immediate single-answer questions. Retrying does not recover points lost on the first attempt.
 - `revealAnswerOnSubmit` defers correctness feedback until quiz completion. Multiple selections can be toggled. Without `allowNavigation`, select exactly the requested number of answers before Next becomes available. Pair it with `allowNavigation` to let users review answers before submission.
-- `allowNavigation` permits skipping between questions, but manual submission requires a finished answer for every question. See the [exact submission rules](./state-and-actions.mdx#selection-and-submission-rules) for multiple-answer and retry modes. The default UI shows an alert for incomplete submission and a confirmation dialog for completed submission when navigation is enabled. Headless actions show no browser dialogs.
+- `allowNavigation` permits skipping between questions, but manual submission requires a finished answer for every question whose time budget has not expired. See the [exact submission rules](./state-and-actions.mdx#selection-and-submission-rules) for multiple-answer and retry modes. The default UI shows an alert for incomplete submission and a confirmation dialog for completed submission when navigation is enabled. Headless actions show no browser dialogs.
 - `disableSynopsis` skips the entire landing screen and starts the session immediately.
-- Timers start with the quiz, stop while paused, and complete the quiz on expiry, including unanswered questions. `timeTaken` is zero for untimed quizzes.
+- Timers start with the quiz, stop while paused, and complete the quiz on expiry, including unanswered questions. `timeTaken` is zero when neither timer is configured.
 - Timers account for elapsed active time, including delayed browser callbacks. Pausing preserves fractional seconds and excludes paused time. Expiry is checked before accepting answers, pausing, or submitting; `timeRemaining` is rounded up for display and `timeTaken` can include fractional seconds.
 - Progress counts questions with the required number of selected answers, regardless of correctness. Skipping questions does not increase it, partial or excessive multiple selections do not count, and timeout preserves actual progress.
 - Shuffling occurs on session creation or reset. Answer indexes in prepared questions and callback payloads reflect the shuffled order.
