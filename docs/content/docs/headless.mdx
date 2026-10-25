@@ -90,6 +90,8 @@ Wrap the component that calls `useQuiz`, or the entire `QuizProvider` and its co
 - [Callback semantics and payloads](./callbacks.mdx)
 - [Exported TypeScript types](./types.mdx)
 
+For simultaneous questions, editable answers, and pagination, see [All questions and review](./examples/all-questions.mdx).
+
 Try the [standalone hook](./examples/hook.mdx) or [provider and context](./examples/provider.mdx) example.
 
 These minimal examples render text questions and answers. To support photo questions, render `answer.value` as an image URL when `state.currentQuestion.questionType === 'photo'`, and provide descriptive alternative text. Render `questionPic`, Markdown, explanations, and locale labels explicitly when your interface needs them. The [shared provider example](./examples/provider.mdx) also demonstrates paused and completed states.
