@@ -71,6 +71,7 @@ export interface QuizProps {
   showInstantFeedback?: boolean;
   continueTillCorrect?: boolean;
   revealAnswerOnSubmit?: boolean;
+  showCorrectAnswer?: boolean;
   allowNavigation?: boolean;
   onQuestionSubmit?: (data: { question: Question; userAnswer: number | number[] | undefined; isCorrect: boolean }) => void;
   disableSynopsis?: boolean;

@@ -18,6 +18,7 @@ import Quiz, { type QuizProps } from 'react-quiz-component';
 | `onComplete` | `(summary: QuestionSummary) => void` | `undefined` | N | Called once when the quiz completes. |
 | `customResultPage` | `(summary: QuestionSummary) => React.ReactElement` | `undefined` | N | Render a custom result page. Use with `showDefaultResult={false}`. |
 | `showInstantFeedback` | `boolean` | `false` | N | Show correct or incorrect messages after answers are submitted. |
+| `showCorrectAnswer` | `boolean` | `false` | N | Highlight all correct choices after an evaluated immediate attempt. Deferred mode takes precedence. |
 | `continueTillCorrect` | `boolean` | `false` | N | For single-answer questions, let the user keep trying until the correct answer is selected. |
 | `revealAnswerOnSubmit` | `boolean` | `false` | N | Allow editing selections and defer correctness feedback until the quiz completes. |
 | `allowNavigation` | `boolean` | `false` | N | Show previous and next controls so users can move between questions. |

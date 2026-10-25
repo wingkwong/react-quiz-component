@@ -15,3 +15,7 @@ createElement(Quiz, { quiz: data });
 // The provider requires children in its props even when the child is null.
 const providerProps = { quiz: data, children: null };
 createElement(QuizProvider, providerProps);
+
+createElement(Quiz, { quiz: data, showCorrectAnswer: true });
+const revealOptions: UseQuizOptions = { quiz: data, showCorrectAnswer: true };
+void revealOptions;

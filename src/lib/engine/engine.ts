@@ -77,6 +77,7 @@ export function getQuizState(session: EngineState): QuizState {
   const questionStates: QuestionState[] = questions.map((question, questionIndex) => {
     const record = records[questionIndex];
     const deferred = options.revealAnswerOnSubmit;
+    const revealCorrect = completed || (!deferred && options.showCorrectAnswer && record.feedback !== null);
     return {
       question, index: questionIndex, userAnswer: record.input,
       attempts: record.attempts, outcome: record.outcome, feedback: record.feedback,
@@ -91,7 +92,7 @@ export function getQuizState(session: EngineState): QuizState {
           answerNumber, value, selected,
           altText: question.answerAltTexts?.[answerIndex] ?? `Answer ${answerNumber}`,
           disabled: !active || (!deferred && (record.finished || selected)),
-          feedback: completed ? (correct ? 'correct' : selected ? 'incorrect' : null)
+          feedback: revealCorrect ? (correct ? 'correct' : selected ? 'incorrect' : null)
             : !deferred && selected ? (correct ? 'correct' : 'incorrect') : null,
         };
       }),

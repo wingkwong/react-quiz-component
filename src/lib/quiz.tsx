@@ -22,6 +22,7 @@ function Quiz(props: QuizProps) {
     shuffleAnswer: props.shuffleAnswer,
     continueTillCorrect: props.continueTillCorrect,
     revealAnswerOnSubmit: props.revealAnswerOnSubmit,
+    showCorrectAnswer: props.showCorrectAnswer,
     allowNavigation: props.allowNavigation,
     timer: props.timer,
     allowPauseTimer: props.allowPauseTimer,
