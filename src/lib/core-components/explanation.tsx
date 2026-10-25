@@ -17,8 +17,7 @@ function Explanation({ question, isResultPage }: ExplanationProps) {
   }
 
   return (
-    <div>
-      <br />
+    <div className="explanation">
       {explanation}
     </div>
   );

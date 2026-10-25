@@ -1,0 +1,29 @@
+---
+title: "Retry until correct"
+description: "Let learners retry a single-answer question while preserving first-attempt scoring."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `continueTillCorrect`, `showInstantFeedback`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+Choose useEffect first, then useState. Next becomes available after the correct answer. Complete the second question correctly to finish with 20 out of 30 points.
+
+<ExamplePreview name="retry-until-correct" />
+
+## How it works
+
+`continueTillCorrect` applies to immediate single-answer questions. Retrying does not recover points lost on the first attempt. Multiple-answer questions are evaluated once the required number of choices is selected.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="retry-until-correct" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />

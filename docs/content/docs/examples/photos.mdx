@@ -1,0 +1,30 @@
+---
+title: "Question images and photo answers"
+description: "Try a question image and image answer choices with descriptive alternative text and a complete runnable quiz."
+---
+
+import Link from 'next/link';
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Fields demonstrated: `questionPic`, `questionPicAlt`, `questionType: 'photo'`, and `answerAltTexts` inside the `quiz` prop.
+
+## Try the quiz
+
+Identify the shape in the first question, then select the circle image in the second. Finish to see the images and explanations in the result review.
+
+<ExamplePreview name="photos" />
+
+## How it works
+
+`questionPic` adds an image above the answer choices, including when answers are text. `questionType: 'photo'` treats each answer as an image URL. This demo uses small SVG shapes; you can replace them with photographs in browser-supported formats such as JPEG or PNG.
+
+Give the question image a meaningful `questionPicAlt`, and supply an `answerAltTexts` entry for every image choice in the same order. `correctAnswer` uses a one-based index, just as it does with text answers. See the [Images guide](../images.mdx) for more details.
+
+## Implementation
+
+Copy <Link href="/images/circle.svg" prefetch={false} download>circle.svg</Link> and <Link href="/images/square.svg" prefetch={false} download>square.svg</Link> into your app's `public/images` directory. Install `react-quiz-component` and copy the component below; its quiz data is included.
+
+The example uses `NEXT_PUBLIC_BASE_PATH` for this site's deployment prefix. In another React setup, replace `basePath` with your public asset prefix, or an empty string when hosting at the domain root. Next.js applications need a client boundary. `Quiz` loads its own stylesheet automatically.
+
+<ExampleSource name="photos" />

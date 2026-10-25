@@ -3,6 +3,18 @@ import path from 'node:path';
 import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc';
 
 const files = {
+  photos: 'photos.tsx',
+  audio: 'audio.tsx',
+  'immediate-start': 'immediate-start.tsx',
+  'immediate-feedback': 'immediate-feedback.tsx',
+  'retry-until-correct': 'retry-until-correct.tsx',
+  'review-before-submitting': 'review-before-submitting.tsx',
+  'quiz-timer': 'quiz-timer.tsx',
+  'question-timer': 'question-timer.tsx',
+  'submit-and-quit': 'submit-and-quit.tsx',
+  'shuffled': 'shuffled.tsx',
+  'callbacks': 'callbacks.tsx',
+  'custom-results': 'custom-results.tsx',
   'all-questions': 'all-questions.tsx',
   default: 'default.tsx', hook: 'hook.tsx', provider: 'provider.tsx',
   quiz: 'quiz.ts',

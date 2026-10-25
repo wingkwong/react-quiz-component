@@ -1,0 +1,29 @@
+---
+title: "Immediate start"
+description: "Start a quiz immediately without a landing screen."
+---
+
+import { ExamplePreview } from '@/components/example-preview';
+import { ExampleSource } from '@/components/example-source';
+
+Props demonstrated: `disableSynopsis`. Every example also supplies the required `quiz` prop.
+
+## Try the quiz
+
+The first question is ready as soon as this preview loads. Answer both questions to see the built-in results.
+
+<ExamplePreview name="immediate-start" />
+
+## How it works
+
+`disableSynopsis` skips the entire landing screen. Without it, users start the quiz with the Start Quiz button.
+
+## Implementation
+
+Install `react-quiz-component`, then copy this component and the `quiz.ts` data file into the same directory. `Quiz` loads its own stylesheet automatically. The preview mounts in the browser; Next.js applications should use a client boundary.
+
+<ExampleSource name="immediate-start" />
+
+## Quiz data
+
+<ExampleSource name="quiz" />
