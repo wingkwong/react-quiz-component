@@ -193,9 +193,7 @@ function Core({
     <div className="question-wrapper">
       {enableProgressBar && (
         <ProgressBar
-          progress={currentQuestionIndex + 1}
-          quizLength={questions.length}
-          isEndQuiz={endQuiz}
+          progress={state.progress}
           progressBarColor={progressBarColor}
         />
       )}
