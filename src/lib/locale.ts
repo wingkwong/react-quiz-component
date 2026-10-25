@@ -14,6 +14,7 @@ const defaultLocale = {
   quitQuizConfirm: 'Submit your answers and quit the quiz?',
   resultPageHeaderText: 'You have completed the quiz. You got <correctIndexLength> out of <questionLength> questions.',
   resultPagePoint: 'You scored <correctPoints> out of <totalPoints>.',
+  resultPageExplanation: 'Explanation',
   pauseScreenDisplay: 'Test is paused. Clicked the Resume button to continue',
   timerTimeRemaining: 'Time Remaining',
   timerTimeTaken: 'Time Taken',

@@ -1,7 +1,8 @@
 import React from 'react';
+import defaultLocale from '../locale';
 import type { ExplanationProps } from '../types';
 
-function Explanation({ question, isResultPage }: ExplanationProps) {
+function Explanation({ question, isResultPage, label = defaultLocale.resultPageExplanation }: ExplanationProps) {
   const { explanation } = question;
 
   if (!explanation) {
@@ -11,7 +12,8 @@ function Explanation({ question, isResultPage }: ExplanationProps) {
   if (isResultPage) {
     return (
       <div className="explanation">
-        {explanation}
+        <div className="explanation-title">{label}</div>
+        <div className="explanation-content">{explanation}</div>
       </div>
     );
   }
