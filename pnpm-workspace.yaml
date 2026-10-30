@@ -56,14 +56,14 @@ minimumReleaseAgeExclude:
   - '@rollup/rollup-win32-x64-msvc@4.64.12'
   - fumadocs-core@16.17.7 || 16.17.8
   - fumadocs-mdx@15.4.8 || 15.4.10
-  - lucide-react@1.60.0
+  - lucide-react@1.60.0 || 1.65.0
   - oxlint@1.89.0
   - rollup@4.64.12
-  - '@babel/core@8.0.9'
+  - '@babel/core@8.0.9 || 8.0.10'
   - '@babel/helper-string-parser@8.0.8'
-  - '@babel/helpers@8.0.8'
-  - '@babel/parser@8.0.8'
-  - '@babel/types@8.0.8'
+  - '@babel/helpers@8.0.8 || 8.0.10'
+  - '@babel/parser@8.0.8 || 8.0.10'
+  - '@babel/types@8.0.8 || 8.0.10'
   - '@next/env@16.4.3'
   - '@next/swc-darwin-arm64@16.4.3'
   - '@next/swc-darwin-x64@16.4.3'
@@ -74,6 +74,8 @@ minimumReleaseAgeExclude:
   - '@next/swc-win32-arm64-msvc@16.4.3'
   - '@next/swc-win32-x64-msvc@16.4.3'
   - next@16.4.3
+  - '@babel/generator@8.0.10'
+  - '@babel/traverse@8.0.10'
 
 overrides:
   'postcss-selector-parser@<7.1.6': '^7.1.6'
