@@ -64,11 +64,11 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "jsdom": "30.1.3",
-    "oxlint": "1.90.0",
+    "oxlint": "1.91.0",
     "prop-types": "15.8.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "rollup": "4.67.4",
+    "rollup": "4.67.5",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-postcss": "4.0.2",
     "tslib": "2.9.1",
@@ -106,5 +106,5 @@
   "files": [
     "dist"
   ],
-  "packageManager": "pnpm@12.17.0"
+  "packageManager": "pnpm@12.18.0"
 }
