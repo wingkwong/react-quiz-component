@@ -68,7 +68,7 @@
     "prop-types": "15.8.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "rollup": "4.67.5",
+    "rollup": "4.68.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-postcss": "4.0.2",
     "tslib": "2.9.1",
