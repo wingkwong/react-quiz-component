@@ -19,13 +19,13 @@
     "react-quiz-component": "workspace:*"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.3.4",
+    "@tailwindcss/postcss": "4.3.5",
     "@types/mdx": "2.0.14",
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "postcss": "8.5.32",
-    "tailwindcss": "4.3.4",
+    "tailwindcss": "4.3.5",
     "typescript": "6.0.3",
     "@playwright/test": "1.64.1"
   }
