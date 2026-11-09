@@ -9,7 +9,7 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - react-dom@19.3.1
   - react@19.3.1
-  - '@fumadocs/base-ui@16.17.7 || 16.17.8 || 16.17.10 || 16.18.0 || 16.18.1'
+  - '@fumadocs/base-ui@16.17.7 || 16.17.8 || 16.17.10 || 16.18.0 || 16.18.1 || 16.18.3'
   - '@oxlint/binding-android-arm-eabi@1.89.0 || 1.92.0'
   - '@oxlint/binding-android-arm64@1.89.0 || 1.92.0'
   - '@oxlint/binding-darwin-arm64@1.89.0 || 1.92.0'
@@ -54,8 +54,8 @@ minimumReleaseAgeExclude:
   - '@rollup/rollup-win32-ia32-msvc@4.64.12 || 4.68.0'
   - '@rollup/rollup-win32-x64-gnu@4.64.12 || 4.68.0'
   - '@rollup/rollup-win32-x64-msvc@4.64.12 || 4.68.0'
-  - fumadocs-core@16.17.7 || 16.17.8 || 16.17.10 || 16.18.0 || 16.18.1
-  - fumadocs-mdx@15.4.8 || 15.4.10 || 15.5.0
+  - fumadocs-core@16.17.7 || 16.17.8 || 16.17.10 || 16.18.0 || 16.18.1 || 16.18.3
+  - fumadocs-mdx@15.4.8 || 15.4.10 || 15.5.0 || 15.5.2
   - lucide-react@1.60.0 || 1.65.0 || 1.69.0
   - oxlint@1.89.0 || 1.92.0
   - rollup@4.64.12 || 4.68.0
