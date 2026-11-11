@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "nanoid": "6.0.2",
-    "sanitize-html": "2.18.1",
+    "sanitize-html": "2.18.2",
     "snarkdown": "2.0.0"
   },
   "peerDependencies": {
