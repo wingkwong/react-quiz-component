@@ -46,7 +46,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "8.1.0",
+    "@babel/core": "8.1.2",
     "@babel/plugin-transform-class-properties": "8.0.1",
     "@babel/plugin-transform-object-rest-spread": "8.0.1",
     "@babel/preset-env": "8.0.7",
@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "nanoid": "6.0.2",
-    "sanitize-html": "2.18.1",
+    "sanitize-html": "2.18.2",
     "snarkdown": "2.0.0"
   },
   "peerDependencies": {
@@ -106,5 +106,5 @@
   "files": [
     "dist"
   ],
-  "packageManager": "pnpm@12.19.0"
+  "packageManager": "pnpm@12.20.0"
 }
