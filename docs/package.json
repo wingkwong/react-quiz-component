@@ -27,6 +27,6 @@
     "postcss": "8.5.32",
     "tailwindcss": "4.3.5",
     "typescript": "6.0.3",
-    "@playwright/test": "1.65.0"
+    "@playwright/test": "1.65.1"
   }
 }
