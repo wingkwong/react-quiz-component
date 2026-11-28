@@ -217,8 +217,8 @@ importers:
         specifier: 8.0.7
         version: 8.0.7(@babel/core@8.1.3)
       '@rollup/plugin-babel':
-        specifier: 7.1.0
-        version: 7.1.0(@babel/core@8.1.3)(rollup@4.68.8)(supports-color@7.2.0)
+        specifier: 7.2.0
+        version: 7.2.0(@babel/core@8.1.3)(rollup@4.68.8)(supports-color@7.2.0)
       '@rollup/plugin-commonjs':
         specifier: 29.0.3
         version: 29.0.3(rollup@4.68.8)
@@ -1730,13 +1730,13 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@rollup/plugin-babel@7.1.0':
-    resolution: {integrity: sha512-h9Y+xYha6p4wKO+FwdiPIkE+eIYCm8MzZPpX1iARIoFBnmKP9CnpT1p9dDf/DTFm6fyN8PmuLyRI5qZgchnitw==}
+  '@rollup/plugin-babel@7.2.0':
+    resolution: {integrity: sha512-phEbG5me6rvdajoAMOioEpBbFIWK2ch8vXrO+JcKKlD/2EV8i7esKlUm2fA3YuKg92D8tV1AxEFIa9iiIq/sXw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
       '@types/babel__core': ^7.1.9
-      rollup: ^2.0.0||^3.0.0||^4.0.0
+      rollup: ^2.78.0||^3.0.0||^4.0.0||^5.0.0
     peerDependenciesMeta:
       '@types/babel__core':
         optional: true
@@ -2997,15 +2997,6 @@ packages:
   lru-cache@11.5.3:
     resolution: {integrity: sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==}
     engines: {node: 20 || >=22}
-
-  lucide-react@1.77.0:
-    resolution: {integrity: sha512-VS6sOi8ZUH1qm6swBL/tpI4xAhB6pFTdHvw3pfCJD+DaTJwpyynVzfOS6mdyMZ+OCdY/GMSQbqinOMOPbNSrQA==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   lucide-react@1.81.0:
     resolution: {integrity: sha512-U+CisvFQ84m+xUJAKKA4q+mykGB1LAmu196hOblQbuNYJgD43iHwpmfYuqcFYHXJu2oqRih5JoH3f5LxwsUegg==}
@@ -5062,7 +5053,7 @@ snapshots:
       class-variance-authority: 0.7.1
       cn: 0.5.2
       fumadocs-core: 16.19.7(@mdx-js/mdx@3.1.1(supports-color@7.2.0))(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/react@19.3.3)(lucide-react@1.81.0(@types/react@19.3.3)(react@19.3.1))(next@16.4.6(@babel/core@8.1.3)(@playwright/test@1.65.1)(@types/node@26.6.11)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)(zod@4.6.7)
-      lucide-react: 1.77.0(@types/react@19.3.3)(react@19.3.1)
+      lucide-react: 1.81.0(@types/react@19.3.3)(react@19.3.1)
       motion: 14.14.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-themes: 0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react: 19.3.1
@@ -5388,7 +5379,7 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@rollup/plugin-babel@7.1.0(@babel/core@8.1.3)(rollup@4.68.8)(supports-color@7.2.0)':
+  '@rollup/plugin-babel@7.2.0(@babel/core@8.1.3)(rollup@4.68.8)(supports-color@7.2.0)':
     dependencies:
       '@babel/core': 8.1.3
       '@babel/helper-module-imports': 7.29.7(supports-color@7.2.0)
@@ -5447,7 +5438,7 @@ snapshots:
 
   '@rollup/pluginutils@5.4.0(rollup@4.68.8)':
     dependencies:
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       estree-walker: 2.0.2
       picomatch: 4.0.7
     optionalDependencies:
@@ -6514,12 +6505,6 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@11.5.3: {}
-
-  lucide-react@1.77.0(@types/react@19.3.3)(react@19.3.1):
-    dependencies:
-      react: 19.3.1
-    optionalDependencies:
-      '@types/react': 19.3.3
 
   lucide-react@1.81.0(@types/react@19.3.3)(react@19.3.1):
     dependencies:
